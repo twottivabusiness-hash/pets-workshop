@@ -5,7 +5,7 @@
   "description": "TWOTTIVA AI Office — TASK 기반 오피스 상태 엔진",
   "type": "module",
   "scripts": {
-    "test": "tsx test/acceptance.ts",
+    "test": "tsx test/acceptance.ts && tsx test/targets.ts",
     "typecheck": "tsc --noEmit",
     "build": "esbuild src/office/runtime.ts --bundle --format=iife --global-name=TwottivaOffice --outfile=dist/twottiva-office-engine.js --target=es2019 --footer:js='if(typeof window!==\"undefined\"){window.TwottivaOffice=TwottivaOffice;}'"
   },

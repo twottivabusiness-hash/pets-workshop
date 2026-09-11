@@ -15,6 +15,7 @@
 import { EMPLOYEES, EMPLOYEE_BY_ID, EmployeeRule } from './employees';
 import { OfficeTask, OfficeState, generateAutonomousTasks, buildCEOBrief } from './daily-engine';
 import { PixelAgentState, taskToPixelState, officeSimulationSnapshot } from './simulation';
+import { generateTargetTasks, backcast, gapReport } from './targets';
 
 export const CEO_TODO_MAX = 3;
 
@@ -51,10 +52,13 @@ export class OfficeRuntime {
 
   constructor(state: OfficeState) { this.state = state; }
 
-  /** 시간당 1회. 중앙 데이터를 다시 분석하지 않고 변화분만 큐에 넣는다. */
+  /**
+   * 시간당 1회. 중앙 데이터를 다시 분석하지 않고 변화분만 큐에 넣는다.
+   * CASE에서 파생된 TASK와 월 수주 목표에서 역산된 TASK를 함께 넣는다.
+   */
   tick(state?: OfficeState): OfficeTask[] {
     if (state) this.state = state;
-    const generated = generateAutonomousTasks(this.state);
+    const generated = [...generateAutonomousTasks(this.state), ...generateTargetTasks(this.state)];
     const known = new Set(this.tasks.map(t => `${t.employeeId}:${t.title}`));
     const fresh = generated.filter(t => !known.has(`${t.employeeId}:${t.title}`));
     this.tasks.push(...fresh);
@@ -146,6 +150,12 @@ export class OfficeRuntime {
     return s;
   }
 
+  /** 이번 달 목표 대비 현황. 확정 계약만 집계하고 파이프라인은 분리한다. */
+  targetStatus() {
+    return { backcast: backcast(this.state.now, this.state.metrics),
+             gap: gapReport(this.state.now, this.state.cases) };
+  }
+
   /** 대표 할 일. 3건 초과는 엔진이 잘라낸다 — 김세리의 규칙을 코드로 강제. */
   ceoBrief() {
     const brief = buildCEOBrief(this.tasks, this.state.cases);
@@ -164,3 +174,4 @@ export type { PixelAgentState, OfficeTask, OfficeState };
 export { EMPLOYEES, EMPLOYEE_BY_ID } from './employees';
 export { generateAutonomousTasks, buildCEOBrief } from './daily-engine';
 export { officeSimulationSnapshot } from './simulation';
+export { MONTHLY_TARGETS, DEFAULT_LADDER, backcast, gapReport, generateTargetTasks } from './targets';

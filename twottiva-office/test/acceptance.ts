@@ -6,7 +6,7 @@
  *      → 진짜 승인건만 대표에게 도달 (CEO 할 일 ≤ 3)
  */
 import { EMPLOYEES, EMPLOYEE_BY_ID } from '../src/office/employees';
-import { OfficeRuntime, CEO_TODO_MAX } from '../src/office/runtime';
+import { OfficeRuntime, CEO_TODO_MAX, taskToPixelState } from '../src/office/runtime';
 import type { OfficeState } from '../src/office/daily-engine';
 
 const NOW = new Date('2026-09-10T09:00:00+09:00');
@@ -105,7 +105,11 @@ console.log(`      결과: ${String(done.task.result).slice(0, 60)}…`);
 console.log(`      ${where(rt, 최아름)}`);
 check('completed 상태 + 결과 저장', done.task.status === 'completed' && !!done.task.result);
 check('증빙 2건 저장', (done.task.evidence || []).length === 2);
-check('캐릭터가 handoff-desk로 이동', rt.agent(최아름).station === 'handoff-desk');
+check('완료 TASK의 캐릭터 위치는 handoff-desk', taskToPixelState(done.task).station === 'handoff-desk');
+// 다음 TASK가 있으면 그쪽이 우선이다 — 완료 표시에 멈춰 있지 않는다.
+const 다음 = rt.byEmployee(최아름).find(t => t.status === 'queued');
+console.log(`      다음 업무로 이동: ${where(rt, 최아름)}`);
+check('다음 TASK가 있으면 캐릭터가 그쪽으로 이동', !다음 || rt.agent(최아름).taskId === 다음.id);
 
 // ── 5. 다음 부서 인계 ───────────────────────────────────────────────────
 console.log('\n[5] 다음 부서 인계 — employees.ts handoffTo 기준');

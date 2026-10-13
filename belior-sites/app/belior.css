@@ -466,3 +466,7 @@
 @media (max-width:820px){.belior .no16 .n16-stay,.belior .no16 .n16-top{grid-template-columns:1fr}.belior .no16 .n16-three{grid-template-columns:1fr}
   .belior .no16 .n16-hero .bg{width:100%;opacity:.75}.belior .no16 .n16-hero::after{background:linear-gradient(0deg,#141a10 20%,rgba(20,26,16,.4) 70%)}.belior .no16 .n16-hero{align-items:end}}
 .belior.ivory .foot-brand img,.belior.ivory .statement img{filter:invert(1)}
+/* page turn, Ferrari-style: one small mark, nothing else */
+.belior .curtain .c-world,.belior .curtain .c-line,.belior .curtain .c-label{display:none}
+.belior .curtain .c-mark,.belior .curtain:not(.round) .c-mark{height:clamp(44px,6vh,60px);width:clamp(44px,6vh,60px);object-fit:cover}
+.belior .curtain.round .c-mark{width:clamp(44px,6vh,60px);height:clamp(44px,6vh,60px);border-radius:50%}

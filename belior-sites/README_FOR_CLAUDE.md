@@ -64,3 +64,6 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 - /products/no-16: 대표가 보낸 화면 2장 그대로 재구성한 아이보리 페이지(No.16 · A memory, held. → The moments that stay. → Before it was a scent, it was a memory. → 01 The Forest · 02 The Warmth · 03 The Presence → 어린 시절).
 - 메인: 동물 슬라이드 다음에 원래 메종 첫 화면(음악에서 시작된 하나의 하우스. / A heritage for a brighter tomorrow / Art · People · Places and beauty / 컬렉션 살펴보기 · 연주 보기 · DISCOVER BELiOR)을 넣음.
 - 메종 소개 아래 BELiOR Gallery · Chapter 02 SWAN LAKE(Tchaikovsky — Swan Lake, Op. 20) 챕터를 넣음. 메인과 /maison에 모두 나옴.
+
+## 2026-10-13 추가 변경 (3)
+- 페이지 전환: 페라리처럼 가운데 작은 문양(44~60px) 하나만 표시. 동물 이름·선·페이지 이름 글자는 숨김.

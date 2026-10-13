@@ -73,3 +73,12 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 - 문의 페이지에서 동물(고래) 연출 삭제. /private는 초대 시안(BELiOR Atelier · Invitation Only) 기반, /music/inquiry는 촛불 연회장 사진(v3/gala-hall.jpg)과 정돈된 폼으로 다시 구성. 문의 API는 그대로.
 - Swan Lake 리허설 사운드: v3/swan-lake.m4a. 메인 영상 왼쪽 아래와 Swan Lake 챕터에 "듣기" 버튼(누르면 서서히 커지며 반복 재생). SWAN 페이지에는 소리 있는 Swan Lake 필름(v3/swan-lake-film.mp4).
 - 확인 필요: /private 시안 문구 "Three Cities. One Vision."과 SEOUL·PARIS·NEW YORK 이미지는 대표 제공 시안 그대로임.
+
+## (5) v7 — 주소 삭제 · 애플 기본서체 · 비주얼 팀 · 원본 화질 필름
+- 푸터 사업장 주소 삭제, 메일 contact@belior.co.kr 로 통일.
+- 한글은 Apple 시스템 서체(-apple-system / Apple SD Gothic Neo) 우선, 작은 크기(.ko 클래스). Noto Serif KR 제거.
+- 연주자 포스터 이미지·문구 전부 삭제. "Silk & Textile" 도어 삭제.
+- The Art of a Living Moment: eve-quartet.jpg 위치 86% 55% — 대표가 잘리지 않음(데스크톱·모바일 확인).
+- 브랜드 필름 1080p H.264(belior-film-1080.mp4, 2-pass 1400k).
+- 신규 섹션: TwoHouses, VisualTeam(피아노 사진), Founder, Artists, OfficialStage, GuestJourney, SymphonicAtelier, BeyondLogo, Operation.
+- AstonHouse 제안서에서는 일반 BELiOR 내용만 사용. 고객명·금액은 넣지 않음.

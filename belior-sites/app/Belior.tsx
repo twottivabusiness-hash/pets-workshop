@@ -8,7 +8,7 @@ import './belior.css';
    and the animal collection extends it world by world. */
 
 const V = (n: string) => '/belior/v3/' + n;
-const MAIL = 'twottiva.business@gmail.com';
+const MAIL = 'contact@belior.co.kr';
 
 type World = {
   slug: string; name: string; kw: string; mat: string; color: string; chips: string[];
@@ -53,7 +53,7 @@ const MENU: {href: string; name: string; ko: string; subs: [string, string, stri
   {href: '/music', name: 'MUSIC & EXPERIENCE', ko: '음악과 경험', subs: [['/music/artists', '연주진', 'Artists'], ['/music/performances', '공연 포트폴리오', 'Performances'], ['/music/gala', 'Brand Gala Dinner Show', 'Brand Gala Dinner Show'], ['/music/inquiry', '공연 문의', 'Performance inquiry']]},
   {href: '/collection', name: 'COLLECTION', ko: '동물 컬렉션', subs: WORLDS.map(w => ['/collection/' + w.slug, w.name[0] + w.name.slice(1).toLowerCase(), w.name[0] + w.name.slice(1).toLowerCase()] as [string, string, string])},
   {href: '/products', name: 'PARFUM & OBJECTS', ko: '향과 오브제', subs: [['/products/no-16', 'No. 16 — 숲과 말', 'No. 16 — Forest & Horse'], ['/products/parfum', 'Parfum', 'Parfum'], ['/objects', 'Selected Objects', 'Selected Objects']]},
-  {href: '/atelier', name: 'ATELIER', ko: '아틀리에', subs: [['/atelier', '콘텐츠 제작', 'Content direction'], ['/atelier#poster', '포스터 아틀리에', 'Poster atelier'], ['/atelier#process', '제작의 순서', 'Process']]},
+  {href: '/atelier', name: 'ATELIER', ko: '아틀리에', subs: [['/atelier', '콘텐츠 제작', 'Content direction'], ['/atelier#visual', '비주얼 팀', 'Visual team'], ['/atelier#process', '제작의 순서', 'Process']]},
   {href: '/journal', name: 'JOURNAL', ko: '저널', subs: [['/journal', '모든 이야기', 'All stories']]},
   {href: '/private', name: 'PRIVATE ENQUIRIES', ko: '프라이빗 문의', subs: [['/private', '문의하기', 'Enquire']]},
 ];
@@ -70,7 +70,12 @@ const SEQUENCE: Turn[] = [{world: 'LION', mark: V('lion-motif.jpg'), round: fals
   ...WORLDS.slice(1).map(w => ({world: w.name, mark: V('emblem-' + w.slug + '.jpg'), round: true, color: w.color}))];
 const OWN: Record<string, Turn> = Object.fromEntries(WORLDS.map((w, i) => ['/collection/' + w.slug, i === 0 ? SEQUENCE[0] : {world: w.name, mark: V('emblem-' + w.slug + '.jpg'), round: true, color: w.color}]));
 
-const lines = (s: string) => s.split('\n').map((p, i, a) => <Fragment key={i}>{p}{i < a.length - 1 && <br/>}</Fragment>);
+const HANGUL = /[\u3131-\uD79D]/;
+// Korean is set small in the Apple system face; Latin keeps the display serif
+const lines = (s: string) => {
+  const body = s.split('\n').map((p, i, a) => <Fragment key={i}>{p}{i < a.length - 1 && <br/>}</Fragment>);
+  return HANGUL.test(s) ? <span className="ko">{body}</span> : body;
+};
 
 const LangCtx = createContext(false);
 function useT() { const en = useContext(LangCtx); return {en, t: (ko: string, eng: string) => en ? eng : ko}; }
@@ -118,7 +123,7 @@ function Band({img, eyebrow, title, text, href, cta, pos = 'center'}: {img: stri
 
 function Door({href, img, eyebrow, title, text, pos = 'center'}: {href: string; img: string; eyebrow: string; title: string; text: string; pos?: string}) {
   const {t, en} = useT(); void t; void en;
-  return <a className="door" href={href}><div className="ph"><img src={V(img)} alt="" loading="lazy" style={{objectPosition: pos}}/></div><span className="label">{eyebrow}</span><h3>{title}</h3><p>{text}</p><span className="more">Explore</span></a>;
+  return <a className="door" href={href}><div className="ph"><img src={V(img)} alt="" loading="lazy" style={{objectPosition: pos}}/></div><span className="label">{eyebrow}</span><h3>{lines(title)}</h3><p>{text}</p><span className="more">Explore</span></a>;
 }
 
 function Head({eyebrow, title, text}: {eyebrow: string; title: string; text?: string}) {
@@ -140,6 +145,125 @@ const CHAPTERS_LIST: [string, string, string, string, string, string][] = [
     ['/private', 'o-mk-home-evening.jpg', 'THE EVENING', '특별한 저녁을 위한\n프라이빗한 경험을 제안합니다.', 'Private experiences\nfor an exceptional evening.', 'Explore Private Experiences'],
     ['/journal', 'o-mk-home-journal.jpg', 'JOURNAL', '예술, 사람, 공간의 이야기를\n기록합니다.', 'Stories of art,\npeople and places.', 'Explore Journal'],
 ];
+
+/* ---------- from the house's own proposal: who we are, how an evening is built ---------- */
+function TwoHouses() {
+  const {t} = useT();
+  return <section className="section two-houses"><Head eyebrow="Two Houses, One Evening" title={t('연주가 필요하시면 TWOTTIVA,\n저녁 전체의 음악이 필요하시면 BELiOR.', 'For a performance, TWOTTIVA.\nFor the music of a whole evening, BELiOR.')}/>
+    <div className="th-grid">
+      <div className="th-card"><span className="label">Role — Live Performance</span><h3>TWOTTIVA</h3><p className="th-tag">String Duo &amp; Ensemble · Where Love Becomes Music.</p>
+        <p className="muted">{t('바이올린과 첼로, 두 대의 현악(TWO)으로 시작한 연주 브랜드. 정해진 시간, 준비된 프로그램, 흔들림 없는 연주.', 'A performance brand that began with two strings, violin and cello. Set times, prepared programmes, unwavering performance.')}</p></div>
+      <div className="th-card"><span className="label">Role — Event Direction</span><h3>BELiOR</h3><p className="th-tag">Private Event Direction · Music · Art · People · Places</p>
+        <p className="muted">{t('저녁의 각 순간에 음악이 맡을 역할을 설계합니다. 아티스트 캐스팅부터 브랜드 모먼트, 피날레까지.', 'We design the role music plays in every moment of the evening, from casting to the brand moment and the finale.')}</p></div>
+    </div></section>;
+}
+
+function VisualTeam() {
+  const {t} = useT();
+  return <section className="visual" id="visual">
+    <figure className="vs-main"><img src={V('visual-piano.jpg')} alt={t('샹들리에 아래 그랜드 피아노를 연주하는 여혜린', 'Hyerin Yeo at the grand piano beneath a chandelier')} loading="lazy"/></figure>
+    <div className="vs-copy"><span className="label">BELiOR Visual</span><h2>{lines(t('모든 장면은\n우리가 직접 만듭니다.', 'Every scene,\nmade by the house.'))}</h2>
+      <p className="muted">{t('BELiOR는 연주하고, 연출하고, 촬영합니다. 무대 위의 연주자가 곧 하우스의 얼굴이 되고, 그 저녁의 이미지가 됩니다.', 'BELiOR performs, directs and films. The artist on stage becomes the face of the house and the image of the evening.')}</p>
+      <p className="vs-name">Hyerin Yeo — {t('바이올리니스트 · 피아노 · 모델 · 디렉터', 'Violinist · Piano · Model · Director')}</p></div>
+    <figure className="vs-side"><img src={V('bu-violinist.jpg')} alt={t('잔디 위에서 바이올린을 든 여혜린', 'Hyerin Yeo with her violin on the lawn')} loading="lazy"/></figure>
+  </section>;
+}
+
+function Founder() {
+  const {t} = useT();
+  const rows: [string, string, string][] = [
+    ['기획 · 현장 총괄', 'Planning & direction', t('한국여성공인회계사회 제31회 정기총회 · 회장 이·취임식 — 엘리에나호텔, 2026', 'Korea Women CPA Association, 31st General Meeting & Inauguration — L’Eliena Hotel, 2026')],
+    ['직접 총괄', 'Directed', t('국회의원 내빈행사 — 아르테움 컬쳐', 'National Assembly guest event — Arteum Culture')],
+    ['연주', 'Performance', t('KBS Hall 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th Anniversary Concert')],
+    ['현장 진행', 'On site', t('식순이 앞당겨졌을 때 곡 해설 멘트로 행사 흐름을 직접 이음', 'Kept the evening flowing with spoken programme notes when the running order moved')],
+    ['운영', 'Operation', t('사전 합주 · 앙상블 디렉팅 · 담당자 창구 단일화', 'Rehearsal, ensemble direction and a single point of contact')],
+  ];
+  return <section className="founder"><figure><img src={V('founder.jpg')} alt={t('바이올린을 든 여혜린 대표', 'Founder Hyerin Yeo with her violin')} loading="lazy"/></figure>
+    <div className="fd-copy"><span className="label">Founder · Artistic Director · Chief Director</span><h2>{lines(t('여혜린', 'Hyerin Yeo'))}<small>Hyerin Yeo</small></h2>
+      <p className="fd-role">{t('BELiOR · TWOTTIVA 대표 | 바이올리니스트 · 작곡 · 편곡', 'Founder of BELiOR & TWOTTIVA | Violinist · Composer · Arranger')}</p>
+      <p className="muted">{t('갈라디너의 흐름을 이해하고, 행사에 차질이 없도록 사전 리허설과 현장을 총괄합니다.', 'She reads the flow of a gala dinner and leads rehearsal and the evening itself, so nothing falters.')}</p>
+      <dl className="fd-list">{rows.map(([ko, en, v]) => <div key={ko}><dt>{t(ko, en)}</dt><dd>{v}</dd></div>)}</dl></div>
+  </section>;
+}
+
+function Artists() {
+  const {t} = useT();
+  const people: [string, string, string, string, string[]][] = [
+    ['artist-hyerin.jpg', '여혜린', 'Hyerin Yeo', 'Violin I · Founder · Artistic Director', [t('한국여성공인회계사회 이·취임식 총괄', 'Directed the Korea Women CPA Association inauguration'), t('국회의원 내빈행사 총괄', 'Directed a National Assembly guest event')]],
+    ['artist-samuel.jpg', '김사무엘', 'Samuel Kim', 'Violin II', [t('청와대 영빈관 대통령 초청 만찬', 'Presidential state dinner, Cheong Wa Dae guest house'), t('2022 대통령 취임식 만찬 · 서울신라호텔', '2022 Presidential inauguration dinner · The Shilla Seoul'), t('하나은행', 'Hana Bank')]],
+    ['artist-dohyun.jpg', '김도현', 'Dohyun Kim', 'Viola', [t('삼성화재 초청 콘서트 · 시그니엘 서울', 'Samsung Fire & Marine concert · Signiel Seoul'), t('롯데호텔', 'Lotte Hotel'), '2023 Carnegie Hall']],
+    ['artist-yohan.jpg', '김요한', 'Yohan Kim', 'Cello · Art Director', [t('주한 이탈리아대사관 초청 연주', 'Invited performance, Embassy of Italy in Korea'), t('Mannes 석사 · CCM Philharmonia 수석', 'Mannes M.M. · Principal, CCM Philharmonia')]],
+  ];
+  return <section className="section artists"><Head eyebrow="The Artists · Signature Quartet" title="The Artists on Stage" text={t('BELiOR 현악 4중주 무대에 서는 TWOTTIVA 시그니처 연주진입니다.', 'The TWOTTIVA signature artists who take the stage for BELiOR’s string quartet.')}/>
+    <div className="ar-grid">{people.map(([im, ko, en, role, cv]) => <figure className="ar" key={ko}><div className="ph"><img src={V(im)} alt={t(ko, en)} loading="lazy"/></div>
+      <figcaption><span className="label">{role}</span><h3>{lines(t(ko, en))}</h3><ul>{cv.map(c => <li key={c}>{c}</li>)}</ul></figcaption></figure>)}</div>
+    <p className="muted small">{t('개인 이력은 해당 연주자의 수행 경력입니다.', 'Credits are each artist’s own performance history.')}</p></section>;
+}
+
+function OfficialStage() {
+  const {t} = useT();
+  return <section className="official"><img className="bg" src={V('stage-official.jpg')} alt={t('공식행사 무대의 현악 4중주', 'String quartet on an official stage')} loading="lazy"/>
+    <div className="of-copy"><span className="label">Official Event · Live Performance</span><h2>{lines('Proven on an\nOfficial Stage.')}</h2>
+      <p>{t('한국여성공인회계사회 제31회 정기총회 및 회장 이·취임식, 엘리에나호텔. 여혜린 대표가 기획과 현장을 총괄하고 TWOTTIVA 현악 4중주가 연주했습니다.', 'Korea Women CPA Association, 31st General Meeting & Inauguration at L’Eliena Hotel. Directed by Hyerin Yeo, performed by the TWOTTIVA string quartet.')}</p>
+      <div className="of-num"><b>18</b><span>Hours of Rehearsal<br/>{t('무대에서 처음 맞추는 일은 없습니다.', 'Nothing is played together for the first time on stage.')}</span></div></div>
+  </section>;
+}
+
+function GuestJourney() {
+  const {t} = useT();
+  const steps: [string, string, string, string][] = [
+    ['Arrival', 'Daylight', t('게스트 도착 · 연주 준비 완료', 'Guests arrive · the ensemble is ready'), ''],
+    ['Opening', 'Sunset', t('음악은 공간을 엽니다', 'Music opens the room'), 'Debussy + Harp'],
+    ['Aperitivo', 'Sunset', t('음악은 대화를 돕습니다', 'Music carries the conversation'), 'Vivaldi'],
+    ['Dinner', 'Dusk', t('음악은 공기를 채웁니다', 'Music fills the air'), 'Cinema'],
+    ['Brand Moment', 'Dusk', t('음악은 시선을 모읍니다', 'Music gathers every gaze'), 'Bespoke Cue'],
+    ['Dessert', 'Night', t('음악이 처음으로 주인공이 됩니다', 'Music takes the lead for the first time'), 'Morricone'],
+    ['Farewell', 'Night', t('음악은 기억을 남깁니다', 'Music leaves the memory'), 'Soft Closing'],
+  ];
+  return <section className="section night journey"><Head eyebrow="The Guest Journey" title="Daylight → Sunset → Dusk → Night" text={t('저녁 전체를 한 곡처럼 — 도입에서 피날레까지 음악의 역할을 설계합니다.', 'The whole evening as one piece of music, from the first note to the finale.')}/>
+    <ol className="gj">{steps.map(([n, time, d, cue], i) => <li key={n}><span className="gj-time">{time}</span><span className="gj-no">0{i + 1}</span><h3>{n}</h3><p>{d}</p>{cue && <span className="gj-cue">{cue}</span>}</li>)}</ol></section>;
+}
+
+function SymphonicAtelier() {
+  const {t} = useT();
+  return <section className="symphonic">
+    <figure className="sy-a"><img src={V('sym-violin.jpg')} alt={t('바이올린 현과 활의 클로즈업', 'Violin strings and bow, close up')} loading="lazy"/></figure>
+    <div className="sy-copy"><span className="label">BELiOR · Signature Ensemble</span><h2>The Symphonic Atelier</h2>
+      <p className="muted">{t('현악의 골드 위에 하프와 클라리넷이 빛을 더하고, 타악과 일렉기타가 대담함을 완성합니다.', 'Harp and clarinet add light to the gold of the strings; percussion and electric guitar bring the daring cut.')}</p>
+      <ol className="sy-list">
+        <li><span className="label">Strings Quartet &amp; Ensemble + Contrabass</span><h3>The Golden Structure</h3><p>{t('정교함과 깊은 울림 — 저녁을 받치는 단단한 베이스', 'Precision and depth, the frame that holds the evening')}</p></li>
+        <li><span className="label">Harp &amp; Clarinet</span><h3>The Gemstone Colour</h3><p>{t('하프의 투명한 아르페지오와 클라리넷의 음색', 'The clear arpeggios of the harp and the colour of the clarinet')}</p></li>
+        <li><span className="label">Electric Guitar &amp; Drums · Timpani</span><h3>The Audacious Cut</h3><p>{t('클래식의 틀을 깨는 선율과 비트', 'Melody and beat that break the classical frame')}</p></li>
+      </ol>
+      <p className="small muted">{t('그리고 이 저녁에만 들을 수 있는 단 하나의 편곡을 준비합니다.', 'And one arrangement written only for that evening.')}</p></div>
+    <figure className="sy-b"><img src={V('sym-timpani.jpg')} alt={t('구리 팀파니와 말렛', 'Copper timpani and mallets')} loading="lazy"/></figure>
+  </section>;
+}
+
+function BeyondLogo() {
+  const {t} = useT();
+  const items: [string, string][] = [
+    ['Signature Arrangement', t('VIP만을 위한 단 하나의 편곡 — 이 저녁에서만 들을 수 있는 곡', 'One arrangement for the guests, heard only that evening')],
+    ['Jewellery on Stage', t('연주자가 컬렉션을 착용하고 연주 (브랜드 협의 시)', 'Artists perform wearing the collection (by agreement)')],
+    ['Signature Light', t('클라이맥스에서 조명을 브랜드 시그니처 컬러로 전환 (조명팀과 협의)', 'Lighting turns to the brand colour at the climax (with the lighting team)')],
+    ['Programme Card', t('곡 해설과 브랜드 헤리티지 스토리를 담은 프로그램 카드', 'A programme card with notes on the music and the brand’s heritage')],
+    ['Artist Moment', t('공연 후 VVIP와 연주자의 짧은 인사와 기념 촬영', 'A short greeting and photograph with the artists after the performance')],
+  ];
+  return <section className="section beyond"><Head eyebrow="BELiOR · Brand Experience" title="Beyond the Logo." text={t('로고를 크게 거는 대신, 브랜드가 저녁 속에 스며들게 합니다.', 'Instead of a large logo, the brand is woven into the evening.')}/>
+    <div className="rows">{items.map(([h, d]) => <div className="row" key={h}><h3>{h}</h3><p>{d}</p><span/></div>)}</div></section>;
+}
+
+function Operation() {
+  const {t} = useT();
+  const steps: [string, string][] = [
+    ['Consultation & Program', t('행사 목적과 게스트에 맞춘 선곡, 순간별 음악 설계', 'Repertoire and moment-by-moment design for your purpose and guests')],
+    ['Casting & Rehearsal', t('행사에 맞는 아티스트 캐스팅, 18시간 사전 합주', 'Artists cast for the event, 18 hours of rehearsal')],
+    ['Cue Sheet & Technical', t('국·영문 큐시트, 동선·음향·무대 배치 사전 확정', 'Korean and English cue sheets; movement, sound and staging set in advance')],
+    ['On-site Direction', t('담당자와 실시간 소통, 식순 변경에 즉시 대응', 'Live contact with your team, immediate response to any change')],
+  ];
+  return <section className="section night"><Head eyebrow="BELiOR · All-in-One Operation" title="From the First Call to the Final Cue." text={t('음악 큐와 음악 운영은 BELiOR가 책임집니다. 담당자는 창구 하나만 두시면 됩니다.', 'BELiOR takes charge of every music cue and its running. You keep a single point of contact.')}/>
+    <div className="steps">{steps.map(([n, d]) => <div className="step" key={n}><h3>{n}</h3><p>{d}</p></div>)}</div></section>;
+}
 
 function MaisonHero() {
   const {t} = useT();
@@ -183,9 +307,9 @@ function TheHouse() {
   const {t, en} = useT(); void t; void en;
   return <section className="section night" id="house"><div className="spread">
     <figure className="c-6"><img src={V('o-gala-ensemble.jpg')} alt={t('연회장에서 연주하는 앙상블', 'Ensemble performing at a banquet')} loading="lazy"/><figcaption>BELiOR · Private Event Direction · with TWOTTIVA</figcaption></figure>
-    <div className="copy c-6"><span className="label">The House</span><h3>{t('무대에서 시작된 하우스', 'A house born on stage')}</h3>
+    <div className="copy c-6"><span className="label">The House</span><h3>{lines(t('무대에서 시작된 하우스', 'A house born on stage'))}</h3>
       <p className="muted">{t('실제 무대에서 태어난 BELiOR는 라이브 음악을 프라이빗 이벤트 연출과 예술 기획, 오브제, 그리고 하루 저녁보다 오래 남는 시각 언어로 넓혀 갑니다.', 'Born on real stages, BELiOR extends live music into private event direction, art planning, objects and a visual language that outlasts a single evening.')}</p>
-      <h3 className="sub">{t('무대는 TWOTTIVA가 연주합니다', 'The stage is played by TWOTTIVA')}</h3>
+      <h3 className="sub">{lines(t('무대는 TWOTTIVA가 연주합니다', 'The stage is played by TWOTTIVA'))}</h3>
       <p className="muted">{t('BELiOR의 음악은 서울에서 활동하는 현악앙상블 TWOTTIVA(뚜띠바 현악앙상블)가 연주합니다. 2021년부터 호텔·기업·공식 행사 무대에서 쌓아 온 TWOTTIVA의 연주 위에, BELiOR가 공간과 오브제와 연출을 더합니다.', 'BELiOR’s music is performed by TWOTTIVA string ensemble, based in Seoul. On the performances TWOTTIVA has built since 2021 at hotel, corporate and official events, BELiOR adds space, objects and direction.')}</p>
       <ul className="history"><li>{t('KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th Anniversary Concert')}</li><li>{t('한국여성공인회계사회 정기총회 및 회장 이·취임식', 'Korea Women CPA Association, General Meeting & Presidential Inauguration')}</li><li>{t('호텔 연회 · 기업행사 · VIP 리셉션', 'Hotel banquets · Corporate events · VIP receptions')}</li><li>Brand Gala Dinner Show · Seoul</li></ul>
       <p className="muted small">{t('공연 이력은 TWOTTIVA와 각 연주자의 이력입니다.', 'Performance history belongs to TWOTTIVA and its musicians.')}</p>
@@ -198,18 +322,18 @@ function TheEvening() {
   return <section className="section"><Head eyebrow="BELiOR Music · The Evening" title={t('음악이 머무는 저녁', 'An evening where music stays')}/>
     <div className="evening whole"><figure className="ev-photo"><img src={V('eve-quartet.jpg')} alt={t('행사장 앞 야외에서 연주하는 현악 4중주', 'A string quartet performing outdoors at the venue')} loading="lazy" width={1260} height={698}/></figure>
       <div className="ev-cards">
-        <a className="ev-card" href="/music"><span className="label">01 · Music &amp; Experience</span><h3>{t('그 저녁', 'The evening')}</h3><p className="muted">{t('호텔, 브랜드, 프라이빗 갈라 디너를 위한 현악 4중주와 확장 편성, 그리고 맞춤 챔버 연출.', 'String quartets, larger ensembles and bespoke chamber direction for hotels, brands and private gala dinners.')}</p><span className="more">Explore</span></a>
-        <a className="ev-card" href="/objects"><span className="label">02 · Objects</span><h3>{t('일상으로 옮긴 예술', 'Art carried into daily life')}</h3><p className="muted">{t('하우스의 시각 언어에서 출발한 스카프와 가죽 소품, 그리고 개인의 오브제.', 'Scarves, leather goods and personal objects drawn from the house’s visual language.')}</p><span className="more">Explore</span></a>
+        <a className="ev-card" href="/music"><span className="label">01 · Music &amp; Experience</span><h3>{lines(t('그 저녁', 'The evening'))}</h3><p className="muted">{t('호텔, 브랜드, 프라이빗 갈라 디너를 위한 현악 4중주와 확장 편성, 그리고 맞춤 챔버 연출.', 'String quartets, larger ensembles and bespoke chamber direction for hotels, brands and private gala dinners.')}</p><span className="more">Explore</span></a>
+        <a className="ev-card" href="/objects"><span className="label">02 · Objects</span><h3>{lines(t('일상으로 옮긴 예술', 'Art carried into daily life'))}</h3><p className="muted">{t('하우스의 시각 언어에서 출발한 스카프와 가죽 소품, 그리고 개인의 오브제.', 'Scarves, leather goods and personal objects drawn from the house’s visual language.')}</p><span className="more">Explore</span></a>
       </div></div></section>;
 }
 
 function AtelierContent() {
   const {t, en} = useT(); void t; void en;
-  return <section className="section night" id="poster"><div className="spread">
-    <div className="copy c-5"><span className="label">BELiOR Atelier · Content</span><h3>{t('무대를 완성하는 콘텐츠', 'Content that completes the stage')}</h3>
-      <p className="muted">{t('무대 배경 영상과 영상 편집, 프로그램 그래픽, 연주자 포스터까지 행사의 콘셉트에 맞춰 기획하고 제작합니다.', 'Stage visuals, film editing, programme graphics and artist posters, planned and made to the concept of each event.')}</p><a className="more" href="/atelier">{t('콘텐츠 제작 보기', 'See content direction')}</a></div>
+  return <section className="section night" id="content"><div className="spread">
+    <div className="copy c-5"><span className="label">BELiOR Atelier · Content</span><h3>{lines(t('무대를 완성하는 콘텐츠', 'Content that completes the stage'))}</h3>
+      <p className="muted">{t('무대 배경 영상과 영상 편집, 프로그램 그래픽까지 행사의 콘셉트에 맞춰 기획하고 제작합니다.', 'Stage visuals, film editing and programme graphics, planned and made to the concept of each event.')}</p><a className="more" href="/atelier">{t('콘텐츠 제작 보기', 'See content direction')}</a></div>
     <div className="c-7 pair"><figure><img src={V('o-content-stage-video.jpg')} alt={t('무대 배경 영상과 함께하는 공연', 'Performance with stage visuals')} loading="lazy"/><figcaption>{t('무대 배경 영상', 'Stage visuals')}</figcaption></figure>
-      <figure><img src={V('o-poster-pirates.jpg')} alt={t('연주자 포스터', 'Artist poster')} loading="lazy"/><figcaption>{t('연주자 포스터', 'Artist poster')}</figcaption></figure></div>
+      <figure><img src={V('op-onsite.jpg')} alt={t('현장에서 큐를 맞추는 연출팀', 'The direction team cueing on site')} loading="lazy"/><figcaption>{t('현장 디렉션', 'On-site direction')}</figcaption></figure></div>
   </div></section>;
 }
 
@@ -223,7 +347,6 @@ function ObjectsRow() {
   return <section className="section"><Head eyebrow="Selected Objects" title={t('곁에 두도록 만든 것들', 'Made to be kept close')}/>
     <div className="doors">
       <Door href="/objects" img="o-prod-5.jpg" eyebrow="Personal Objects" title={t('개인의 오브제', 'Personal objects')} text={t('매일 쓰는 기기의 케이스를 수집할 만한 표면으로 다룹니다.', 'Everyday device cases treated as collectible surfaces.')}/>
-      <Door href="/objects" img="o-prod-3.jpg" eyebrow="Silk & Textile" title={t('실크와 직물', 'Silk & textile')} text={t('물성과 움직임, 그리고 밤하늘의 붓결.', 'Material, movement and brushstrokes of the night sky.')}/>
       <Door href="/maison#symbol" img="lion-motif.jpg" eyebrow="The Monogram" title={t('B 모노그램', 'The B monogram')} text={t('현처럼 곧게 선 획 위에 별을 얹은 하우스의 이니셜.', 'The house initial: a stroke straight as a string, crowned with a star.')}/>
     </div></section>;
 }
@@ -233,11 +356,11 @@ function Services() {
   return <><section className="section night"><Head eyebrow="Services" title={t('하우스의 세 가지 챕터', 'Three chapters of the house')}/>
     <div className="rows">
       <a className="row" href="/atelier"><h3>Content Direction</h3><p>{t('브랜드 · 행사 콘텐츠 기획', 'Brand and event content')}</p><span className="more">Explore</span></a>
-      <a className="row" href="/atelier#poster"><h3>Poster Atelier</h3><p>{t('포스터 및 비주얼 제작', 'Posters and visuals')}</p><span className="more">Explore</span></a>
+      <a className="row" href="/atelier#visual"><h3>Visual Team</h3><p>{t('촬영 · 영상 · 비주얼 디렉션', 'Photography · Film · Visual direction')}</p><span className="more">Explore</span></a>
       <a className="row" href="/music/inquiry"><h3>Performance Inquiry</h3><p>{t('공연 및 프라이빗 이벤트 문의', 'Performances and private events')}</p><span className="more">Inquire</span></a>
     </div></section>
     <section className="section"><div className="statement"><img src={V('mono-ivory.png')} alt="" width={34} height={67}/>
-      <h2>{t('“더 아름다운 내일은, 오늘의 한 순간을 어떻게 짜는가에서 시작됩니다.”', '“A more beautiful tomorrow begins with how we compose a single moment today.”')}</h2><p className="label">BELiOR · Music · Art · People · Places</p></div></section></>;
+      <h2>{lines(t('“더 아름다운 내일은, 오늘의 한 순간을 어떻게 짜는가에서 시작됩니다.”', '“A more beautiful tomorrow begins with how we compose a single moment today.”'))}</h2><p className="label">BELiOR · Music · Art · People · Places</p></div></section></>;
 }
 
 function InquiryForm({music}: {music?: boolean}) {
@@ -340,13 +463,13 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   /* ---------- pages ---------- */
   const home = <>
     <section className="scene film" aria-label="BELiOR brand film">
-      <video ref={filmRef} className="bg" src={V('belior-film.webm')} poster={V('film-poster.jpg')} muted loop playsInline autoPlay preload="metadata"/>
+      <video ref={filmRef} className="bg" src={V('belior-film-1080.mp4')} poster={V('film-poster.jpg')} muted loop playsInline autoPlay preload="metadata"/>
       <button className="film-toggle" type="button" aria-label={filmPaused ? t('영상 재생', 'Play film') : t('영상 일시정지', 'Pause film')}
         onClick={() => { const f = filmRef.current; if (!f) return; if (f.paused) { void f.play().catch(() => {}); setFilmPaused(false); } else { f.pause(); setFilmPaused(true); } }}>
         <span aria-hidden="true">{filmPaused ? '▶' : 'II'}</span></button>
       <div className="film-sound"><SoundButton label="Swan Lake · Rehearsal"/></div>
     </section>
-    <Scene img="bu-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="60% center" href="/music"/>
+    <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
     <Scene img="lion-portrait.jpg" eyebrow="Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계', 'One symbol, endless worlds')} pos="center 30%" href="/collection"/>
     <section className="carousel" aria-label={t('여섯 개의 컬렉션', 'Six collections')}>
@@ -358,14 +481,14 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="dots">{WORLDS.map((w, i) => <button type="button" className="dot" key={w.slug} aria-label={w.name} aria-current={slide === i}
         onClick={() => trackRef.current?.scrollTo({left: i * (trackRef.current?.clientWidth || 0), behavior: 'smooth'})}/>)}</div>
     </section>
-    <MaisonHero/><MaisonIntro/><TheHouse/><TheEvening/><AtelierContent/><OneWorld/>
+    <MaisonHero/><MaisonIntro/><TwoHouses/><VisualTeam/><TheHouse/><Founder/><TheEvening/><SymphonicAtelier/><GuestJourney/><AtelierContent/><OneWorld/>
     <section className="section night"><div className="spread">
       <figure className="c-5"><img src={V('no16-hero.jpg')} alt={t('숲속에서 말에 오른 아이', 'A child on a horse in the forest')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
       <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>A memory, held.</h3>
         <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
     <ObjectsRow/><Services/>
-    <Scene img="gala-hall.jpg" eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
+    <Scene img="visual-arrival.jpg" eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
   </>;
 
   const maison = <>
@@ -374,15 +497,15 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="section" id="symbol"><Head eyebrow="Symbol System" title={t('하나의 하우스, 하나의 심볼, 여섯 개의 세계', 'One house, one symbol, six worlds')}
       text={t('메종 심볼은 하우스 전체를, 사자-B 모노그램은 동물 세계관의 시작을, 여섯 엠블럼은 각 컬렉션을 대표합니다.', 'The maison symbol stands for the whole house, the lion-B monogram opens the animal worlds, and six emblems stand for each collection.')}/>
       <div className="symbols three">
-        <div className="symbol-card"><div className="mark"><img src={V('mono-ivory.png')} alt="BELiOR maison symbol" width={76} height={150}/></div><span className="label">Maison Symbol</span><h3>{t('메종 심볼', 'Maison symbol')}</h3><p className="muted">{t('하우스의 공식 표기. 사이트 상단과 모든 공식 문서에 사용합니다.', 'The official mark of the house, used at the top of the site and on all official documents.')}</p></div>
-        <div className="symbol-card"><div className="mark"><img src={V('lion-motif.jpg')} alt="Lion-B monogram" style={{maxHeight: 150, borderRadius: 4}}/></div><span className="label">The Monogram</span><h3>{t('사자-B 모노그램', 'Lion-B monogram')}</h3><p className="muted">{t('현처럼 곧게 선 획 위에 별을 얹은 이니셜. 동물 세계관으로 들어가는 문입니다.', 'An initial straight as a string, crowned with a star. The door to the animal worlds.')}</p></div>
-        <div className="symbol-card"><div className="mini">{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/></a>)}</div><span className="label">Collection Emblems</span><h3>{t('여섯 엠블럼', 'Six emblems')}</h3><p className="muted">LION · SWAN · ORCA · LEOPARD · PANTHER · PHOENIX.</p></div>
+        <div className="symbol-card"><div className="mark"><img src={V('mono-ivory.png')} alt="BELiOR maison symbol" width={76} height={150}/></div><span className="label">Maison Symbol</span><h3>{lines(t('메종 심볼', 'Maison symbol'))}</h3><p className="muted">{t('하우스의 공식 표기. 사이트 상단과 모든 공식 문서에 사용합니다.', 'The official mark of the house, used at the top of the site and on all official documents.')}</p></div>
+        <div className="symbol-card"><div className="mark"><img src={V('lion-motif.jpg')} alt="Lion-B monogram" style={{maxHeight: 150, borderRadius: 4}}/></div><span className="label">The Monogram</span><h3>{lines(t('사자-B 모노그램', 'Lion-B monogram'))}</h3><p className="muted">{t('현처럼 곧게 선 획 위에 별을 얹은 이니셜. 동물 세계관으로 들어가는 문입니다.', 'An initial straight as a string, crowned with a star. The door to the animal worlds.')}</p></div>
+        <div className="symbol-card"><div className="mini">{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/></a>)}</div><span className="label">Collection Emblems</span><h3>{lines(t('여섯 엠블럼', 'Six emblems'))}</h3><p className="muted">LION · SWAN · ORCA · LEOPARD · PANTHER · PHOENIX.</p></div>
       </div></section>
     <OneWorld/><Services/>
   </>;
 
   const music = <>
-    <Scene img="bu-quartet.jpg" eyebrow="BELiOR Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술. 실제 무대와 현장에서 연주하는 BELiOR의 음악입니다.', 'Music performed live, on real stages and at real events.')} pos="60% center"/>
+    <Scene img="eve-quartet.jpg" eyebrow="BELiOR Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술. 실제 무대와 현장에서 연주하는 BELiOR의 음악입니다.', 'Music performed live, on real stages and at real events.')} pos="86% 55%"/>
     <section className="section"><Head eyebrow="Music" title={t('음악은 저녁을 작곡합니다', 'Music composes the evening')} text="Where Music Becomes Memory."/>
       <div className="doors">
         <Door href="/music/artists" img="bu-backstage.jpg" eyebrow="Artists" title={t('연주진', 'Artists')} text={t('현장에서 함께 호흡하는 연주진.', 'The musicians on stage.')}/>
@@ -390,15 +513,13 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <Door href="/music/gala" img="bu-violinist.jpg" eyebrow="Editorial" title="Brand Gala Dinner Show" text={t('현장 · 리셉션 · 백스테이지의 기록.', 'On site · Reception · Backstage.')} pos="center 20%"/>
         <Door href="/music/inquiry" img="bu-violin.jpg" eyebrow="Inquiry" title={t('공연 문의', 'Inquiry')} text={t('행사 정보를 남기면 프로그램을 제안드립니다.', 'Share your event and we will propose a programme.')}/>
       </div></section>
-    <TheEvening/><TheHouse/>
+    <TwoHouses/><GuestJourney/><SymphonicAtelier/><OfficialStage/><BeyondLogo/><Operation/><TheEvening/>
     <section className="section"><div className="statement"><span className="label">An Evening</span><h2>An Evening, Beautifully Composed.</h2><p>{t('아름답게 구성된 하나의 저녁.', 'One evening, beautifully composed.')}</p><Cta href="/music/inquiry">{t('공연 문의', 'Inquire')}</Cta></div></section>
   </>;
 
   const artists = <>
     <Scene img="bu-backstage.jpg" eyebrow="Music · Artists" title={t('BELiOR 연주진', 'BELiOR Artists')} lede="Beyond Performance. An Experience." pos="center 35%"/>
-    <section className="section"><Head eyebrow="The Ensemble" title={t('현악 4중주 편성', 'String quartet')} text={t('BELiOR의 무대는 현악앙상블 TWOTTIVA가 연주합니다.', 'BELiOR’s stage is performed by TWOTTIVA string ensemble.')}/>
-      <div className="roles">{[['여혜린', 'Hyerin Yeo', 'Violin I · Founder & Artistic Director'], ['김사무엘', 'Samuel Kim', 'Violin II'], ['김도현', 'Dohyun Kim', 'Viola'], ['김요한', 'Yohan Kim', 'Cello']].map(([ko, eng, role]) =>
-        <div className="role" key={ko}><span className="label">{role}</span><h3>{t(ko, eng)}</h3></div>)}</div></section>
+    <Founder/><Artists/><OfficialStage/>
     <TheHouse/>
     <Band img="bu-violinist.jpg" eyebrow="On Site" title={t('무대가 아닌 곳에서도,\n무대처럼', 'On stage,\neven off stage')} text={t('야외 잔디와 리셉션 공간, 디너 테이블 사이에서 행사의 흐름에 맞춰 연주합니다.', 'On lawns, in reception halls and between dinner tables, we play to the flow of the event.')} href="/music/performances" cta={t('공연 보기', 'Performances')} pos="center 25%"/>
   </>;
@@ -408,22 +529,22 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="section"><Head eyebrow="Portfolio" title={t('함께한 저녁', 'Evenings we shared')}/>
       <div className="rows">
         <a className="row" href="/music/gala"><h3>Brand Gala Dinner Show</h3><p>{t('서울 · 한강을 내려다보는 야외 디너 · 현악 4중주 라이브 연주', 'Seoul · Outdoor dinner above the Han River · Live string quartet')}</p><span className="more">Editorial</span></a>
-        <div className="row"><h3>{t('KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th Anniversary Concert')}</h3><p>TWOTTIVA</p><span/></div>
-        <div className="row"><h3>{t('한국여성공인회계사회 정기총회 및 회장 이·취임식', 'Korea Women CPA Association, Inauguration')}</h3><p>TWOTTIVA</p><span/></div>
-        <div className="row"><h3>{t('호텔 연회 · 기업행사 · VIP 리셉션', 'Hotel banquets · Corporate events · VIP receptions')}</h3><p>TWOTTIVA</p><span/></div>
+        <div className="row"><h3>{lines(t('KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th Anniversary Concert'))}</h3><p>TWOTTIVA</p><span/></div>
+        <div className="row"><h3>{lines(t('한국여성공인회계사회 정기총회 및 회장 이·취임식', 'Korea Women CPA Association, Inauguration'))}</h3><p>TWOTTIVA</p><span/></div>
+        <div className="row"><h3>{lines(t('호텔 연회 · 기업행사 · VIP 리셉션', 'Hotel banquets · Corporate events · VIP receptions'))}</h3><p>TWOTTIVA</p><span/></div>
       </div>
       <p className="muted small" style={{marginTop: 20}}>{t('공연 이력은 TWOTTIVA와 각 연주자의 이력입니다.', 'Performance history belongs to TWOTTIVA and its musicians.')}</p>
       <video className="performance-video" controls playsInline preload="metadata" src="/belior/rehearsal.mp4"/></section>
     <TheEvening/>
-    <Band img="bu-quartet.jpg" eyebrow="For Your Evening" title={t('행사의 성격에 맞춘\n프로그램', 'A programme shaped\nto your event')} text={t('행사 일정과 장소, 진행 순서를 바탕으로 편성과 곡목을 제안드립니다.', 'We propose ensemble and repertoire around your schedule, venue and running order.')} href="/music/inquiry" cta={t('공연 문의', 'Inquire')} pos="60% center"/>
+    <Band img="eve-quartet.jpg" eyebrow="For Your Evening" title={t('행사의 성격에 맞춘\n프로그램', 'A programme shaped\nto your event')} text={t('행사 일정과 장소, 진행 순서를 바탕으로 편성과 곡목을 제안드립니다.', 'We propose ensemble and repertoire around your schedule, venue and running order.')} href="/music/inquiry" cta={t('공연 문의', 'Inquire')} pos="86% 55%"/>
   </>;
 
   const gala = <>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial · Brand Gala Dinner Show, Seoul" title={t('강 위로 저무는 저녁', 'An evening over the river')} lede={t('브랜드 갈라 디너 쇼에서 BELiOR는 현장의 라이브 연주를 맡았고, 연주에 대해 좋은 평가를 받았습니다.', 'At a brand gala dinner show, BELiOR performed live and was well received.')} pos="center 55%"/>
     <section className="section">
-      <div className="spread"><figure className="c-8"><img src={V('bu-quartet.jpg')} alt={t('행사장 앞 야외 4중주', 'Outdoor quartet at the venue')} loading="lazy"/><figcaption>I. Reception</figcaption></figure>
-        <div className="copy c-4"><span className="label">Reception</span><h3>{t('손님이 도착하는 시간', 'As the guests arrive')}</h3><p className="muted">{t('조명이 켜지기 시작할 무렵, 리셉션의 공기를 현악 4중주로 채웠습니다.', 'As the lights came on, a string quartet filled the reception.')}</p></div></div>
-      <div className="spread"><div className="copy c-5"><span className="label">The Venue</span><h3>{t('원형 테이블과 한강', 'Round tables and the river')}</h3><p className="muted">{t('언덕 위 잔디에 놓인 원형 디너 테이블, 그 너머로 강과 다리가 이어지는 풍경입니다.', 'Round dinner tables on a hillside lawn, with the river and bridges beyond.')}</p></div>
+      <div className="spread"><figure className="c-8"><img src={V('eve-quartet.jpg')} alt={t('행사장 앞 야외 4중주', 'Outdoor quartet at the venue')} loading="lazy"/><figcaption>I. Reception</figcaption></figure>
+        <div className="copy c-4"><span className="label">Reception</span><h3>{lines(t('손님이 도착하는 시간', 'As the guests arrive'))}</h3><p className="muted">{t('조명이 켜지기 시작할 무렵, 리셉션의 공기를 현악 4중주로 채웠습니다.', 'As the lights came on, a string quartet filled the reception.')}</p></div></div>
+      <div className="spread"><div className="copy c-5"><span className="label">The Venue</span><h3>{lines(t('원형 테이블과 한강', 'Round tables and the river'))}</h3><p className="muted">{t('언덕 위 잔디에 놓인 원형 디너 테이블, 그 너머로 강과 다리가 이어지는 풍경입니다.', 'Round dinner tables on a hillside lawn, with the river and bridges beyond.')}</p></div>
         <figure className="c-6" style={{gridColumn: '7 / span 6'}}><img src={V('bu-violinist.jpg')} alt={t('잔디 위의 바이올리니스트', 'Violinist on the lawn')} loading="lazy"/><figcaption>II. Venue</figcaption></figure></div>
       <div className="spread"><figure className="c-5"><img src={V('bu-violin.jpg')} alt={t('바이올린 클로즈업', 'Violin close-up')} loading="lazy"/><figcaption>III. Detail</figcaption></figure>
         <figure className="c-7"><img src={V('bu-backstage.jpg')} alt={t('공연을 마친 연주진', 'The musicians after the show')} loading="lazy"/><figcaption>IV. Backstage</figcaption></figure></div>
@@ -443,7 +564,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   const collection = <>
     <Scene img="lion-wide.jpg" eyebrow="The Animal Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계. BELiOR의 메종 위에 여섯 동물의 세계가 펼쳐집니다.', 'One symbol, endless worlds. Six animal worlds unfold upon the maison.')} pos="center 35%"/>
     <section className="section"><div className="spread">
-      <div className="copy c-6"><span className="label">From the Maison</span><h3>{t('메종에서 시작된 여섯 개의 세계', 'Six worlds that began in the maison')}</h3>
+      <div className="copy c-6"><span className="label">From the Maison</span><h3>{lines(t('메종에서 시작된 여섯 개의 세계', 'Six worlds that began in the maison'))}</h3>
         <p className="muted">{t('음악과 오브제로 쌓아 온 BELiOR의 하우스 위에, 사자의 모노그램에서 출발한 동물들의 세계관을 더합니다. 각 세계는 고유의 색과 소재, 향과 사물을 가집니다.', 'Upon the house of music and objects, BELiOR adds animal worlds that begin with the lion monogram. Each has its own colour, material, scent and objects.')}</p>
         <blockquote className="note-founder"><span className="label">Founder’s Note</span><p>{t('사자는 강인하고 멋집니다. 호랑이는 홀로 살아남아야 하는 자연의 섭리 속에서도 웅장합니다. 그 마음이 BELiOR의 세계관이 되었습니다.', 'The lion is strong and magnificent. The tiger, though nature asks it to survive alone, is grand. That feeling became the world of BELiOR.')}</p></blockquote>
         <a className="more" href="/maison">{t('메종 보기', 'The maison')}</a></div>
@@ -487,6 +608,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       {w.atelier && <section className="section night"><div className="spread">
         <div className="copy c-5"><span className="label">Atelier</span><h3>{w.name} Atelier</h3><p className="muted">{w.atelier[en ? 1 : 0]}</p><a className="more" href="/atelier">{t('아틀리에 보기', 'The atelier')}</a></div>
         <figure className="c-6" style={{gridColumn: '7 / span 6'}}><img src={V(w.slug + '-atelier.jpg')} alt={w.name + ' atelier'} loading="lazy"/><figcaption>Leather · Emblem</figcaption></figure></div></section>}
+      {w.slug === 'swan' && <section className="section"><figure className="wide-fig"><img src={V('swan-ballet.jpg')} alt={t('Swan Lake 1막 무대', 'Swan Lake, Act I on stage')} loading="lazy"/><figcaption>Swan Lake · Act I</figcaption></figure></section>}
       {w.alt && <section className="section"><figure className="wide-fig"><img src={V(w.alt)} alt="" loading="lazy"/><figcaption>The World of {w.name}</figcaption></figure></section>}
       <section className="section night"><Head eyebrow="Other Worlds" title={t('다른 세계로', 'Other worlds')}/><Emblems items={WORLDS.filter(x => x !== w)} five/></section>
       <Band img={nxt.img || 'lion-wide.jpg'} eyebrow="Next World" title={nxt.name} text={nxt.kw} href={'/collection/' + nxt.slug} cta={t('다음 세계', 'Next world')}/>
@@ -523,7 +645,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <Scene img="o-mk-home-objects.jpg" eyebrow="Parfum · Bag · Clothing · Objects" title={one ? one[1] : 'The Art of Everyday'} lede={t('감각을 담는 소재, 오래 머무는 형태.', 'Materials that hold feeling. Forms that endure.')}/>
       {(d === '' || d === 'parfum') && <section className="section night"><div className="spread">
         <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('검은 말', 'A black horse')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
-        <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me')}</h3><a className="more" href="/products/no-16">{t('이야기 보기', 'Read the story')}</a></div></div></section>}
+        <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{lines(t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me'))}</h3><a className="more" href="/products/no-16">{t('이야기 보기', 'Read the story')}</a></div></div></section>}
       <section className="section"><Head eyebrow="The Art of Everyday" title={t('일상의 예술', 'The art of everyday')} text={t('출시 소식은 프라이빗 문의로 먼저 안내드립니다.', 'Launch news is shared first through private enquiries.')}/>
         <div className="lines">{items.map(([s, n, ko, im]) => <a className="line-item" href={'/products/' + s} key={s}><div className="ph"><img src={V(im)} alt={n} loading="lazy"/></div><span className="label">{n}</span><p className="muted">{t(ko, n)}</p></a>)}</div></section>
       <ObjectsRow/><OneWorld/>
@@ -535,7 +657,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <ObjectsRow/>
     <section className="section night"><div className="spread">
       <figure className="c-6"><img src={V('o-m-br-hero.jpg')} alt={t('B 모노그램 가죽 브레이슬릿', 'Leather bracelet with B monogram')} loading="lazy"/><figcaption>Leather · Monogram</figcaption></figure>
-      <div className="copy c-5" style={{gridColumn: '8 / span 5'}}><span className="label">Leather Goods</span><h3>{t('모노그램을 새긴 가죽 소품', 'Leather goods with the monogram')}</h3><p className="muted">{t('하우스의 이니셜을 작은 사물에 옮깁니다.', 'The house initial, carried onto small objects.')}</p></div></div></section>
+      <div className="copy c-5" style={{gridColumn: '8 / span 5'}}><span className="label">Leather Goods</span><h3>{lines(t('모노그램을 새긴 가죽 소품', 'Leather goods with the monogram'))}</h3><p className="muted">{t('하우스의 이니셜을 작은 사물에 옮깁니다.', 'The house initial, carried onto small objects.')}</p></div></div></section>
     <section className="section" id="lines"><Head eyebrow="Collection Lines" title={t('여섯 세계의 사물', 'Objects of six worlds')}/><Emblems items={WORLDS}/></section>
     <Band img="o-maison-objects.jpg" eyebrow="Maison" title={t('음악과 오브제가\n함께 머무는 곳', 'Where music and\nobjects live together')} text={t('하우스의 시각 언어에서 출발한 사물들.', 'Objects drawn from the house’s visual language.')} href="/maison" cta={t('메종 보기', 'The maison')}/>
   </>;
@@ -543,8 +665,9 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   const atelier = <>
     <Scene img="o-mk-home-atelier.jpg" eyebrow="Atelier" title="Craft Your Moment" lede={t('시간이 만들어내는 아름다움, 섬세한 손끝에서 시작됩니다.', 'Beauty made by time begins at the fingertips.')}/>
     <AtelierContent/>
+    <VisualTeam/>
     <section className="section" id="process"><Head eyebrow="Process" title={t('제작의 순서', 'How we make')} text={t('세부 일정과 방식은 프로젝트마다 함께 정합니다.', 'Schedules and methods are agreed project by project.')}/>
-      <div className="steps">{[['Concept', '행사와 브랜드의 콘셉트, 세계관을 정합니다.', 'We set the concept and world of the event or brand.'], ['Visual', '무대 배경 영상과 프로그램 그래픽을 설계합니다.', 'We design stage visuals and programme graphics.'], ['Object', '포스터, 패키지, 오브제로 형태를 만듭니다.', 'We give it form in posters, packaging and objects.'], ['Stage', '현장에서 음악과 함께 완성합니다.', 'We complete it on site, with music.']].map(([n, ko, eng]) =>
+      <div className="steps">{[['Concept', '행사와 브랜드의 콘셉트, 세계관을 정합니다.', 'We set the concept and world of the event or brand.'], ['Visual', '무대 배경 영상과 프로그램 그래픽을 설계합니다.', 'We design stage visuals and programme graphics.'], ['Object', '패키지와 오브제로 형태를 만듭니다.', 'We give it form in packaging and objects.'], ['Stage', '현장에서 음악과 함께 완성합니다.', 'We complete it on site, with music.']].map(([n, ko, eng]) =>
         <div className="step" key={n}><h3>{n}</h3><p>{t(ko, eng)}</p></div>)}</div></section>
     <section className="section night"><figure className="wide-fig"><img src={V('atelier-wide.jpg')} alt={t('패키지 콘셉트', 'Packaging concept')} loading="lazy"/><figcaption>Packaging</figcaption></figure></section>
     <Services/>
@@ -553,11 +676,11 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   const journal = <>
     <Scene img="o-mk-home-journal.jpg" eyebrow="Journal" title={'Stories behind\nthe Maison'} lede={t('예술, 사람, 공간의 이야기를 기록합니다.', 'Stories of art, people and places.')}/>
     <section className="section"><div className="rows">
-      <a className="row" href="/products/no-16"><h3>{t('No. 16 — 숲, 그리고 나를 지탱해 준 말', 'No. 16 — The forest, and the horse that held me')}</h3><p>Parfum · Story</p><span className="more">Read</span></a>
-      <a className="row" href="/music/gala"><h3>{t('Brand Gala Dinner Show, 그날의 기록', 'Brand Gala Dinner Show, that evening')}</h3><p>Music · Reception · Backstage</p><span className="more">Read</span></a>
-      <a className="row" href="/maison#house"><h3>{t('무대에서 시작된 하우스', 'A house born on stage')}</h3><p>Maison · BELiOR & TWOTTIVA</p><span className="more">Read</span></a>
-      <a className="row" href="/collection"><h3>{t('하나의 상징, 여섯 개의 세계', 'One symbol, six worlds')}</h3><p>Collection</p><span className="more">Read</span></a>
-      <a className="row" href="/maison#symbol"><h3>{t('메종 심볼과 사자-B 모노그램', 'The maison symbol and the lion-B monogram')}</h3><p>Maison · Symbols</p><span className="more">Read</span></a>
+      <a className="row" href="/products/no-16"><h3>{lines(t('No. 16 — 숲, 그리고 나를 지탱해 준 말', 'No. 16 — The forest, and the horse that held me'))}</h3><p>Parfum · Story</p><span className="more">Read</span></a>
+      <a className="row" href="/music/gala"><h3>{lines(t('Brand Gala Dinner Show, 그날의 기록', 'Brand Gala Dinner Show, that evening'))}</h3><p>Music · Reception · Backstage</p><span className="more">Read</span></a>
+      <a className="row" href="/maison#house"><h3>{lines(t('무대에서 시작된 하우스', 'A house born on stage'))}</h3><p>Maison · BELiOR & TWOTTIVA</p><span className="more">Read</span></a>
+      <a className="row" href="/collection"><h3>{lines(t('하나의 상징, 여섯 개의 세계', 'One symbol, six worlds'))}</h3><p>Collection</p><span className="more">Read</span></a>
+      <a className="row" href="/maison#symbol"><h3>{lines(t('메종 심볼과 사자-B 모노그램', 'The maison symbol and the lion-B monogram'))}</h3><p>Maison · Symbols</p><span className="more">Read</span></a>
     </div></section>
     <OneWorld/>
   </>;
@@ -605,7 +728,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <nav className="foot-nav" aria-label="Footer">{MENU.map(m => <a href={m.href} key={m.href}>{m.name}</a>)}<a href="/office">OFFICE</a></nav></div>
       <hr className="rule"/>
       <dl className="biz"><div><dt>{t('상호', 'Company')}</dt><dd>벨리오르(BELIOR)</dd></div><div><dt>{t('대표', 'CEO')}</dt><dd>{t('여혜린', 'Hyerin Yeo')}</dd></div>
-        <div><dt>{t('사업자등록번호', 'Business No.')}</dt><dd>450-54-01129</dd></div><div><dt>{t('사업장', 'Address')}</dt><dd>{t('경기도 용인시 수지구 동천로135번길 21', '21, Dongcheon-ro 135beon-gil, Suji-gu, Yongin-si, Gyeonggi-do')}</dd></div>
+        <div><dt>{t('사업자등록번호', 'Business No.')}</dt><dd>450-54-01129</dd></div>
         <div><dt>Mail</dt><dd>{MAIL}</dd></div></dl>
       <div className="foot-base"><span className="label">A More Beautiful Tomorrow.</span><span className="muted small">© {new Date().getFullYear()} BELiOR</span></div>
     </footer>

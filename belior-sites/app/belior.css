@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&family=Noto+Serif+KR:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap');
 .belior{--ink: #0c0b0a;          
   --night: #15130f;        
   --ivory: #ece4d6;        
@@ -522,3 +522,91 @@
 .belior .iv-foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:28px var(--gutter) 0;border-top:1px solid var(--line);margin-top:30px;
   font:400 .66rem/1.6 var(--label);letter-spacing:.3em;text-transform:uppercase;color:var(--taupe)}
 @media (max-width:760px){.belior .iv-art .wide{display:none}.belior .iv-art .narrow{display:block}}
+
+/* ---------- Korean: the Apple system face, set small ---------- */
+.belior{--ko:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --display:"Cormorant Garamond",-apple-system,"Apple SD Gothic Neo","Noto Sans KR",Georgia,serif;
+  --body:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-family:var(--body);font-size:15px;line-height:1.8;letter-spacing:-.005em}
+.belior p,.belior li,.belior dd{font-size:.92rem}
+.belior .ko{font-family:var(--ko);font-size:.56em;font-weight:500;letter-spacing:-.01em;line-height:1.55;display:inline-block}
+.belior h3 .ko{font-size:.72em}
+.belior .scene h1 .ko,.belior .lux-hero h1 .ko{font-size:.5em;text-transform:none}
+.belior .world-line{font-family:var(--ko);font-style:normal;font-size:clamp(1.05rem,1.8vw,1.35rem);font-weight:400;line-height:1.8}
+.belior .note-founder p{font-family:var(--ko);font-style:normal;font-size:1rem}
+
+/* ---------- two houses ---------- */
+.belior .th-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.belior .th-card{background:var(--night);padding:clamp(28px,4vw,52px);display:grid;gap:14px;align-content:start}
+.belior .th-card h3{font-size:clamp(2rem,3.6vw,3rem);letter-spacing:.14em}
+.belior .th-tag{font:italic 400 1.05rem/1.4 var(--display);color:var(--champagne)}
+@media (max-width:760px){.belior .th-grid{grid-template-columns:1fr}}
+
+/* ---------- visual team ---------- */
+.belior .visual{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-template-rows:auto auto;gap:2px;background:var(--ink)}
+.belior .vs-main{grid-row:1 / span 2;margin:0;position:relative;overflow:hidden;min-height:70svh}
+.belior .vs-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center}
+.belior .vs-copy{padding:clamp(32px,5vw,72px);display:grid;gap:18px;align-content:center;background:var(--night)}
+.belior .vs-copy h2{font-size:clamp(2rem,3.6vw,3rem)}
+.belior .vs-name{font:400 .72rem/1.6 var(--label);letter-spacing:.24em;text-transform:uppercase;color:var(--champagne)}
+.belior .vs-side{margin:0;overflow:hidden;max-height:60svh}
+.belior .vs-side img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
+@media (max-width:860px){.belior .visual{grid-template-columns:1fr}.belior .vs-main{grid-row:auto;min-height:56svh}.belior .vs-main img{object-position:72% center}}
+
+/* ---------- founder ---------- */
+.belior .founder{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);background:#0a0a09}
+.belior .founder figure{margin:0;overflow:hidden;max-height:92svh}
+.belior .founder figure img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.belior .fd-copy{padding:clamp(40px,6vw,96px) var(--gutter);display:grid;gap:18px;align-content:center}
+.belior .fd-copy h2{font-size:clamp(2.6rem,5vw,4rem);display:grid;gap:6px}
+.belior .fd-copy h2 .ko{font-size:.7em}
+.belior .fd-copy h2 small{font:italic 400 1.4rem/1 var(--display);color:var(--champagne)}
+.belior .fd-role{font:400 .74rem/1.6 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--taupe)}
+.belior .fd-list{margin:10px 0 0;display:grid;border-top:1px solid var(--line)}
+.belior .fd-list div{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.belior .fd-list dt{font:400 .7rem/1.7 var(--label);letter-spacing:.18em;color:var(--champagne)}
+.belior .fd-list dd{margin:0}
+@media (max-width:860px){.belior .founder{grid-template-columns:1fr}.belior .founder figure{max-height:70svh}}
+
+/* ---------- artists ---------- */
+.belior .ar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,28px);margin-bottom:24px}
+.belior .ar{margin:0;display:grid;gap:16px;align-content:start}
+.belior .ar .ph{aspect-ratio:4/5;overflow:hidden;background:var(--night)}
+.belior .ar .ph img{width:100%;height:100%;object-fit:cover;object-position:center 20%;transition:transform 1.4s ease}
+.belior .ar:hover .ph img{transform:scale(1.04)}
+.belior .ar h3{font-size:1.6rem}
+.belior .ar ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;color:var(--taupe)}
+.belior .ar li{font-size:.84rem}
+@media (max-width:900px){.belior .ar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- official stage ---------- */
+.belior .official{position:relative;min-height:84svh;display:grid;align-items:end;isolation:isolate;overflow:hidden}
+.belior .official .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.belior .official::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(10,10,9,.92) 0%,rgba(10,10,9,.55) 45%,rgba(10,10,9,.1) 80%)}
+.belior .of-copy{padding:clamp(48px,7vw,100px) var(--gutter);display:grid;gap:20px;max-width:38rem}
+.belior .of-copy h2{font-size:clamp(2.4rem,5vw,4rem)}
+.belior .of-num{display:flex;gap:18px;align-items:center;margin-top:10px}
+.belior .of-num b{font:400 clamp(3.4rem,7vw,5.6rem)/1 var(--display);color:var(--champagne)}
+.belior .of-num span{font:400 .72rem/1.7 var(--label);letter-spacing:.2em;text-transform:uppercase}
+
+/* ---------- guest journey ---------- */
+.belior .gj{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line)}
+.belior .gj li{padding:22px 16px 26px 0;border-bottom:1px solid var(--line);display:grid;gap:8px;align-content:start;min-width:0}
+.belior .gj-time{font:400 .62rem/1 var(--label);letter-spacing:.3em;text-transform:uppercase;color:var(--taupe)}
+.belior .gj-no{font:400 .7rem/1 var(--label);color:var(--champagne)}
+.belior .gj h3{font-size:1.35rem}
+.belior .gj p{font-size:.84rem;color:var(--taupe)}
+.belior .gj-cue{font:italic 400 .95rem/1.3 var(--display);color:var(--champagne)}
+@media (max-width:1000px){.belior .gj{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- symphonic atelier ---------- */
+.belior .symphonic{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr) minmax(0,.8fr);gap:2px;background:var(--ink)}
+.belior .symphonic figure{margin:0;overflow:hidden;max-height:92svh}
+.belior .symphonic figure img{width:100%;height:100%;object-fit:cover}
+.belior .sy-copy{padding:clamp(36px,5vw,80px);display:grid;gap:18px;align-content:center;background:var(--night)}
+.belior .sy-copy h2{font-size:clamp(2.2rem,4vw,3.4rem)}
+.belior .sy-list{list-style:none;margin:6px 0;padding:0;display:grid;border-top:1px solid var(--line)}
+.belior .sy-list li{padding:18px 0;border-bottom:1px solid var(--line);display:grid;gap:6px}
+.belior .sy-list h3{font-size:1.5rem}
+.belior .sy-list p{color:var(--taupe)}
+@media (max-width:980px){.belior .symphonic{grid-template-columns:1fr 1fr}.belior .sy-copy{grid-column:1 / -1;grid-row:1}.belior .symphonic figure{max-height:60svh}}

@@ -28,7 +28,11 @@
   if (film) {
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) film.pause(); else { var p = film.play(); if (p && p.catch) p.catch(function () {}); }
-    function label() { if (toggle) toggle.textContent = film.paused ? 'PLAY FILM' : 'PAUSE FILM'; }
+    function label() {
+      if (!toggle) return;
+      toggle.innerHTML = film.paused ? '<span aria-hidden="true">&#9654;</span>' : '<span aria-hidden="true">II</span>';
+      toggle.setAttribute('aria-label', film.paused ? '영상 재생' : '영상 일시정지');
+    }
     film.addEventListener('play', label); film.addEventListener('pause', label); label();
     if (toggle) toggle.addEventListener('click', function () {
       if (film.paused) { var q = film.play(); if (q && q.catch) q.catch(function () {}); } else film.pause();
@@ -64,6 +68,20 @@
     }, { threshold: 0.2 });
     targets.forEach(function (t) { io.observe(t); });
   } else targets.forEach(function (t) { t.classList.add('seen'); });
+
+  // World carousel: dots follow the swipe, and take you to a world.
+  document.querySelectorAll('.carousel').forEach(function (car) {
+    var track = car.querySelector('.track'), dotsEl = car.querySelectorAll('.dot');
+    function mark() {
+      var i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+      dotsEl.forEach(function (d, k) { d.setAttribute('aria-current', String(k === i)); });
+    }
+    dotsEl.forEach(function (d, k) {
+      d.addEventListener('click', function () { track.scrollTo({ left: k * track.clientWidth, behavior: 'smooth' }); });
+    });
+    track.addEventListener('scroll', function () { window.requestAnimationFrame(mark); }, { passive: true });
+    mark();
+  });
 
   // Inquiry forms: nothing is sent from the page. The form composes a message to copy.
   document.querySelectorAll('form[data-inquiry]').forEach(function (form) {

@@ -47,13 +47,12 @@ LINES = [("PARFUM", "Scent of a story", "prod-parfum.jpg"), ("BAGS", "Carry a wo
 
 def header(active):
     cur = ' aria-current="page"'
-    links = "".join(f'<a href="{s}.html"{cur if s == active else ""}>{n}</a>' for s, n, _ in NAV)
-    panel = "".join(f'<a href="{s}.html">{n}<small>{k}</small></a>' for s, n, k in NAV)
-    return (f'<header class="site-header"><a class="brand" href="index.html" aria-label="BELiOR 홈">'
-            f'<img src="assets/img/mono-ivory.png" alt="" width="32" height="63"><span class="wordmark">BELiOR</span></a>'
-            f'<nav class="nav" aria-label="주요 메뉴">{links}</nav>'
-            f'<button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-panel">MENU</button></header>'
-            f'<nav class="menu-panel" id="menu-panel" hidden aria-label="모바일 메뉴">{panel}</nav>')
+    panel = "".join(f'<a href="{s}.html"{cur if s == active else ""}>{n}<small>{k}</small></a>' for s, n, k in NAV)
+    return (f'<header class="site-header">'
+            f'<button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-panel">MENU</button>'
+            f'<a class="brand" href="index.html" aria-label="BELiOR 홈"><img src="assets/img/mono-ivory.png" alt="BELiOR" width="22" height="43"></a>'
+            f'<a class="head-link" href="private.html">PRIVATE</a></header>'
+            f'<nav class="menu-panel" id="menu-panel" hidden aria-label="메뉴">{panel}</nav>')
 
 
 def footer():
@@ -91,12 +90,15 @@ def page(slug, title, body, active=None, extra_style="", chapter=None):
     (OUT / f"{slug}.html").write_text(html, encoding="utf-8")
 
 
-def scene(img, eyebrow, h1, lede="", full=True, pos="center", mark="mono-ivory.png", round_mark=False):
-    m = f'<img class="scene-mark{" round" if round_mark else ""}" src="assets/img/{mark}" alt="">'
+def cta(href, text="알아보기"):
+    return f'<a class="cta" href="{href}"><span>{text}</span><span class="ring" aria-hidden="true">&#8250;</span></a>'
+
+
+def scene(img, eyebrow, h1, lede="", full=True, pos="center", href=None, cta_text="알아보기", **_):
     return (f'<section class="scene{" scene--full" if full else ""}">'
             f'<img class="bg" src="assets/img/{img}" alt="" style="object-position:{pos}">'
-            f'<div class="inner">{m}<span class="label">{eyebrow}</span><h1>{h1}</h1>'
-            f'{f"<p class=lede>{lede}</p>" if lede else ""}</div></section>')
+            f'<div class="inner"><span class="label">{eyebrow}</span><h1>{h1}</h1>'
+            f'{f"<p class=lede>{lede}</p>" if lede else ""}{cta(href, cta_text) if href else ""}</div></section>')
 
 
 def door(href, img, title, text, pos="center"):
@@ -106,45 +108,30 @@ def door(href, img, title, text, pos="center"):
 
 
 # ---------------- index ----------------
+world_slides = "".join(
+    f'<div class="slide" role="group" aria-label="{w["name"]}" style="--world:{w["color"]}">'
+    f'<img class="bg" src="assets/img/{w["img"] or "phoenix.jpg"}" alt="" loading="lazy">'
+    f'<div class="inner"><span class="label">The Animal Collection</span><h2>{w["name"]}</h2>'
+    f'<p class="lede">{" · ".join(w["kw"])}</p>{cta("collection-" + w["slug"] + ".html")}</div></div>' for w in WORLDS)
+dots = "".join(f'<button type="button" class="dot" aria-label="{w["name"]}"></button>' for w in WORLDS)
+
 page("index", "BELiOR", f'''
 <section class="scene scene--full film" aria-label="BELiOR 브랜드 필름">
   <video class="bg" src="assets/media/belior-film.webm" poster="assets/img/film-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
-  <div class="center">
-    <img src="assets/img/mono-ivory.png" alt="BELiOR 기본 심볼" width="96" height="189">
-    <span class="wordmark">BELiOR</span>
-    <span class="label">The Evening, Composed.</span>
-  </div>
-  <span class="label scroll-cue">Scroll</span>
-  <button class="film-toggle" type="button">PAUSE FILM</button>
+  <button class="film-toggle" type="button" aria-label="영상 일시정지"><span aria-hidden="true">II</span></button>
 </section>
-<section class="section">
-  <div class="section-head" style="justify-items:center;text-align:center;margin-inline:auto">
-    <span class="label">A Maison of Art &amp; Experience</span>
-    <h2>두 개의 세계, 하나의 메종</h2>
-    <p class="muted">음악과 컬렉션은 각자의 자리에서 BELiOR의 저녁을 완성합니다.</p>
-  </div>
+{scene("bu-quartet.jpg", "Music", "The Art of a<br>Living Moment", "살아 있는 순간의 예술", pos="60% center", href="music.html")}
+{scene("bu-aerial.jpg", "Editorial", "Buccellati Dinner", "강 위로 저무는 저녁", pos="center 60%", href="music-buccellati.html")}
+{scene("lion-portrait.jpg", "Collection", "One Symbol.<br>Endless Worlds.", "하나의 상징, 끝없는 세계", pos="center 30%", href="collection.html")}
+<section class="carousel" aria-label="여섯 개의 컬렉션">
+  <div class="track">{world_slides}</div>
+  <div class="dots">{dots}</div>
 </section>
-<div class="houses">
-  <a class="house" href="music.html"><img src="assets/img/bu-quartet.jpg" alt="부첼라티 디너 현장의 현악 4중주" style="object-position:60% center">
-    <div class="txt"><span class="label">BELiOR Music</span><h2>MUSIC</h2><p>연주진 · 공연 · 아티스트 · 문화 행사</p><span class="more">Enter Music</span></div></a>
-  <a class="house" href="collection.html"><img src="assets/img/lion-portrait.jpg" alt="블랙 배경의 사자 초상" style="object-position:center 30%">
-    <div class="txt"><span class="label">BELiOR Collection</span><h2>COLLECTION</h2><p>동물 세계관 · 향수 · 오브제 · 아틀리에</p><span class="more">Enter Collection</span></div></a>
-</div>
-<section class="section section--night">
-  <div class="statement">
-    <span class="label">The BELiOR Point of View</span>
-    <h2>Not Made to Be Seen. Made to Be Remembered.</h2>
-    <p>보여지기 위해서가 아닌, 기억되기 위해.</p>
-  </div>
+<section class="scene scene--full plain">
+  <div class="inner"><img class="plain-mark" src="assets/img/mono-ivory.png" alt="" width="40" height="79"><span class="label">Maison</span>
+    <h1>Not Made to Be Seen.<br>Made to Be Remembered.</h1><p class="lede">보여지기 위해서가 아닌, 기억되기 위해.</p>{cta("maison.html")}</div>
 </section>
-<section class="section">
-  <div class="spread">
-    <figure class="c-7"><img src="assets/img/bu-aerial.jpg" alt="한강을 내려다보는 부첼라티 디너 테이블 전경" loading="lazy"><figcaption>MUSIC · Buccellati Dinner, Seoul</figcaption></figure>
-    <div class="copy c-5"><span class="label">Journal</span><h3>부첼라티 디너, 그날의 기록</h3>
-      <p class="muted">한강을 내려다보는 저녁, BELiOR 연주진이 현장의 음악을 맡았습니다.</p>
-      <a class="more" href="music-buccellati.html">Read the story</a></div>
-  </div>
-</section>''')
+{scene("panther.jpg", "Private", "By Appointment", "공연과 컬렉션에 관한 프라이빗 문의", pos="center 30%", href="private.html", cta_text="문의하기")}''')
 
 # ---------------- maison ----------------
 emb_mini = "".join(f'<img src="assets/img/emblem-{w["slug"]}.jpg" alt="{w["name"]} 엠블럼">' for w in WORLDS)

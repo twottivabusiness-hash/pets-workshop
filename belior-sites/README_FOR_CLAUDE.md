@@ -67,3 +67,9 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 
 ## 2026-10-13 추가 변경 (3)
 - 페이지 전환: 페라리처럼 가운데 작은 문양(44~60px) 하나만 표시. 동물 이름·선·페이지 이름 글자는 숨김.
+
+## 2026-10-13 추가 변경 (4)
+- The Evening: "프라이빗 갈라·콘셉트 필름" 영상 삭제. 그 자리에 야외 4중주 가로 사진(v3/eve-quartet.jpg)을 원본 비율 그대로(잘림 없음) 넣음.
+- 문의 페이지에서 동물(고래) 연출 삭제. /private는 초대 시안(BELiOR Atelier · Invitation Only) 기반, /music/inquiry는 촛불 연회장 사진(v3/gala-hall.jpg)과 정돈된 폼으로 다시 구성. 문의 API는 그대로.
+- Swan Lake 리허설 사운드: v3/swan-lake.m4a. 메인 영상 왼쪽 아래와 Swan Lake 챕터에 "듣기" 버튼(누르면 서서히 커지며 반복 재생). SWAN 페이지에는 소리 있는 Swan Lake 필름(v3/swan-lake-film.mp4).
+- 확인 필요: /private 시안 문구 "Three Cities. One Vision."과 SEOUL·PARIS·NEW YORK 이미지는 대표 제공 시안 그대로임.

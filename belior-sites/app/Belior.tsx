@@ -87,13 +87,27 @@ function Scene({img, eyebrow, title, lede, href, cta, pos = 'center'}: {img: str
       <div className="inner"><span className="label">{eyebrow}</span><h1>{lines(title)}</h1>{lede && <p className="lede">{lede}</p>}{href && <Cta href={href}>{cta}</Cta>}</div></section>;
 }
 
-function WhaleScene({eyebrow, title, lede, href, cta}: {eyebrow: string; title: string; lede: string; href?: string; cta?: string}) {
-  return <section className="scene whale-scene" aria-label="Humpback whale">
-    <div className="sea" aria-hidden="true"><span className="ray r1"/><span className="ray r2"/><span className="ray r3"/></div>
-    <img className="whale" src={V('whale.jpg')} alt=""/>
-    <div className="motes" aria-hidden="true">{Array.from({length: 14}, (_, i) => <i key={i} style={{left: (i * 7.3 % 100) + '%', animationDelay: (i * .9) + 's'}}/>)}</div>
-    <div className="inner"><span className="label">{eyebrow}</span><h1>{lines(title)}</h1><p className="lede">{lede}</p>{href && <Cta href={href}>{cta}</Cta>}</div>
-  </section>;
+/* Swan Lake rehearsal, one shared player with a slow fade-in */
+let swanAudio: HTMLAudioElement | null = null;
+function swan() {
+  if (!swanAudio) { swanAudio = new Audio('/belior/v3/swan-lake.m4a'); swanAudio.loop = true; swanAudio.preload = 'none'; }
+  return swanAudio;
+}
+function SoundButton({label}: {label: string}) {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const a = swan(), sync = () => setOn(!a.paused);
+    a.addEventListener('play', sync); a.addEventListener('pause', sync); sync();
+    return () => { a.removeEventListener('play', sync); a.removeEventListener('pause', sync); };
+  }, []);
+  const toggle = () => {
+    const a = swan();
+    if (!a.paused) { a.pause(); return; }
+    document.querySelectorAll('video').forEach(v => { if (!v.muted) v.pause(); });
+    a.volume = 0; void a.play().then(() => { const id = window.setInterval(() => { a.volume = Math.min(.85, a.volume + .05); if (a.volume >= .85) window.clearInterval(id); }, 120); }).catch(() => {});
+  };
+  return <button type="button" className={'sound' + (on ? ' on' : '')} onClick={toggle} aria-pressed={on}>
+    <span className="bars" aria-hidden="true"><i/><i/><i/><i/></span><span>{label}</span></button>;
 }
 
 function Band({img, eyebrow, title, text, href, cta, pos = 'center'}: {img: string; eyebrow: string; title: string; text: string; href: string; cta?: string; pos?: string}) {
@@ -143,12 +157,12 @@ function MaisonHero() {
 
 function SwanGallery() {
   const {t} = useT();
-  return <a className="gallery-chapter" href="/collection/swan">
-    <div className="gc-img"><img src="/belior/ballet.webp" alt="BELiOR Gallery Chapter 02 Swan Lake" loading="lazy"/></div>
+  return <div className="gallery-chapter">
+    <a className="gc-img" href="/collection/swan"><img src="/belior/ballet.webp" alt="BELiOR Gallery Chapter 02 Swan Lake" loading="lazy"/></a>
     <div className="gc-txt"><span className="label">BELiOR Gallery · Chapter 02</span><h3>SWAN LAKE</h3><p className="gc-work">Tchaikovsky — Swan Lake, Op. 20</p>
       <p className="gc-quote">We do not illustrate music. We give it form.</p><p className="muted">음악을 묘사하지 않습니다. 음악에 형태를 부여합니다.</p>
-      <span className="more">{t('챕터 들어가기', 'Enter the chapter')} →</span></div>
-  </a>;
+      <div className="gc-actions"><SoundButton label={t('Swan Lake 리허설 듣기', 'Listen — Swan Lake rehearsal')}/><a className="more" href="/collection/swan">{t('챕터 들어가기', 'Enter the chapter')} →</a></div></div>
+  </div>;
 }
 
 function MaisonIntro() {
@@ -182,7 +196,7 @@ function TheHouse() {
 function TheEvening() {
   const {t, en} = useT(); void t; void en;
   return <section className="section"><Head eyebrow="BELiOR Music · The Evening" title={t('음악이 머무는 저녁', 'An evening where music stays')}/>
-    <div className="evening"><figure className="ev-film"><video src={V('o-gala.mp4')} poster={V('o-gala-ensemble.jpg')} muted loop playsInline autoPlay preload="metadata"/><figcaption>{t('프라이빗 갈라', 'Private gala')}</figcaption></figure>
+    <div className="evening whole"><figure className="ev-photo"><img src={V('eve-quartet.jpg')} alt={t('행사장 앞 야외에서 연주하는 현악 4중주', 'A string quartet performing outdoors at the venue')} loading="lazy" width={1260} height={698}/></figure>
       <div className="ev-cards">
         <a className="ev-card" href="/music"><span className="label">01 · Music &amp; Experience</span><h3>{t('그 저녁', 'The evening')}</h3><p className="muted">{t('호텔, 브랜드, 프라이빗 갈라 디너를 위한 현악 4중주와 확장 편성, 그리고 맞춤 챔버 연출.', 'String quartets, larger ensembles and bespoke chamber direction for hotels, brands and private gala dinners.')}</p><span className="more">Explore</span></a>
         <a className="ev-card" href="/objects"><span className="label">02 · Objects</span><h3>{t('일상으로 옮긴 예술', 'Art carried into daily life')}</h3><p className="muted">{t('하우스의 시각 언어에서 출발한 스카프와 가죽 소품, 그리고 개인의 오브제.', 'Scarves, leather goods and personal objects drawn from the house’s visual language.')}</p><span className="more">Explore</span></a>
@@ -330,6 +344,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <button className="film-toggle" type="button" aria-label={filmPaused ? t('영상 재생', 'Play film') : t('영상 일시정지', 'Pause film')}
         onClick={() => { const f = filmRef.current; if (!f) return; if (f.paused) { void f.play().catch(() => {}); setFilmPaused(false); } else { f.pause(); setFilmPaused(true); } }}>
         <span aria-hidden="true">{filmPaused ? '▶' : 'II'}</span></button>
+      <div className="film-sound"><SoundButton label="Swan Lake · Rehearsal"/></div>
     </section>
     <Scene img="bu-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="60% center" href="/music"/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
@@ -350,7 +365,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
     <ObjectsRow/><Services/>
-    <WhaleScene eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
+    <Scene img="gala-hall.jpg" eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
   </>;
 
   const maison = <>
@@ -417,9 +432,12 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const musicInquiry = <>
-    <Scene img="bu-violin.jpg" eyebrow="Music · Inquiry" title={t('공연 문의', 'Performance inquiry')} lede={t('행사 정보를 남겨주시면 일정과 편성을 확인해 프로그램을 제안드립니다.', 'Tell us about your event and we will propose a programme.')}/>
-    <section className="section"><Head eyebrow="Your Evening" title={t('행사 정보', 'Your event')} text={t('모르는 항목은 비워두셔도 됩니다. 통화로 함께 확인합니다.', 'Leave blank anything you are unsure of. We will confirm by phone.')}/>
-      <InquiryForm music/><p className="muted small" style={{marginTop: 24}}>{MAIL}</p></section>
+    <section className="lux-hero"><img className="bg" src={V('gala-hall.jpg')} alt={t('촛불이 켜진 연회장에서 연주하는 앙상블', 'An ensemble performing in a candlelit hall')}/>
+      <div className="inner"><span className="label">BELiOR Music · Performance Enquiry</span><h1 className="keep">{lines(t('당신의 저녁을 위해\n작곡합니다.', 'An evening,\ncomposed for you.'))}</h1></div></section>
+    <section className="lux-form"><div className="lf-intro"><span className="label">The Enquiry</span><h2>{lines(t('일정과 장소,\n원하시는 분위기를 들려주세요.', 'Tell us the date, the place\nand the atmosphere you imagine.'))}</h2>
+      <p className="muted">{t('모르는 항목은 비워두셔도 됩니다. 확인 후 프로그램과 편성을 제안드립니다.', 'Leave blank anything you are unsure of. We will reply with a programme and ensemble.')}</p>
+      <p className="lf-mail">{MAIL}</p></div>
+      <InquiryForm music/></section>
   </>;
 
   const collection = <>
@@ -450,7 +468,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       {w.img ? <Scene img={w.img} eyebrow={'The Animal Collection · ' + w.mat} title={w.name + '\nCollection'} lede={lede} pos="center 35%"/> :
         <section className="scene plain"><div className="inner"><div className="phoenix-frame"><img src={V('phoenix.jpg')} alt="Phoenix"/></div>
           <span className="label">{'The Animal Collection · ' + w.mat}</span><h1>{w.name}<br/><span className="accent">Collection</span></h1><p className="lede">{lede}</p></div></section>}
-      {w.slug === 'swan' && <section className="section night"><Head eyebrow="Swan Lake" title={t('달빛 아래의 호수', 'A lake under the moon')}/><video className="performance-video" autoPlay muted loop playsInline preload="metadata" src="/belior/opening.mp4"/></section>}
+      {w.slug === 'swan' && <section className="section night"><Head eyebrow="Swan Lake · TWOTTIVA × BELiOR" title={t('달빛 아래의 호수', 'A lake under the moon')} text={t('리허설에서 녹음한 Swan Lake 연주입니다. 소리를 켜고 보세요.', 'Swan Lake, recorded in rehearsal. Watch with sound.')}/><video className="performance-video" controls playsInline preload="metadata" poster={V('swan-lake-poster.jpg')} src={V('swan-lake-film.mp4')}/></section>}
       <section className="section"><div className="spread">
         <div className="copy c-7"><span className="label">The World</span><p className="world-line">{w.world[en ? 1 : 0]}</p></div>
         <div className="c-4 emblem-side"><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/><span className="label">{w.name} Emblem</span></div></div>
@@ -545,10 +563,14 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const privatePage = <>
-    <WhaleScene eyebrow="Private Enquiries · By Invitation" title={'Extraordinary\nMoments'} lede={t('프라이빗 공연, 브랜드 행사, 기업 선물과 아틀리에 협업을 문의하세요.', 'For private performances, brand events, corporate gifting and atelier collaborations.')}/>
-    <section className="section"><Head eyebrow="Private Enquiries" title={t('대화를 시작합니다.', 'Begin a conversation.')} text={t('일정, 장소, 규모와 원하는 분위기를 남겨주시면 구체적인 제안으로 회신드리겠습니다.', 'Share your date, venue, scale and desired atmosphere. We will reply with a considered proposal.')}/>
-      <InquiryForm/><p className="muted small" style={{marginTop: 24}}>{t('BELiOR 문의 접수 창구', 'BELiOR enquiries')} · {MAIL}</p></section>
-    <Services/>
+    <section className="invite">
+      <div className="iv-art"><img className="wide" src={V('invite.jpg')} alt="BELiOR Atelier"/><img className="narrow" src={V('invite-center.jpg')} alt="BELiOR Atelier"/></div>
+      <div className="iv-body"><h1 className="keep">Three Cities. One Vision.</h1><p className="label">A More Beautiful Tomorrow.</p><span className="iv-rule"/>
+        <p className="iv-only">Invitation Only</p><p className="iv-sub">Some things are not made for everyone.</p>
+        <p className="muted">{t('프라이빗 공연, 브랜드 행사, 기업 선물과 아틀리에 협업은 초대와 개별 상담으로 진행합니다.', 'Private performances, brand events, corporate gifting and atelier collaborations are arranged by invitation.')}</p>
+        <InquiryForm/></div>
+      <div className="iv-foot"><span>Art · Objects · People · A Brighter Tomorrow</span><span>BELiOR Atelier</span></div>
+    </section>
   </>;
 
   const world = WORLDS.find(w => w.slug === detail);

@@ -121,7 +121,7 @@ page("index", "BELiOR", f'''
   <button class="film-toggle" type="button" aria-label="영상 일시정지"><span aria-hidden="true">II</span></button>
 </section>
 {scene("bu-quartet.jpg", "Music", "The Art of a<br>Living Moment", "살아 있는 순간의 예술", pos="60% center", href="music.html")}
-{scene("bu-aerial.jpg", "Editorial", "Buccellati Dinner", "강 위로 저무는 저녁", pos="center 60%", href="music-buccellati.html")}
+{scene("bu-aerial.jpg", "Editorial", "Brand Gala Dinner Show", "강 위로 저무는 저녁", pos="center 60%", href="music-gala.html")}
 {scene("lion-portrait.jpg", "Collection", "One Symbol.<br>Endless Worlds.", "하나의 상징, 끝없는 세계", pos="center 30%", href="collection.html")}
 <section class="carousel" aria-label="여섯 개의 컬렉션">
   <div class="track">{world_slides}</div>
@@ -173,7 +173,7 @@ page("music", "BELiOR Music", f'''
   <div class="doors">
     {door("music-artists.html", "bu-backstage.jpg", ("Artists", "연주진"), "현장에서 함께 호흡하는 BELiOR 연주진.")}
     {door("music-performances.html", "bu-aerial.jpg", ("Performances", "공연 포트폴리오"), "BELiOR가 함께한 행사와 무대.")}
-    {door("music-buccellati.html", "bu-violinist.jpg", ("Editorial", "부첼라티 디너"), "현장 · 리셉션 · 백스테이지의 기록.", pos="center 20%")}
+    {door("music-gala.html", "bu-violinist.jpg", ("Editorial", "브랜드 갈라 디너 쇼"), "현장 · 리셉션 · 백스테이지의 기록.", pos="center 20%")}
     {door("music-inquiry.html", "bu-violin.jpg", ("Inquiry", "공연 문의"), "행사 정보를 남기면 프로그램을 제안드립니다.")}
   </div>
 </section>
@@ -195,7 +195,7 @@ page("music-artists", "BELiOR Artists", f'''
 </section>
 <section class="section section--night">
   <div class="spread">
-    <figure class="c-5"><img src="assets/img/bu-violinist.jpg" alt="부첼라티 사인 앞에서 바이올린을 든 연주자" loading="lazy"><figcaption>Buccellati Dinner, Seoul</figcaption></figure>
+    <figure class="c-5"><img src="assets/img/bu-violinist.jpg" alt="행사장 잔디 위에서 바이올린을 든 연주자" loading="lazy"><figcaption>Brand Gala Dinner Show, Seoul</figcaption></figure>
     <div class="copy c-6 push-1" style="grid-column:7 / span 6"><span class="label">On Site</span><h3>무대가 아닌 곳에서도, 무대처럼</h3>
       <p class="muted">야외 잔디와 리셉션 공간, 디너 테이블 사이에서 행사의 흐름에 맞춰 연주합니다.</p>
       <a class="more" href="music-performances.html">Performances</a></div>
@@ -207,7 +207,7 @@ page("music-performances", "BELiOR Performances", f'''
 <section class="section">
   <div class="section-head"><span class="label">Portfolio</span><h2>함께한 저녁</h2></div>
   <div class="rows">
-    <a class="row" href="music-buccellati.html"><h3>Buccellati Dinner</h3>
+    <a class="row" href="music-gala.html"><h3>Brand Gala Dinner Show</h3>
       <p>서울 · 한강을 내려다보는 야외 디너 · 현악 4중주 라이브 연주</p><span class="more">Editorial</span></a>
   </div>
   <p class="muted" style="margin-top:28px">추가 공연은 확인된 행사부터 순서대로 게재합니다.</p>
@@ -217,15 +217,15 @@ page("music-performances", "BELiOR Performances", f'''
     <div class="copy c-6"><span class="label">For Your Evening</span><h3>행사의 성격에 맞춘 프로그램</h3>
       <p class="muted">행사 일정과 장소, 진행 순서를 바탕으로 편성과 곡목을 제안드립니다.</p>
       <a class="more" href="music-inquiry.html">공연 문의</a></div>
-    <figure class="c-6"><img src="assets/img/bu-quartet.jpg" alt="부첼라티 하우스 앞 야외 4중주" loading="lazy"><figcaption>Reception · Buccellati Dinner</figcaption></figure>
+    <figure class="c-6"><img src="assets/img/bu-quartet.jpg" alt="행사장 앞 야외 4중주" loading="lazy"><figcaption>Reception · Brand Gala Dinner Show</figcaption></figure>
   </div>
 </section>''', "music")
 
-page("music-buccellati", "Buccellati Dinner", f'''
-{scene("bu-aerial.jpg", "Editorial · Buccellati Dinner, Seoul", "강 위로 저무는 저녁", "부첼라티 디너에서 BELiOR는 현장의 라이브 연주를 맡았고, 연주에 대해 좋은 평가를 받았습니다.", pos="center 55%")}
+page("music-gala", "Brand Gala Dinner Show", f'''
+{scene("bu-aerial.jpg", "Editorial · Brand Gala Dinner Show, Seoul", "강 위로 저무는 저녁", "브랜드 갈라 디너 쇼에서 BELiOR는 현장의 라이브 연주를 맡았고, 연주에 대해 좋은 평가를 받았습니다.", pos="center 55%")}
 <section class="section">
   <div class="spread">
-    <figure class="c-8"><img src="assets/img/bu-quartet.jpg" alt="주황 조명 아래 부첼라티 하우스 앞에서 연주하는 4중주" loading="lazy"><figcaption>I. Reception — 하우스 앞 야외 4중주</figcaption></figure>
+    <figure class="c-8"><img src="assets/img/bu-quartet.jpg" alt="주황 조명 아래 행사장 앞에서 연주하는 4중주" loading="lazy"><figcaption>I. Reception — 하우스 앞 야외 4중주</figcaption></figure>
     <div class="copy c-4"><span class="label">Reception</span><h3>손님이 도착하는 시간</h3>
       <p class="muted">조명이 켜지기 시작할 무렵, 리셉션의 공기를 현악 4중주로 채웠습니다.</p></div>
   </div>
@@ -236,7 +236,7 @@ page("music-buccellati", "Buccellati Dinner", f'''
   </div>
   <div class="spread">
     <figure class="c-5"><img src="assets/img/bu-violin.jpg" alt="바이올린과 활의 클로즈업" loading="lazy"><figcaption>III. Detail</figcaption></figure>
-    <figure class="c-7"><img src="assets/img/bu-backstage.jpg" alt="부첼라티 사인보드 옆에 선 연주진" loading="lazy"><figcaption>IV. Backstage — 공연을 마친 연주진</figcaption></figure>
+    <figure class="c-7"><img src="assets/img/bu-backstage.jpg" alt="행사장 입구에 선 연주진" loading="lazy"><figcaption>IV. Backstage — 공연을 마친 연주진</figcaption></figure>
   </div>
 </section>
 <section class="section section--night">
@@ -379,7 +379,7 @@ page("journal", "BELiOR Journal", f'''
 <section class="section" style="padding-top:150px">
   <div class="section-head"><span class="label">Journal</span><h1 style="font-size:clamp(2.6rem,7vw,5.4rem)">Stories behind the Maison.</h1><p class="muted">브랜드 뒤의 이야기.</p></div>
   <div class="rows">
-    <a class="row" href="music-buccellati.html"><h3>부첼라티 디너, 그날의 기록</h3><p>Music · 현장 · 리셉션 · 백스테이지</p><span class="more">Read</span></a>
+    <a class="row" href="music-gala.html"><h3>브랜드 갈라 디너 쇼, 그날의 기록</h3><p>Music · 현장 · 리셉션 · 백스테이지</p><span class="more">Read</span></a>
     <a class="row" href="collection.html"><h3>하나의 상징, 여섯 개의 세계</h3><p>Collection · Lion · Swan · Orca · Leopard · Panther · Phoenix</p><span class="more">Read</span></a>
     <a class="row" href="maison.html#symbol"><h3>기본 심볼과 컬렉션 엠블럼</h3><p>Maison · BELiOR의 심볼 체계</p><span class="more">Read</span></a>
   </div>

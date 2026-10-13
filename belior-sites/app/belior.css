@@ -390,3 +390,19 @@
 @media (max-width:640px){.belior .head-link{display:none}}
 .belior .wordmark{color:var(--ivory)}
 .belior .scene h1.keep{text-transform:none}
+/* the invitation: a humpback drifting through light */
+.belior .whale-scene{background:radial-gradient(120% 90% at 50% 0%,#1f6f94 0%,#0f3d5c 38%,#08192a 75%,#050b12 100%);align-items:end}
+.belior .whale-scene::after{background:linear-gradient(to top,rgba(5,11,18,.9) 0%,rgba(5,11,18,.2) 45%,rgba(5,11,18,0) 70%)}
+.belior .whale-scene .whale{position:absolute;z-index:-2;width:min(1180px,96vw);left:50%;top:44%;
+  -webkit-mask-image:radial-gradient(ellipse 62% 58% at 52% 52%,#000 55%,transparent 80%);mask-image:radial-gradient(ellipse 62% 58% at 52% 52%,#000 55%,transparent 80%);
+  transform:translate(-50%,-50%);animation:whale-swim 18s ease-in-out infinite;filter:saturate(1.05) contrast(1.05)}
+@keyframes whale-swim{0%{transform:translate(-56%,-50%) rotate(-1.5deg) scale(1)}50%{transform:translate(-44%,-56%) rotate(1.2deg) scale(1.04)}100%{transform:translate(-56%,-50%) rotate(-1.5deg) scale(1)}}
+.belior .whale-scene .sea{position:absolute;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.belior .whale-scene .ray{position:absolute;top:-20%;width:18%;height:120%;background:linear-gradient(to bottom,rgba(190,235,255,.28),rgba(190,235,255,0) 70%);filter:blur(14px);transform-origin:top center;animation:ray-sway 9s ease-in-out infinite}
+.belior .whale-scene .r1{left:22%;transform:rotate(14deg)} .belior .whale-scene .r2{left:46%;width:12%;animation-delay:-3s;transform:rotate(6deg)} .belior .whale-scene .r3{left:66%;width:20%;animation-delay:-6s;transform:rotate(-8deg)}
+@keyframes ray-sway{0%,100%{opacity:.5;translate:0 0}50%{opacity:1;translate:3vw 0}}
+.belior .whale-scene .motes{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.belior .whale-scene .motes i{position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;background:rgba(220,245,255,.55);animation:mote-rise 12s linear infinite}
+@keyframes mote-rise{from{transform:translateY(0);opacity:0}15%{opacity:.8}to{transform:translateY(-95vh);opacity:0}}
+@media (prefers-reduced-motion:reduce){.belior .whale-scene .whale,.belior .whale-scene .ray,.belior .whale-scene .motes i{animation:none}}
+@media (max-width:700px){.belior .whale-scene .whale{width:190vw;top:40%}}

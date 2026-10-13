@@ -87,6 +87,15 @@ function Scene({img, eyebrow, title, lede, href, cta, pos = 'center'}: {img: str
       <div className="inner"><span className="label">{eyebrow}</span><h1>{lines(title)}</h1>{lede && <p className="lede">{lede}</p>}{href && <Cta href={href}>{cta}</Cta>}</div></section>;
 }
 
+function WhaleScene({eyebrow, title, lede, href, cta}: {eyebrow: string; title: string; lede: string; href?: string; cta?: string}) {
+  return <section className="scene whale-scene" aria-label="Humpback whale">
+    <div className="sea" aria-hidden="true"><span className="ray r1"/><span className="ray r2"/><span className="ray r3"/></div>
+    <img className="whale" src={V('whale.jpg')} alt=""/>
+    <div className="motes" aria-hidden="true">{Array.from({length: 14}, (_, i) => <i key={i} style={{left: (i * 7.3 % 100) + '%', animationDelay: (i * .9) + 's'}}/>)}</div>
+    <div className="inner"><span className="label">{eyebrow}</span><h1>{lines(title)}</h1><p className="lede">{lede}</p>{href && <Cta href={href}>{cta}</Cta>}</div>
+  </section>;
+}
+
 function Band({img, eyebrow, title, text, href, cta, pos = 'center'}: {img: string; eyebrow: string; title: string; text: string; href: string; cta?: string; pos?: string}) {
   const {t, en} = useT(); void t; void en;
   return <section className="band"><img className="bg" src={V(img)} alt="" loading="lazy" style={{objectPosition: pos}}/>
@@ -148,7 +157,7 @@ function TheHouse() {
 function TheEvening() {
   const {t, en} = useT(); void t; void en;
   return <section className="section"><Head eyebrow="BELiOR Music · The Evening" title={t('음악이 머무는 저녁', 'An evening where music stays')}/>
-    <div className="evening"><figure className="ev-film"><video src={V('o-gala.mp4')} poster={V('o-gala-ensemble.jpg')} muted loop playsInline autoPlay preload="metadata"/><figcaption>{t('프라이빗 갈라 · 콘셉트 필름', 'Private gala · Concept film')}</figcaption></figure>
+    <div className="evening"><figure className="ev-film"><video src={V('o-gala.mp4')} poster={V('o-gala-ensemble.jpg')} muted loop playsInline autoPlay preload="metadata"/><figcaption>{t('프라이빗 갈라', 'Private gala')}</figcaption></figure>
       <div className="ev-cards">
         <a className="ev-card" href="/music"><span className="label">01 · Music &amp; Experience</span><h3>{t('그 저녁', 'The evening')}</h3><p className="muted">{t('호텔, 브랜드, 프라이빗 갈라 디너를 위한 현악 4중주와 확장 편성, 그리고 맞춤 챔버 연출.', 'String quartets, larger ensembles and bespoke chamber direction for hotels, brands and private gala dinners.')}</p><span className="more">Explore</span></a>
         <a className="ev-card" href="/objects"><span className="label">02 · Objects</span><h3>{t('일상으로 옮긴 예술', 'Art carried into daily life')}</h3><p className="muted">{t('하우스의 시각 언어에서 출발한 스카프와 가죽 소품, 그리고 개인의 오브제.', 'Scarves, leather goods and personal objects drawn from the house’s visual language.')}</p><span className="more">Explore</span></a>
@@ -311,12 +320,12 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     </section>
     <MaisonIntro/><TheHouse/><TheEvening/><AtelierContent/><OneWorld/>
     <section className="section night"><div className="spread">
-      <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('바닷가를 달리는 검은 말', 'A black horse on the shore')} loading="lazy"/><figcaption>No. 16 · Reference image</figcaption></figure>
+      <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('숲속의 아이와 검은 말', 'A child and a black horse in the forest')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
       <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me')}</h3>
         <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
     <ObjectsRow/><Services/>
-    <Scene img="panther.jpg" eyebrow="Private Enquiries" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} pos="center 30%" href="/private" cta={t('문의하기', 'Enquire')}/>
+    <WhaleScene eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
   </>;
 
   const maison = <>
@@ -404,7 +413,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="patterns">{WORLDS.map(w => <figure key={w.slug}><img src={V(w.slug + '-pattern.jpg')} alt={w.name + ' pattern'} loading="lazy"/><figcaption>{w.name} · {w.mat}</figcaption></figure>)}</div></section>
     <section className="section night" id="lines"><Head eyebrow="From World to Object" title={t('세계관이 사물이 되기까지', 'From world to object')} text={t('각 컬렉션은 PARFUM · BAGS · APPAREL · OBJECTS로 이어집니다. 제품은 공개 준비 중입니다.', 'Each collection extends into parfum, bags, apparel and objects. Products are in development.')}/>
       <div className="lines">{[['PARFUM', 'prod-parfum.jpg'], ['BAGS', 'prod-bag.jpg'], ['APPAREL', 'prod-clothing.jpg'], ['OBJECTS', 'prod-objects.jpg']].map(([n, im]) =>
-        <div className="line-item" key={n}><div className="ph"><img src={V(im)} alt={n + ' concept'} loading="lazy"/></div><span className="label">{n}</span></div>)}</div></section>
+        <div className="line-item" key={n}><div className="ph"><img src={V(im)} alt={n} loading="lazy"/></div><span className="label">{n}</span></div>)}</div></section>
     <OneWorld/>
   </>;
 
@@ -418,7 +427,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
           <span className="label">{'The Animal Collection · ' + w.mat}</span><h1>{w.name}<br/><span className="accent">Collection</span></h1><p className="lede">{lede}</p></div></section>}
       {w.slug === 'swan' && <section className="section night"><Head eyebrow="Swan Lake" title={t('달빛 아래의 호수', 'A lake under the moon')}/><video className="performance-video" autoPlay muted loop playsInline preload="metadata" src="/belior/opening.mp4"/></section>}
       <section className="section"><div className="spread">
-        <div className="copy c-7"><span className="label">The World</span><p className="world-line">{w.world[en ? 1 : 0]}</p><p className="muted small">{t('컬렉션 문구는 시안 단계의 초안입니다.', 'Collection copy is an early draft.')}</p></div>
+        <div className="copy c-7"><span className="label">The World</span><p className="world-line">{w.world[en ? 1 : 0]}</p></div>
         <div className="c-4 emblem-side"><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/><span className="label">{w.name} Emblem</span></div></div>
         {w.slug === 'lion' && <blockquote className="note-founder"><span className="label">Founder’s Note</span><p>{t('사자를 좋아하는 이유는 강인하고 멋지기 때문입니다.', 'I love the lion because it is strong and magnificent.')}</p></blockquote>}
         <div className="facts">
@@ -427,14 +436,14 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
           <div className="fact"><span className="label">Pattern & Motif</span><img className="pat" src={V(w.slug + '-pattern.jpg')} alt={w.name + ' pattern'}/></div>
         </div></section>
       <section className="section night"><Head eyebrow={w.name + ' Objects'} title={t(w.name + '의 사물들', 'Objects of ' + w.name)} text={t('향수와 가방, 의류와 캔들. 하나의 엠블럼이 여러 사물로 이어집니다.', 'Parfum, bags, apparel and candles. One emblem carried into many objects.')}/>
-        {mock ? <figure className="wide-fig"><img src={V(w.slug + '-objects.jpg')} alt={w.name + ' objects concept'} loading="lazy"/><figcaption>Parfum · Bags · Apparel · Objects · Concept</figcaption></figure>
+        {mock ? <figure className="wide-fig"><img src={V(w.slug + '-objects.jpg')} alt={w.name + ' objects'} loading="lazy"/><figcaption>Parfum · Bags · Apparel · Objects</figcaption></figure>
           : <p className="muted">{t('PHOENIX의 사물은 공개 준비 중입니다.', 'Phoenix objects are in development.')}</p>}</section>
       {w.notes && w.scent && <section className="section"><div className="spread">
-        <figure className="c-5"><img src={V(w.slug + '-scent.jpg')} alt={w.name + ' fragrance concept'} loading="lazy"/><figcaption>Fragrance · Concept</figcaption></figure>
-        <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Fragrance</span><h3>{w.name}</h3><p className="notes accent">{w.notes}</p><p className="muted">{w.scent[en ? 1 : 0]}</p><span className="small muted">{t('향 노트는 시안 단계의 콘셉트입니다.', 'Notes are an early concept.')}</span></div></div></section>}
+        <figure className="c-5"><img src={V(w.slug + '-scent.jpg')} alt={w.name + ' fragrance'} loading="lazy"/><figcaption>Fragrance</figcaption></figure>
+        <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Fragrance</span><h3>{w.name}</h3><p className="notes accent">{w.notes}</p><p className="muted">{w.scent[en ? 1 : 0]}</p></div></div></section>}
       {w.atelier && <section className="section night"><div className="spread">
         <div className="copy c-5"><span className="label">Atelier</span><h3>{w.name} Atelier</h3><p className="muted">{w.atelier[en ? 1 : 0]}</p><a className="more" href="/atelier">{t('아틀리에 보기', 'The atelier')}</a></div>
-        <figure className="c-6" style={{gridColumn: '7 / span 6'}}><img src={V(w.slug + '-atelier.jpg')} alt={w.name + ' atelier concept'} loading="lazy"/><figcaption>Leather · Emblem · Concept</figcaption></figure></div></section>}
+        <figure className="c-6" style={{gridColumn: '7 / span 6'}}><img src={V(w.slug + '-atelier.jpg')} alt={w.name + ' atelier'} loading="lazy"/><figcaption>Leather · Emblem</figcaption></figure></div></section>}
       {w.alt && <section className="section"><figure className="wide-fig"><img src={V(w.alt)} alt="" loading="lazy"/><figcaption>The World of {w.name}</figcaption></figure></section>}
       <section className="section night"><Head eyebrow="Other Worlds" title={t('다른 세계로', 'Other worlds')}/><Emblems items={WORLDS.filter(x => x !== w)} five/></section>
       <Band img={nxt.img || 'lion-wide.jpg'} eyebrow="Next World" title={nxt.name} text={nxt.kw} href={'/collection/' + nxt.slug} cta={t('다음 세계', 'Next world')}/>
@@ -446,7 +455,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="scene plain"><div className="inner"><span className="label">Parfum · BELiOR No. 16</span><h1 className="keep">No. 16</h1>
       <p className="lede">{t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me')}</p></div></section>
     <section className="section"><div className="spread">
-      <figure className="c-6"><img src={V('no16-horse.jpg')} alt={t('바닷가를 달리는 검은 말', 'A black horse on the shore')}/><figcaption>{t('참고 이미지 · 승인된 원본으로 교체 예정', 'Reference image · to be replaced with an approved original')}</figcaption></figure>
+      <figure className="c-6"><img src={V('no16-horse.jpg')} alt={t('숲속의 아이와 검은 말', 'A child and a black horse in the forest')}/><figcaption>No. 16 · BELiOR</figcaption></figure>
       <div className="copy c-6"><span className="label">The Memory</span>
         <p className="world-line">{t('어린 시절, 아버지가 말에 한번 타 보라고 했습니다.', 'As a child, my father told me to try riding a horse.')}</p>
         <p className="muted">{t('나는 말 위에 올랐고, 아버지는 그 모습을 지켜보았습니다. 푸릇푸릇한, 동화 속 같은 숲. 무서웠지만 나를 지탱해 주던 말. 그 순간은 지금도 선명하게 남아 있습니다.', 'I climbed on, and my father watched. A green forest, like something from a fairy tale. I was afraid, but the horse held me steady. That moment has stayed with me ever since.')}</p>
@@ -470,8 +479,8 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       {(d === '' || d === 'parfum') && <section className="section night"><div className="spread">
         <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('검은 말', 'A black horse')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
         <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me')}</h3><a className="more" href="/products/no-16">{t('이야기 보기', 'Read the story')}</a></div></div></section>}
-      <section className="section"><Head eyebrow="Design Concept" title={t('콘셉트 라인', 'Concept lines')} text={t('브랜드북에서 출발한 제품 개발 방향입니다. 디자인 이미지는 콘셉트이며, 재고·가격·출시 일정은 확정되지 않았습니다.', 'A product direction rooted in our brand book. Images are concepts; stock, pricing and launch dates are not confirmed.')}/>
-        <div className="lines">{items.map(([s, n, ko, im]) => <a className="line-item" href={'/products/' + s} key={s}><div className="ph"><img src={V(im)} alt={n + ' concept'} loading="lazy"/></div><span className="label">{n}</span><p className="muted">{t(ko, n)}</p></a>)}</div></section>
+      <section className="section"><Head eyebrow="The Art of Everyday" title={t('일상의 예술', 'The art of everyday')} text={t('출시 소식은 프라이빗 문의로 먼저 안내드립니다.', 'Launch news is shared first through private enquiries.')}/>
+        <div className="lines">{items.map(([s, n, ko, im]) => <a className="line-item" href={'/products/' + s} key={s}><div className="ph"><img src={V(im)} alt={n} loading="lazy"/></div><span className="label">{n}</span><p className="muted">{t(ko, n)}</p></a>)}</div></section>
       <ObjectsRow/><OneWorld/>
     </>;
   };
@@ -492,7 +501,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="section" id="process"><Head eyebrow="Process" title={t('제작의 순서', 'How we make')} text={t('세부 일정과 방식은 프로젝트마다 함께 정합니다.', 'Schedules and methods are agreed project by project.')}/>
       <div className="steps">{[['Concept', '행사와 브랜드의 콘셉트, 세계관을 정합니다.', 'We set the concept and world of the event or brand.'], ['Visual', '무대 배경 영상과 프로그램 그래픽을 설계합니다.', 'We design stage visuals and programme graphics.'], ['Object', '포스터, 패키지, 오브제로 형태를 만듭니다.', 'We give it form in posters, packaging and objects.'], ['Stage', '현장에서 음악과 함께 완성합니다.', 'We complete it on site, with music.']].map(([n, ko, eng]) =>
         <div className="step" key={n}><h3>{n}</h3><p>{t(ko, eng)}</p></div>)}</div></section>
-    <section className="section night"><figure className="wide-fig"><img src={V('atelier-wide.jpg')} alt={t('패키지 콘셉트', 'Packaging concept')} loading="lazy"/><figcaption>Packaging · Concept</figcaption></figure></section>
+    <section className="section night"><figure className="wide-fig"><img src={V('atelier-wide.jpg')} alt={t('패키지 콘셉트', 'Packaging concept')} loading="lazy"/><figcaption>Packaging</figcaption></figure></section>
     <Services/>
   </>;
 
@@ -509,7 +518,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const privatePage = <>
-    <Scene img="panther.jpg" eyebrow="Private Enquiries · By Appointment" title={'Extraordinary\nMoments'} lede={t('프라이빗 공연, 브랜드 행사, 기업 선물과 아틀리에 협업을 문의하세요.', 'For private performances, brand events, corporate gifting and atelier collaborations.')} pos="center 30%"/>
+    <WhaleScene eyebrow="Private Enquiries · By Invitation" title={'Extraordinary\nMoments'} lede={t('프라이빗 공연, 브랜드 행사, 기업 선물과 아틀리에 협업을 문의하세요.', 'For private performances, brand events, corporate gifting and atelier collaborations.')}/>
     <section className="section"><Head eyebrow="Private Enquiries" title={t('대화를 시작합니다.', 'Begin a conversation.')} text={t('일정, 장소, 규모와 원하는 분위기를 남겨주시면 구체적인 제안으로 회신드리겠습니다.', 'Share your date, venue, scale and desired atmosphere. We will reply with a considered proposal.')}/>
       <InquiryForm/><p className="muted small" style={{marginTop: 24}}>{t('BELiOR 문의 접수 창구', 'BELiOR enquiries')} · {MAIL}</p></section>
     <Services/>
@@ -549,7 +558,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <dl className="biz"><div><dt>{t('상호', 'Company')}</dt><dd>벨리오르(BELIOR)</dd></div><div><dt>{t('대표', 'CEO')}</dt><dd>{t('여혜린', 'Hyerin Yeo')}</dd></div>
         <div><dt>{t('사업자등록번호', 'Business No.')}</dt><dd>450-54-01129</dd></div><div><dt>{t('사업장', 'Address')}</dt><dd>{t('경기도 용인시 수지구 동천로135번길 21', '21, Dongcheon-ro 135beon-gil, Suji-gu, Yongin-si, Gyeonggi-do')}</dd></div>
         <div><dt>Mail</dt><dd>{MAIL}</dd></div></dl>
-      <div className="foot-base"><span className="label">A More Beautiful Tomorrow.</span><span className="muted small">{t('제품·공간 이미지는 컬렉션 콘셉트이며 실제 제품과 다를 수 있습니다.', 'Product and space images are collection concepts and may differ from actual products.')} © {new Date().getFullYear()} BELiOR</span></div>
+      <div className="foot-base"><span className="label">A More Beautiful Tomorrow.</span><span className="muted small">© {new Date().getFullYear()} BELiOR</span></div>
     </footer>
   </div></LangCtx.Provider>;
 }

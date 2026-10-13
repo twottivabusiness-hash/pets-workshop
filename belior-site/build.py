@@ -66,10 +66,22 @@ def footer():
             f'<span class="label" style="text-transform:none;letter-spacing:.08em">{MAIL}</span></div></footer>')
 
 
-def page(slug, title, body, active=None, extra_style=""):
+CHAPTERS = {}  # slug -> (label, mark image, round emblem?) used by the page-turn curtain
+
+
+def curtain(slug):
+    label, mark, rnd = CHAPTERS.get(slug, ("BELiOR", "mono-ivory.png", False))
+    return (f'<div class="curtain{" round" if rnd else ""}" aria-hidden="true"><div class="c-inner">'
+            f'<img class="c-mark" src="assets/img/{mark}" alt=""><span class="c-line"></span>'
+            f'<span class="c-label">{label}</span></div></div>')
+
+
+def page(slug, title, body, active=None, extra_style="", chapter=None):
+    CHAPTERS[slug] = chapter or (title.replace("BELiOR ", "").upper() if title != "BELiOR" else "BELiOR", "mono-ivory.png", False)
     head = (f'<title>{title}</title><meta name="description" content="BELiOR — The Evening, Composed.">'
             f'{FONTS}<link rel="stylesheet" href="assets/site.css">{extra_style}')
-    main = header(active) + f'<main id="top">{body}</main>' + footer() + '<script src="assets/site.js"></script>'
+    main = (curtain(slug) + header(active) + f'<main id="top">{body}</main>' + footer()
+            + '<script src="assets/pages.js"></script><script src="assets/site.js"></script>')
     if slug == "index":
         html = head + main  # host adds doctype, charset and viewport
     else:
@@ -79,10 +91,11 @@ def page(slug, title, body, active=None, extra_style=""):
     (OUT / f"{slug}.html").write_text(html, encoding="utf-8")
 
 
-def scene(img, eyebrow, h1, lede="", full=False, pos="center"):
+def scene(img, eyebrow, h1, lede="", full=True, pos="center", mark="mono-ivory.png", round_mark=False):
+    m = f'<img class="scene-mark{" round" if round_mark else ""}" src="assets/img/{mark}" alt="">'
     return (f'<section class="scene{" scene--full" if full else ""}">'
             f'<img class="bg" src="assets/img/{img}" alt="" style="object-position:{pos}">'
-            f'<div class="inner"><span class="label">{eyebrow}</span><h1>{h1}</h1>'
+            f'<div class="inner">{m}<span class="label">{eyebrow}</span><h1>{h1}</h1>'
             f'{f"<p class=lede>{lede}</p>" if lede else ""}</div></section>')
 
 
@@ -315,7 +328,7 @@ for i, w in enumerate(WORLDS):
     if w["img"]:
         hero = scene(w["img"], f'The Animal Collection · {w["mat"]}', f'{w["name"]}<br><span class="accent">Collection</span>',
                      (f'{w["tag"][0]} {w["tag"][1]}' if w["tag"] else w["kr"]),
-                     pos="center 35%")
+                     pos="center 35%", mark=f'emblem-{w["slug"]}.jpg', round_mark=True)
     else:
         hero = (f'<section class="section" style="padding-top:150px"><div class="spread">'
                 f'<div class="copy c-6"><span class="label">The Animal Collection · {w["mat"]}</span>'
@@ -356,7 +369,7 @@ for i, w in enumerate(WORLDS):
     <a href="collection-{next_w["slug"]}.html"><span class="label">Next</span><span class="wordmark">{next_w["name"]}</span></a>
   </nav>
 </section>
-</div>''', "collection", style)
+</div>''', "collection", style, chapter=(f'{w["name"]} COLLECTION', f'emblem-{w["slug"]}.jpg', True))
 
 # ---------------- atelier ----------------
 page("atelier", "BELiOR Atelier", f'''
@@ -400,4 +413,7 @@ page("private", "BELiOR Private", f'''
   <div style="margin-top:36px">{result_box("private-result")}</div>
 </section>''', "private")
 
+import json
+(OUT / "assets/pages.js").write_text("window.BELIOR_PAGES=" + json.dumps(
+    {k: {"label": v[0], "mark": "assets/img/" + v[1], "round": v[2]} for k, v in CHAPTERS.items()}, ensure_ascii=False) + ";", encoding="utf-8")
 print(sorted(p.name for p in OUT.glob("*.html")))

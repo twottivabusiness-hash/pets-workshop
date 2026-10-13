@@ -35,6 +35,36 @@
     });
   }
 
+  // Page turn: close on the destination's symbol, then navigate.
+  var curtainEl = document.querySelector('.curtain');
+  var pages = window.BELIOR_PAGES || {};
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || !curtainEl || reduceMotion) return;
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target) return;
+    var href = a.getAttribute('href');
+    var m = href.match(/^([a-z0-9-]+)\.html(#[\w.~-]*)?$/i);
+    if (!m) return;
+    var info = pages[m[1]] || { label: 'BELiOR', mark: 'assets/img/mono-ivory.png', round: false };
+    e.preventDefault();
+    curtainEl.querySelector('.c-mark').src = info.mark;
+    curtainEl.querySelector('.c-label').textContent = info.label;
+    curtainEl.classList.toggle('round', !!info.round);
+    curtainEl.classList.remove('leaving'); void curtainEl.offsetWidth; curtainEl.classList.add('leaving');
+    setTimeout(function () { window.location.href = href; }, 700);
+  });
+  window.addEventListener('pageshow', function (e) { if (e.persisted && curtainEl) curtainEl.classList.remove('leaving'); });
+
+  // Scenes settle as they come into view.
+  var targets = document.querySelectorAll('.scene, .house, .world');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('seen'); io.unobserve(en.target); } });
+    }, { threshold: 0.2 });
+    targets.forEach(function (t) { io.observe(t); });
+  } else targets.forEach(function (t) { t.classList.add('seen'); });
+
   // Inquiry forms: nothing is sent from the page. The form composes a message to copy.
   document.querySelectorAll('form[data-inquiry]').forEach(function (form) {
     var out = document.getElementById(form.getAttribute('data-inquiry'));

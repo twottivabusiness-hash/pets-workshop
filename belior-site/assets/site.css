@@ -266,3 +266,43 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- page turn: every page opens and closes on its symbol ---------- */
+html { scroll-snap-type: y proximity; }
+.scene, .houses, .worlds { scroll-snap-align: start; }
+.curtain {
+  position: fixed; inset: 0; z-index: 50; background: var(--ink);
+  display: grid; place-items: center; pointer-events: none;
+  animation: curtain-lift 1.7s cubic-bezier(.7, 0, .2, 1) forwards;
+}
+.curtain .c-inner { display: grid; justify-items: center; gap: 22px; }
+.curtain .c-mark { height: clamp(96px, 16vh, 150px); width: auto; animation: mark-in 1.1s ease-out both; }
+.curtain.round .c-mark { width: clamp(110px, 18vh, 160px); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 50%; }
+.curtain .c-line { width: 120px; height: 1px; background: var(--champagne); transform-origin: center; animation: line-draw 1s ease-out both .2s; }
+.curtain .c-label { font: 400 .74rem/1 var(--label); letter-spacing: .5em; padding-left: .5em; color: var(--ivory); animation: mark-in 1s ease-out both .3s; }
+@keyframes curtain-lift { 0%, 55% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+@keyframes mark-in { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes line-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.curtain.leaving { animation: curtain-fall .65s cubic-bezier(.7, 0, .2, 1) forwards; }
+.curtain.leaving .c-mark, .curtain.leaving .c-label { animation: mark-in .6s ease-out both .1s; }
+.curtain.leaving .c-line { animation: line-draw .6s ease-out both .15s; }
+@keyframes curtain-fall { from { opacity: 0; visibility: visible; } to { opacity: 1; visibility: visible; } }
+
+/* each full scene carries the house mark, like a chapter plate */
+.scene-mark { height: 46px; width: auto; opacity: .9; }
+.scene-mark.round { width: 56px; height: 56px; object-fit: cover; border-radius: 50%; }
+
+/* scenes settle into place as they arrive; resting state stays fully visible */
+.scene > .bg, .house img, .world .bg { transform: scale(1.06); transition: transform 2.2s cubic-bezier(.2, .6, .2, 1); }
+.scene.seen > .bg, .house.seen img, .world.seen .bg { transform: scale(1); }
+.scene .inner > * { transform: translateY(14px); transition: transform 1.2s cubic-bezier(.2, .6, .2, 1); }
+.scene.seen .inner > * { transform: none; }
+.scene .inner > *:nth-child(2) { transition-delay: .08s; } .scene .inner > *:nth-child(3) { transition-delay: .16s; }
+.scene .inner > *:nth-child(4) { transition-delay: .24s; }
+.film > .bg { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain { display: none; }
+  html { scroll-snap-type: none; }
+  .scene > .bg, .house img, .world .bg, .scene .inner > * { transform: none !important; }
+}

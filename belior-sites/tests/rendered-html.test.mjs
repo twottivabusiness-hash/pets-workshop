@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+const {default:worker}=await import('../dist/server/index.js');
+const env={ASSETS:{fetch:async()=>new Response('Not found',{status:404})}};
+const ctx={waitUntil(){},passThroughOnException(){}};
+for(const route of ['/','/maison','/collection','/collection/lion','/collection/swan','/collection/orca','/collection/leopard','/collection/panther','/collection/phoenix','/products','/products/parfum','/products/no-16','/objects','/music','/music/artists','/music/performances','/music/gala','/music/inquiry','/atelier','/journal','/private','/office']){
+ test(`renders ${route}`,async()=>{const res=await worker.fetch(new Request('http://localhost'+route,{headers:{accept:'text/html'}}),env,ctx);assert.equal(res.status,200);const html=await res.text();assert.ok(html.length>1000);assert.doesNotMatch(html,/<meta[^>]*name="codex-preview"/);if(route!='/office')assert.match(html,/BELiOR/)});
+}
+test('rejects invalid inquiry and foreign origin',async()=>{for(const origin of ['http://localhost','https://other.test']){const r=await worker.fetch(new Request('http://localhost/api/inquiries',{method:'POST',headers:{origin,'content-type':'application/json'},body:'{}'}),env,ctx);assert.equal(r.status,origin==='http://localhost'?400:403)}});
+test('saves valid inquiry using bound values',async()=>{let saved;const fake={...env,DB:{prepare(sql){return {bind(...values){if(sql.startsWith('INSERT'))saved=values;return this},async run(){return {}},async first(){return {total:0}}}}}};const r=await worker.fetch(new Request('http://localhost/api/inquiries',{method:'POST',headers:{origin:'http://localhost','content-type':'application/json'},body:JSON.stringify({name:'Test client',email:'client@example.com',message:'Private event inquiry',type:'Private performance',date:'2026-12-01'})}),fake,ctx);assert.equal(r.status,201);assert.deepEqual(saved,['Test client','client@example.com','Private performance','2026-12-01','Private event inquiry'])});

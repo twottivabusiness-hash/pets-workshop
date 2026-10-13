@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&family=Noto+Serif+KR:wght@400;500&display=swap');
+.belior{--ink: #0c0b0a;          
+  --night: #15130f;        
+  --ivory: #ece4d6;        
+  --taupe: #9d8f7c;        
+  --champagne: #c9aa6c;    
+  --line: rgba(236, 228, 214, .16);
+  --world: var(--champagne); 
+
+  --display: "Cormorant Garamond", "Noto Serif KR", Georgia, serif;
+  --body: "Noto Serif KR", "Apple SD Gothic Neo", Georgia, serif;
+  --label: "Jost", "Helvetica Neue", Arial, sans-serif;
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --measure: 36rem;
+  color-scheme: dark;}
+.belior *, .belior *::before, .belior *::after{box-sizing: border-box;}
+.belior [hidden]{display: none !important;}
+.belior{-webkit-text-size-adjust: 100%;}
+.belior{margin: 0;
+  background: var(--ink);
+  color: var(--ivory);
+  font: 400 1rem/1.85 var(--body);
+  overflow-x: hidden;}
+.belior img, .belior video{display: block; max-width: 100%;}
+.belior a{color: inherit;}
+.belior :focus-visible{outline: 1px solid var(--champagne); outline-offset: 4px;}
+.belior h1, .belior h2, .belior h3{font-family: var(--display); font-weight: 400; line-height: 1.1; margin: 0; text-wrap: balance;}
+.belior p{margin: 0;}
+.belior .label{font: 400 .72rem/1.4 var(--label);
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--taupe);}
+.belior .wordmark{font-family: var(--display); font-weight: 500; letter-spacing: .34em;}
+.belior .site-header{position: fixed; inset: 0 0 auto 0; z-index: 20;
+  padding: calc(env(safe-area-inset-top, 0px) + 18px) var(--gutter) 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  background: linear-gradient(to bottom, rgba(12, 11, 10, .78), rgba(12, 11, 10, 0));
+  transition: background .4s ease;}
+.belior .site-header.solid{background: rgba(12, 11, 10, .94); border-bottom: 1px solid var(--line);}
+.belior .brand{display: flex; align-items: center; gap: 12px; text-decoration: none;}
+.belior .brand img{height: 30px; width: auto;}
+.belior .brand .wordmark{font-size: 1.05rem;}
+.belior .nav{display: flex; gap: clamp(16px, 2.2vw, 34px);}
+.belior .nav a{font: 400 .7rem/1 var(--label); letter-spacing: .3em; text-transform: uppercase;
+  text-decoration: none; color: var(--ivory); opacity: .78; padding-block: 8px;
+  border-bottom: 1px solid transparent;}
+.belior .nav a:hover, .belior .nav a[aria-current="page"]{opacity: 1; border-bottom-color: var(--champagne);}
+.belior .menu-btn{display: none; background: none; border: 1px solid var(--line); color: var(--ivory);
+  font: 400 .68rem/1 var(--label); letter-spacing: .28em; padding: 10px 14px; cursor: pointer;}
+.belior .menu-panel{position: fixed; inset: 0; z-index: 19; background: var(--ink);
+  padding: calc(env(safe-area-inset-top, 0px) + 96px) var(--gutter) 40px;
+  display: flex; flex-direction: column; gap: 6px;}
+.belior .menu-panel a{font: 400 2rem/1.5 var(--display); letter-spacing: .12em; text-decoration: none;
+  border-bottom: 1px solid var(--line); padding-block: 10px;}
+.belior .menu-panel a small{display: block; font: .72rem/1.4 var(--label); letter-spacing: .28em; color: var(--taupe);}
+@media (max-width: 900px){.belior .nav{display: none;}
+.belior .menu-btn{display: inline-block;}}
+.belior .scene{position: relative; min-height: 78svh; display: grid; align-items: end; overflow: hidden; isolation: isolate;}
+.belior .scene--full{min-height: 100svh;}
+.belior .scene > .bg{position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover;}
+.belior .scene::after{content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(12, 11, 10, .92) 0%, rgba(12, 11, 10, .25) 45%, rgba(12, 11, 10, .35) 100%);}
+.belior .scene .inner{padding: 140px var(--gutter) clamp(40px, 8vh, 88px); display: grid; gap: 18px; max-width: 70rem;}
+.belior .scene h1{font-size: clamp(2.6rem, 7vw, 6rem); letter-spacing: .04em;}
+.belior .scene .lede{font-size: 1.05rem; max-width: var(--measure); color: var(--ivory); opacity: .9;}
+.belior .film .center{position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 22px; text-align: center;
+  padding-inline: var(--gutter);}
+.belior .film .center img{height: clamp(110px, 18vh, 190px); width: auto; animation: arrive 2.4s ease-out both .4s;}
+.belior .film .center .wordmark{font-size: clamp(1.6rem, 3.6vw, 2.6rem); animation: arrive 2.4s ease-out both .9s;}
+.belior .film .center .label{color: var(--ivory); animation: arrive 2.4s ease-out both 1.4s;}
+@keyframes arrive{ from { opacity: .25; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.belior .film-toggle{position: absolute; right: var(--gutter); bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  background: none; border: 1px solid var(--line); color: var(--ivory); cursor: pointer;
+  font: .66rem/1 var(--label); letter-spacing: .28em; padding: 10px 14px;}
+.belior .scroll-cue{position: absolute; left: var(--gutter); bottom: calc(env(safe-area-inset-bottom, 0px) + 34px);}
+.belior .section{padding: clamp(72px, 12vw, 150px) var(--gutter);}
+.belior .section--night{background: var(--night);}
+.belior .section-head{display: grid; gap: 14px; margin-bottom: clamp(36px, 6vw, 64px); max-width: 52rem;}
+.belior .section-head h2{font-size: clamp(2rem, 4.6vw, 3.6rem);}
+.belior .prose{max-width: var(--measure); display: grid; gap: 1.1em; color: var(--ivory);}
+.belior .prose .muted, .belior .muted{color: var(--taupe);}
+.belior .rule{border: 0; border-top: 1px solid var(--line); margin: 0;}
+.belior .statement{text-align: center; display: grid; justify-items: center; gap: 22px;}
+.belior .statement h2{font-size: clamp(2rem, 5vw, 4rem); font-style: italic; max-width: 22ch;}
+.belior .statement p{color: var(--taupe);}
+.belior .houses{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px;}
+.belior .house{position: relative; display: block; text-decoration: none; min-height: 72svh; overflow: hidden; isolation: isolate;}
+.belior .house img{position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.6s ease;}
+.belior .house::after{content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(12,11,10,.9), rgba(12,11,10,.1) 60%);}
+.belior .house:hover img{transform: scale(1.04);}
+.belior .house .txt{position: absolute; left: 0; right: 0; bottom: 0; padding: 32px clamp(20px, 3vw, 44px); display: grid; gap: 10px;}
+.belior .house h2{font-size: clamp(1.8rem, 3.4vw, 2.8rem); letter-spacing: .08em;}
+.belior .more{font: .7rem/1 var(--label); letter-spacing: .3em; text-transform: uppercase; color: var(--champagne);}
+@media (max-width: 760px){.belior .houses{grid-template-columns: 1fr;}
+.belior .house{min-height: 62svh;}}
+.belior .doors{display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: clamp(20px, 3vw, 36px);}
+.belior .door{text-decoration: none; display: grid; gap: 14px; align-content: start;}
+.belior .door .ph{aspect-ratio: 4 / 5; overflow: hidden; background: var(--night);}
+.belior .door .ph img{width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease;}
+.belior .door:hover .ph img{transform: scale(1.04);}
+.belior .door h3{font-size: 1.6rem; letter-spacing: .06em;}
+.belior .door p{color: var(--taupe); font-size: .95rem;}
+.belior .spread{display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); align-items: end;}
+.belior .spread + .spread{margin-top: clamp(56px, 9vw, 120px);}
+.belior .spread figure{margin: 0; display: grid; gap: 12px;}
+.belior .spread figcaption{font: .74rem/1.6 var(--label); letter-spacing: .14em; color: var(--taupe);}
+.belior .spread .copy{display: grid; gap: 16px; align-self: center; min-width: 0;}
+.belior .spread .copy h3{font-size: clamp(1.6rem, 3vw, 2.4rem);}
+.belior .c-7{grid-column: span 7;}
+.belior .c-5{grid-column: span 5;}
+.belior .c-6{grid-column: span 6;}
+.belior .c-8{grid-column: span 8;}
+.belior .c-4{grid-column: span 4;}
+.belior .c-12{grid-column: 1 / -1;}
+.belior .push-1{grid-column-start: 2;}
+@media (max-width: 820px){.belior .spread > *{grid-column: 1 / -1 !important;}}
+.belior .quote{font: italic 400 clamp(1.5rem, 3vw, 2.3rem)/1.3 var(--display); max-width: 30ch;}
+.belior .quote small{display: block; margin-top: 10px; font: .9rem/1.6 var(--body); font-style: normal; color: var(--taupe);}
+.belior .rows{display: grid; border-top: 1px solid var(--line);}
+.belior .row{display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) auto; gap: 24px; align-items: baseline;
+  padding-block: 26px; border-bottom: 1px solid var(--line); text-decoration: none;}
+.belior .row h3{font-size: clamp(1.4rem, 2.4vw, 1.9rem);}
+.belior .row p{color: var(--taupe);}
+@media (max-width: 720px){.belior .row{grid-template-columns: 1fr; gap: 8px;}}
+.belior .roles{display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line);}
+.belior .role{padding: 28px 20px 28px 0; border-bottom: 1px solid var(--line); display: grid; gap: 8px;}
+.belior .role h3{font-size: 1.7rem;}
+@media (max-width: 760px){.belior .roles{grid-template-columns: repeat(2, minmax(0, 1fr));}}
+.belior .worlds{display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px;}
+.belior .world{position: relative; text-decoration: none; aspect-ratio: 3 / 4; overflow: hidden; isolation: isolate; background: var(--night);}
+.belior .world .bg{position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.4s ease;}
+.belior .world::after{content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(12,11,10,.92), rgba(12,11,10,.05) 55%);}
+.belior .world:hover .bg{transform: scale(1.05);}
+.belior .world .txt{position: absolute; inset: auto 0 0 0; padding: 26px; display: grid; gap: 8px;}
+.belior .world h3{font-size: 2rem; letter-spacing: .14em;}
+.belior .world .kw{font: .68rem/1.5 var(--label); letter-spacing: .26em; text-transform: uppercase; color: var(--ivory); opacity: .8;}
+.belior .world .mat{position: absolute; top: 22px; right: 22px;}
+@media (max-width: 900px){.belior .worlds{grid-template-columns: repeat(2, minmax(0, 1fr));}}
+@media (max-width: 520px){.belior .worlds{grid-template-columns: 1fr;}
+.belior .world{aspect-ratio: 4 / 5;}}
+.belior .emblems{display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px;}
+.belior .emblem{display: grid; justify-items: center; gap: 12px; text-decoration: none; text-align: center;}
+.belior .emblem img{width: 100%; max-width: 132px; aspect-ratio: 1; object-fit: cover; border-radius: 50%;}
+.belior .emblem .label{color: var(--ivory);}
+@media (max-width: 760px){.belior .emblems{grid-template-columns: repeat(3, minmax(0, 1fr));}}
+.belior .world-page .scene::after{background: linear-gradient(to top, rgba(12,11,10,.95), rgba(12,11,10,.1) 55%);}
+.belior .world-page .accent{color: var(--world);}
+.belior .facts{display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line);}
+.belior .fact{padding: 26px 24px 26px 0; border-bottom: 1px solid var(--line); display: grid; gap: 10px; align-content: start; min-width: 0;}
+.belior .fact .val{font: 400 1.5rem/1.3 var(--display);}
+.belior .chips{display: flex; gap: 10px; flex-wrap: wrap;}
+.belior .chip{width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line);}
+@media (max-width: 760px){.belior .facts{grid-template-columns: 1fr;}}
+.belior .lines{display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px);}
+.belior .line-item{display: grid; gap: 12px;}
+.belior .line-item .ph{aspect-ratio: 218 / 405; overflow: hidden; background: var(--night);}
+.belior .line-item .ph img{width: 100%; height: 100%; object-fit: cover;}
+@media (max-width: 760px){.belior .lines{grid-template-columns: repeat(2, minmax(0, 1fr));}}
+.belior .phoenix-frame{width: min(100%, 360px); aspect-ratio: 1; margin-inline: auto; border: 1px solid var(--line); padding: 10px;}
+.belior .phoenix-frame img{width: 100%; height: 100%; object-fit: cover;}
+.belior .pager{display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;}
+.belior .pager a{text-decoration: none; display: grid; gap: 6px;}
+.belior .pager a:last-child{text-align: right;}
+.belior .pager .wordmark{font-size: 1.6rem; letter-spacing: .2em;}
+.belior .steps{display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); counter-reset: step;}
+.belior .step{padding: 28px 22px 28px 0; border-bottom: 1px solid var(--line); display: grid; gap: 10px; align-content: start;}
+.belior .step::before{counter-increment: step; content: "N° 0" counter(step); font: .7rem/1 var(--label); letter-spacing: .3em; color: var(--champagne);}
+.belior .step h3{font-size: 1.6rem;}
+.belior .step p{color: var(--taupe); font-size: .95rem;}
+@media (max-width: 760px){.belior .steps{grid-template-columns: 1fr;}}
+.belior .symbols{display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2px;}
+.belior .symbol-card{background: var(--night); padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; align-content: start;}
+.belior .symbol-card .mark{height: 150px; display: grid; place-items: center;}
+.belior .symbol-card .mark img{max-height: 150px; width: auto;}
+.belior .symbol-card .mini{display: flex; gap: 10px; flex-wrap: wrap; align-items: center; height: 150px;}
+.belior .symbol-card .mini img{width: 64px; height: 64px; border-radius: 50%; object-fit: cover;}
+@media (max-width: 760px){.belior .symbols{grid-template-columns: 1fr;}}
+.belior .form{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 28px; max-width: 52rem;}
+.belior .field{display: grid; gap: 8px; min-width: 0;}
+.belior .field.wide{grid-column: 1 / -1;}
+.belior .field label{font: .7rem/1.4 var(--label); letter-spacing: .26em; text-transform: uppercase; color: var(--taupe);}
+.belior .field input, .belior .field select, .belior .field textarea{width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--line); color: var(--ivory);
+  font: 1rem/1.6 var(--body); padding: 10px 0; border-radius: 0;}
+.belior .field select option{background: var(--night);}
+.belior .field textarea{min-height: 120px; resize: vertical;}
+.belior .field input:focus, .belior .field select:focus, .belior .field textarea:focus{outline: none; border-bottom-color: var(--champagne);}
+.belior .btn{justify-self: start; background: var(--ivory); color: var(--ink); border: 0; cursor: pointer;
+  font: 500 .72rem/1 var(--label); letter-spacing: .3em; text-transform: uppercase; padding: 18px 28px;}
+.belior .btn.ghost{background: transparent; color: var(--ivory); border: 1px solid var(--line);}
+@media (max-width: 640px){.belior .form{grid-template-columns: 1fr;}}
+.belior .result{max-width: 52rem; display: grid; gap: 16px; border: 1px solid var(--line); padding: 28px;}
+.belior .result pre{margin: 0; white-space: pre-wrap; font: .95rem/1.8 var(--body); color: var(--ivory);}
+.belior .result .addr{user-select: all; font-family: var(--label); letter-spacing: .06em;}
+.belior .result .actions{display: flex; gap: 12px; flex-wrap: wrap;}
+.belior .site-footer{border-top: 1px solid var(--line); padding: 64px var(--gutter) calc(env(safe-area-inset-bottom, 0px) + 40px); display: grid; gap: 40px;}
+.belior .foot-top{display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; align-items: start;}
+.belior .foot-brand{display: grid; gap: 14px; justify-items: start;}
+.belior .foot-brand img{height: 64px; width: auto;}
+.belior .foot-brand .wordmark{font-size: 1.3rem;}
+.belior .foot-nav{display: grid; grid-template-columns: repeat(3, auto); gap: 12px 40px;}
+.belior .foot-nav a{font: .7rem/1.4 var(--label); letter-spacing: .28em; text-transform: uppercase; text-decoration: none; color: var(--taupe);}
+.belior .foot-nav a:hover{color: var(--ivory);}
+.belior .foot-base{display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;}
+@media (max-width: 520px){.belior .foot-nav{grid-template-columns: repeat(2, auto);}}
+@media (prefers-reduced-motion: reduce){.belior *, .belior *::before, .belior *::after{animation: none !important; transition: none !important;}}
+.belior{}
+.belior .scene, .belior .houses, .belior .worlds{scroll-snap-align: start;}
+.belior .curtain{position: fixed; inset: 0; z-index: 50; background: var(--ink);
+  display: grid; place-items: center; pointer-events: none;
+  animation: curtain-lift 1.7s cubic-bezier(.7, 0, .2, 1) forwards;}
+.belior .curtain .c-inner{display: grid; justify-items: center; gap: 22px;}
+.belior .curtain .c-mark{height: clamp(96px, 16vh, 150px); width: auto; animation: mark-in 1.1s ease-out both;}
+.belior .curtain.round .c-mark{width: clamp(110px, 18vh, 160px); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 50%;}
+.belior .curtain .c-line{width: 120px; height: 1px; background: var(--champagne); transform-origin: center; animation: line-draw 1s ease-out both .2s;}
+.belior .curtain .c-label{font: 400 .74rem/1 var(--label); letter-spacing: .5em; padding-left: .5em; color: var(--ivory); animation: mark-in 1s ease-out both .3s;}
+@keyframes curtain-lift{ 0%, 55% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+@keyframes mark-in{ from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes line-draw{ from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.belior .curtain.leaving{animation: curtain-fall .65s cubic-bezier(.7, 0, .2, 1) forwards;}
+.belior .curtain.leaving .c-mark, .belior .curtain.leaving .c-label{animation: mark-in .6s ease-out both .1s;}
+.belior .curtain.leaving .c-line{animation: line-draw .6s ease-out both .15s;}
+@keyframes curtain-fall{ from { opacity: 0; visibility: visible; } to { opacity: 1; visibility: visible; } }
+.belior .scene-mark{height: 46px; width: auto; opacity: .9;}
+.belior .scene-mark.round{width: 56px; height: 56px; object-fit: cover; border-radius: 50%;}
+.belior .scene > .bg, .belior .house img, .belior .world .bg{transform: scale(1.06); transition: transform 2.2s cubic-bezier(.2, .6, .2, 1);}
+.belior .scene.seen > .bg, .belior .house.seen img, .belior .world.seen .bg{transform: scale(1);}
+.belior .scene .inner > *{transform: translateY(14px); transition: transform 1.2s cubic-bezier(.2, .6, .2, 1);}
+.belior .scene.seen .inner > *{transform: none;}
+.belior .scene .inner > *:nth-child(2){transition-delay: .08s;}
+.belior .scene .inner > *:nth-child(3){transition-delay: .16s;}
+.belior .scene .inner > *:nth-child(4){transition-delay: .24s;}
+.belior .film > .bg{transform: none;}
+@media (prefers-reduced-motion: reduce){.belior .curtain{display: none;}
+.belior{scroll-snap-type: none;}
+.belior .scene > .bg, .belior .house img, .belior .world .bg, .belior .scene .inner > *{transform: none !important;}}
+.belior .site-header{display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  background: var(--ink); border-bottom: 1px solid var(--line);
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) var(--gutter) 14px;}
+.belior .site-header.solid{background: var(--ink);}
+.belior .site-header .brand{justify-self: center;}
+.belior .site-header .brand img{height: 40px;}
+.belior .menu-btn{display: inline-block; justify-self: start; border: 0; padding: 10px 0; font-size: .76rem; letter-spacing: .32em;}
+.belior .head-link{justify-self: end; font: 400 .76rem/1 var(--label); letter-spacing: .32em; text-decoration: none; padding-block: 10px;}
+.belior .head-link:hover, .belior .menu-btn:hover{color: var(--champagne);}
+.belior .nav{display: none;}
+.belior .menu-panel{padding-top: calc(env(safe-area-inset-top, 0px) + 110px);}
+.belior .menu-panel a[aria-current="page"]{color: var(--champagne);}
+.belior .scene .inner{justify-self: center; justify-items: center; text-align: center;
+  padding: 120px var(--gutter) calc(env(safe-area-inset-bottom, 0px) + 64px); max-width: 60rem; gap: 14px;}
+.belior .scene .inner .label{color: var(--ivory); letter-spacing: .26em;}
+.belior .scene h1, .belior .slide h2{font-size: clamp(2.2rem, 6vw, 4.6rem); letter-spacing: .06em; text-transform: uppercase; line-height: 1.05;}
+.belior .scene .lede, .belior .slide .lede{max-width: 32rem; font-size: 1rem; opacity: .85;}
+.belior .scene::after{background: linear-gradient(to top, rgba(12,11,10,.85) 0%, rgba(12,11,10,.15) 45%, rgba(12,11,10,0) 70%);}
+.belior .scene{min-height: calc(100svh - 72px);}
+.belior .cta{display: inline-flex; align-items: center; gap: 16px; margin-top: 10px; text-decoration: none;
+  font: 400 .74rem/1 var(--label); letter-spacing: .3em;}
+.belior .cta .ring{width: 54px; height: 54px; border-radius: 50%; border: 1px solid rgba(236,228,214,.7);
+  display: grid; place-items: center; font: 300 1.6rem/1 var(--label); transition: background .3s ease, color .3s ease;}
+.belior .cta:hover .ring{background: var(--ivory); color: var(--ink);}
+.belior .scene-mark{display: none;}
+.belior .film::after{background: none;}
+.belior .film-toggle{width: 44px; height: 44px; border-radius: 50%; padding: 0; display: grid; place-items: center;
+  font: 500 .7rem/1 var(--label); letter-spacing: .05em; border-color: rgba(236,228,214,.6);}
+.belior .scene.plain{background: var(--night); align-items: center;}
+.belior .scene.plain::after{display: none;}
+.belior .plain-mark{height: 64px; width: auto; margin-bottom: 10px;}
+.belior .carousel{position: relative;}
+.belior .track{display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;}
+.belior .track::-webkit-scrollbar{display: none;}
+.belior .slide{position: relative; flex: 0 0 100%; min-height: calc(100svh - 72px); scroll-snap-align: start;
+  display: grid; align-items: end; isolation: isolate; overflow: hidden;}
+.belior .slide .bg{position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2;}
+.belior .slide::after{content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(12,11,10,.88), rgba(12,11,10,.1) 50%, rgba(12,11,10,0) 75%);}
+.belior .slide .inner{justify-self: center; display: grid; justify-items: center; text-align: center; gap: 14px;
+  padding: 120px var(--gutter) 96px;}
+.belior .slide .label{color: var(--world); letter-spacing: .26em;}
+.belior .dots{position: absolute; left: 0; right: 0; bottom: 36px; display: flex; justify-content: center; gap: 12px;}
+.belior .dot{width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ivory); background: transparent; padding: 0; cursor: pointer;}
+.belior .dot[aria-current="true"]{background: var(--ivory); width: 26px; border-radius: 5px;}
+.belior main{padding-top: calc(env(safe-area-inset-top, 0px) + 72px);}
+.belior .curtain{z-index: 60;}
+.belior .scene h1, .belior .slide h2{font-size: clamp(1.75rem, 7.2vw, 4.6rem); letter-spacing: .03em; overflow-wrap: anywhere; max-width: 100%;}
+.belior .scene .inner, .belior .slide .inner{width: 100%; min-width: 0;}
+.belior .site-header{width: 100%;}
+.belior .small{font-size: .82rem;}
+.belior .topline{display: flex; justify-content: space-between; padding: calc(env(safe-area-inset-top, 0px) + 8px) var(--gutter) 8px;
+  font: .62rem/1 var(--label); letter-spacing: .34em; text-transform: uppercase; color: var(--taupe); background: var(--ink);}
+.belior .site-header{position: sticky; top: env(safe-area-inset-top, 0px);}
+.belior main{padding-top: 0;}
+.belior .scene{min-height: calc(100svh - 100px);}
+.belior .menu-panel{overflow-y: auto; display: grid; align-content: start; gap: 40px; padding: calc(env(safe-area-inset-top, 0px) + 120px) var(--gutter) 48px;}
+.belior .menu-panel a{font: inherit; border: 0; padding: 0; letter-spacing: normal;}
+.belior .m-grid{display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 36px 40px;}
+.belior .m-col{display: grid; gap: 14px; align-content: start; border-top: 1px solid var(--line); padding-top: 18px;}
+.belior .m-head{font: 400 1.5rem/1.2 var(--display) !important; letter-spacing: .1em !important; text-decoration: none;}
+.belior .m-head small{display: block; margin-top: 6px; font: .7rem/1.4 var(--label); letter-spacing: .26em; color: var(--taupe);}
+.belior .m-head[aria-current="page"]{color: var(--champagne);}
+.belior .m-subs{display: grid; gap: 8px;}
+.belior .m-subs a{font: .9rem/1.5 var(--body) !important; color: var(--taupe); text-decoration: none;}
+.belior .m-subs a:hover{color: var(--ivory);}
+.belior .m-foot{display: flex; align-items: center; gap: 16px; border-top: 1px solid var(--line); padding-top: 24px;}
+.belior .m-foot img{width: 56px; height: 56px; object-fit: cover;}
+.belior .curtain{--world: var(--champagne);}
+.belior .curtain .c-mark{height: clamp(140px, 24vh, 220px);}
+.belior .curtain:not(.round) .c-mark{width: clamp(140px, 24vh, 220px); object-fit: cover;}
+.belior .curtain .c-world{font: 400 .78rem/1 var(--label); letter-spacing: .5em; padding-left: .5em; color: var(--world); animation: mark-in 1s ease-out both .25s;}
+.belior .curtain .c-line{background: var(--world);}
+.belior .curtain .c-label{font: 400 1.4rem/1.2 var(--display); letter-spacing: .24em;}
+.belior .curtain.leaving .c-world{animation: mark-in .6s ease-out both .1s;}
+.belior .maison-intro{display: grid; gap: 56px;}
+.belior .mi-head{display: grid; gap: 18px; max-width: 46rem;}
+.belior .mi-head h2{font-size: clamp(2rem, 4.8vw, 3.8rem);}
+.belior .marquee{overflow: hidden; border-block: 1px solid var(--line); padding-block: 14px; white-space: nowrap;}
+.belior .marquee > div{display: inline-block; font: .8rem/1 var(--label); letter-spacing: .4em; color: var(--taupe); animation: slide 40s linear infinite;}
+@keyframes slide{ to { transform: translateX(-50%); } }
+.belior .chapters{display: grid; border-top: 1px solid var(--line);}
+.belior .chapter{display: grid; grid-template-columns: 3rem minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 40px); align-items: center;
+  padding-block: 26px; border-bottom: 1px solid var(--line); text-decoration: none;}
+.belior .chapter .num{font: .8rem/1 var(--label); letter-spacing: .2em; color: var(--champagne);}
+.belior .ch-img{aspect-ratio: 2.2 / 1; overflow: hidden; background: var(--night);}
+.belior .ch-img img{width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s ease;}
+.belior .chapter:hover .ch-img img{transform: scale(1.05);}
+.belior .ch-txt{display: grid; gap: 12px; min-width: 0;}
+.belior .ch-txt h3{font-size: clamp(1.4rem, 2.6vw, 2.1rem); letter-spacing: .08em;}
+.belior .ch-txt p{color: var(--taupe);}
+@media (max-width: 760px){.belior .chapter{grid-template-columns: 2rem minmax(0, 1fr);}
+.belior .ch-img{grid-column: 2;}
+.belior .ch-txt{grid-column: 2;}}
+.belior .history{list-style: none; margin: 6px 0 0; padding: 0; display: grid; border-top: 1px solid var(--line);}
+.belior .history li{padding-block: 12px; border-bottom: 1px solid var(--line);}
+.belior .links{display: flex; gap: 24px; flex-wrap: wrap;}
+.belior .evening{display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(20px, 3vw, 40px); align-items: stretch;}
+.belior .ev-film{margin: 0; display: grid; gap: 12px;}
+.belior .ev-film video{width: 100%; max-height: 78svh; aspect-ratio: 9 / 16; object-fit: cover; background: var(--night);}
+.belior .ev-film figcaption, .belior .wide-fig figcaption, .belior .patterns figcaption{font: .74rem/1.6 var(--label); letter-spacing: .14em; color: var(--taupe);}
+.belior .ev-cards{display: grid; gap: 2px; align-content: stretch;}
+.belior .ev-card{background: var(--night); padding: clamp(24px, 4vw, 48px); display: grid; gap: 14px; align-content: end; text-decoration: none;}
+.belior .ev-card h3{font-size: clamp(1.6rem, 3vw, 2.4rem);}
+@media (max-width: 820px){.belior .evening{grid-template-columns: 1fr;}
+.belior .ev-film video{max-height: 70svh;}}
+.belior .band{position: relative; min-height: 70svh; display: grid; place-items: center; text-align: center; isolation: isolate; overflow: hidden;}
+.belior .band .bg{position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2;}
+.belior .band::after{content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(12, 11, 10, .55);}
+.belior .band .inner{display: grid; justify-items: center; gap: 14px; padding: 80px var(--gutter); max-width: 48rem;}
+.belior .band h2{font-size: clamp(2rem, 5vw, 3.8rem); letter-spacing: .05em;}
+.belior .symbols.three{grid-template-columns: repeat(3, minmax(0, 1fr));}
+.belior .symbol-card .mini a{display: block;}
+@media (max-width: 900px){.belior .symbols.three{grid-template-columns: 1fr;}}
+.belior .patterns{display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px;}
+.belior .patterns figure{margin: 0; display: grid; gap: 10px;}
+.belior .patterns img{width: 100%; aspect-ratio: 1; object-fit: cover;}
+@media (max-width: 760px){.belior .patterns{grid-template-columns: repeat(3, minmax(0, 1fr));}}
+.belior .wide-fig{margin: 0 auto; display: grid; gap: 12px; max-width: 64rem;}
+.belior .wide-fig img{width: 100%;}
+.belior .world-line{font: italic 400 clamp(1.6rem, 3.4vw, 2.6rem)/1.35 var(--display);}
+.belior .emblem-side{grid-column: 9 / span 4; display: grid; gap: 14px; justify-items: start;}
+.belior .emblem-side img{width: 150px; border-radius: 50%;}
+.belior .pat{width: 96px; height: 96px; object-fit: cover;}
+.belior .notes{font: 400 1.3rem/1.4 var(--display); letter-spacing: .08em;}
+.belior .emblems.five{grid-template-columns: repeat(5, minmax(0, 1fr));}
+@media (max-width: 760px){.belior .emblems.five{grid-template-columns: repeat(3, minmax(0, 1fr));}}
+.belior .phoenix-frame{margin-bottom: 18px;}
+.belior .biz{margin: 0; display: flex; flex-wrap: wrap; gap: 10px 32px;}
+.belior .biz div{display: flex; gap: 10px;}
+.belior .biz dt{font: .7rem/1.6 var(--label); letter-spacing: .2em; color: var(--taupe);}
+.belior .biz dd{margin: 0; font-size: .86rem; color: var(--ivory);}
+.belior .statement img{margin-bottom: 6px;}
+@media (prefers-reduced-motion: reduce){.belior .marquee > div{animation: none;}}
+.belior .pair{display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; align-items: end;}
+.belior .pair figure{margin: 0; display: grid; gap: 10px;}
+.belior .pair figcaption{font: .74rem/1.6 var(--label); letter-spacing: .14em; color: var(--taupe);}
+.belior .wide-fig img{max-height: 82svh; object-fit: cover;}
+.belior{min-height:100vh;font-size:16px}
+.belior .night{background:var(--night)}
+.belior .head-right{justify-self:end;display:flex;align-items:center;gap:22px}
+.belior .lang{background:none;border:0;color:var(--ivory);font:400 .72rem/1 var(--label);letter-spacing:.3em;cursor:pointer;padding:10px 0}
+.belior .lang:hover{color:var(--champagne)}
+.belior .copy .sub{font-size:1.5rem;margin-top:14px}
+.belior .note-founder{margin:24px 0 0;padding:22px 0 22px 22px;border-left:1px solid var(--world);display:grid;gap:10px;max-width:42rem}
+.belior .note-founder p{font:italic 400 1.35rem/1.5 var(--display)}
+.belior .performance-video{width:100%;max-height:80svh;margin-top:36px;background:#000;display:block}
+.belior a.line-item{text-decoration:none}
+.belior .film{min-height:calc(100svh - 100px)}
+.belior .consent{display:flex;gap:12px;align-items:flex-start;font-size:.85rem;color:var(--taupe)}
+.belior .consent input{width:16px;margin-top:5px;flex-shrink:0}
+.belior .form [role=status]{color:var(--champagne)}
+.belior .field input[type=date]{color-scheme:dark}
+@media (max-width:640px){.belior .head-link{display:none}}
+.belior .wordmark{color:var(--ivory)}
+.belior .scene h1.keep{text-transform:none}

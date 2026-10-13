@@ -127,6 +127,30 @@ const CHAPTERS_LIST: [string, string, string, string, string, string][] = [
     ['/journal', 'o-mk-home-journal.jpg', 'JOURNAL', '예술, 사람, 공간의 이야기를\n기록합니다.', 'Stories of art,\npeople and places.', 'Explore Journal'],
 ];
 
+function MaisonHero() {
+  const {t} = useT();
+  return <section className="maison-hero"><img className="bg" src={V('o-hero-salon.jpg')} alt={t('BELiOR 메종 살롱 공간', 'The BELiOR maison salon')}/>
+    <div className="mh-inner">
+      <div className="mh-main"><span className="label">BELiOR · Maison de l’Art de Vivre</span>
+        <h2>{lines(t('음악에서 시작된\n하나의 하우스.', 'A house that began\nin music.'))}</h2>
+        <p className="mh-heritage">{lines('A heritage\nfor a brighter\ntomorrow')}</p>
+        <div className="mh-actions"><a className="btn-line" href="/collection">{t('컬렉션 살펴보기', 'Explore the collection')}</a><a className="btn-line" href="/music">{t('연주 보기', 'See the performances')}</a><a className="more" href="/maison">DISCOVER BELiOR →</a></div></div>
+      <ul className="mh-words" aria-label="Art · People · Places and beauty"><li>Art</li><li>People</li><li>Places</li><li>and beauty</li></ul>
+    </div>
+    <p className="mh-foot label">A More Beautiful Tomorrow</p>
+  </section>;
+}
+
+function SwanGallery() {
+  const {t} = useT();
+  return <a className="gallery-chapter" href="/collection/swan">
+    <div className="gc-img"><img src="/belior/ballet.webp" alt="BELiOR Gallery Chapter 02 Swan Lake" loading="lazy"/></div>
+    <div className="gc-txt"><span className="label">BELiOR Gallery · Chapter 02</span><h3>SWAN LAKE</h3><p className="gc-work">Tchaikovsky — Swan Lake, Op. 20</p>
+      <p className="gc-quote">We do not illustrate music. We give it form.</p><p className="muted">음악을 묘사하지 않습니다. 음악에 형태를 부여합니다.</p>
+      <span className="more">{t('챕터 들어가기', 'Enter the chapter')} →</span></div>
+  </a>;
+}
+
 function MaisonIntro() {
   const {t, en} = useT(); void t; void en;
   return <section className="section maison-intro" id="maison">
@@ -134,6 +158,7 @@ function MaisonIntro() {
       <h2>{lines(t('예술이 머무는 저녁,\n더 아름다운 내일을 위한 집.', 'An evening where art lingers,\na house for a more beautiful tomorrow.'))}</h2>
       <p className="muted">{t('BELiOR는 음악, 공간, 오브제, 향, 그리고 사람을 통해 일상의 순간들을 더 깊고 아름답게 만드는 라이프스타일 하우스입니다.', 'BELiOR is a lifestyle house that deepens everyday moments through music, space, objects, scent and people.')}</p></div>
     <div className="marquee" aria-hidden="true"><div>MUSIC · ART · PEOPLE · PLACES · OBJECTS · A MORE BEAUTIFUL TOMORROW · MUSIC · ART · PEOPLE · PLACES · OBJECTS · A MORE BEAUTIFUL TOMORROW ·</div></div>
+    <SwanGallery/>
     <div className="chapters">{CHAPTERS_LIST.map(([h, im, name, ko, eng, c], i) =>
       <a className="chapter" href={h} key={name}><span className="num">0{i + 1}</span><div className="ch-img"><img src={V(im)} alt="" loading="lazy"/></div>
         <div className="ch-txt"><h3>{name}</h3><p>{lines(t(ko, eng))}</p><span className="more">{c} →</span></div></a>)}</div>
@@ -318,10 +343,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="dots">{WORLDS.map((w, i) => <button type="button" className="dot" key={w.slug} aria-label={w.name} aria-current={slide === i}
         onClick={() => trackRef.current?.scrollTo({left: i * (trackRef.current?.clientWidth || 0), behavior: 'smooth'})}/>)}</div>
     </section>
-    <MaisonIntro/><TheHouse/><TheEvening/><AtelierContent/><OneWorld/>
+    <MaisonHero/><MaisonIntro/><TheHouse/><TheEvening/><AtelierContent/><OneWorld/>
     <section className="section night"><div className="spread">
-      <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('숲속의 아이와 검은 말', 'A child and a black horse in the forest')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
-      <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me')}</h3>
+      <figure className="c-5"><img src={V('no16-hero.jpg')} alt={t('숲속에서 말에 오른 아이', 'A child on a horse in the forest')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
+      <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>A memory, held.</h3>
         <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
     <ObjectsRow/><Services/>
@@ -451,24 +476,26 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     </div>;
   };
 
-  const no16 = <>
-    <section className="scene plain"><div className="inner"><span className="label">Parfum · BELiOR No. 16</span><h1 className="keep">No. 16</h1>
-      <p className="lede">{t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me')}</p></div></section>
-    <section className="section"><div className="spread">
-      <figure className="c-6"><img src={V('no16-horse.jpg')} alt={t('숲속의 아이와 검은 말', 'A child and a black horse in the forest')}/><figcaption>No. 16 · BELiOR</figcaption></figure>
-      <div className="copy c-6"><span className="label">The Memory</span>
-        <p className="world-line">{t('어린 시절, 아버지가 말에 한번 타 보라고 했습니다.', 'As a child, my father told me to try riding a horse.')}</p>
-        <p className="muted">{t('나는 말 위에 올랐고, 아버지는 그 모습을 지켜보았습니다. 푸릇푸릇한, 동화 속 같은 숲. 무서웠지만 나를 지탱해 주던 말. 그 순간은 지금도 선명하게 남아 있습니다.', 'I climbed on, and my father watched. A green forest, like something from a fairy tale. I was afraid, but the horse held me steady. That moment has stayed with me ever since.')}</p>
-        <p className="muted">{t('No. 16은 그 기억을 담은 향입니다.', 'No. 16 is the scent of that memory.')}</p></div></div></section>
-    <section className="section night"><div className="statement"><span className="label">The House of Stories</span>
-      <h2>{t('테마마다 하나의 이야기. 값을 매길 수 없는 경험.', 'One story for every theme. An experience beyond price.')}</h2>
-      <p>{t('BELiOR의 향과 오브제는 각자의 기억과 이야기에서 시작합니다.', 'Every BELiOR scent and object begins with a memory and a story.')}</p></div></section>
-    <section className="section"><div className="facts">
-      <div className="fact"><span className="label">Name</span><span className="val">No. 16</span></div>
-      <div className="fact"><span className="label">Theme</span><span className="val accent">{t('숲 · 말 · 아버지의 시선', 'Forest · Horse · A father’s gaze')}</span></div>
-      <div className="fact"><span className="label">Notes</span><span className="val">{t('조향 확정 전', 'To be composed')}</span></div></div></section>
-    <OneWorld/>
-  </>;
+  const no16 = <div className="no16">
+    <section className="n16-hero"><img className="bg" src={V('no16-hero.jpg')} alt={t('푸른 숲에서 말에 오른 아이와 지켜보는 아버지', 'A child on a horse in a green forest, her father watching')}/>
+      <div className="inner"><h1 className="keep">No.16<br/>A memory, held.</h1><p className="lede">{t('푸른 숲, 나를 지탱해주던 기억.', 'A green forest, and the memory that held me.')}</p>
+        <a className="line-cta" href="#memory">DISCOVER THE STORY <span aria-hidden="true">→</span></a></div></section>
+    <section className="n16-stay"><div className="txt"><h2>The moments that stay.</h2>
+      <p>{lines(t('향은 우리를 어떤 장소로 데려갑니다 —\n우리를 만든 감정과, 여전히 안에 살아 있는\n고요한 힘으로.', 'Scent can return us to a place —\nto the feelings that shaped us, and the quiet strength\nthat still lives within.'))}</p></div>
+      <img src={V('no16-stream.jpg')} alt={t('햇살이 비치는 이끼와 시냇물', 'Moss and a sunlit stream')} loading="lazy"/></section>
+    <section className="n16-memory" id="memory">
+      <div className="n16-top"><div className="txt"><span className="label">No.16 / The Memory</span><h2>{lines('Before it was a scent,\nit was a memory.')}</h2>
+        <p>{lines(t('어린 시절, 아빠가 권했던 말 위에 올랐습니다.\n무서웠지만, 말은 나를 지탱하고 있었고\n아빠는 그 모습을 지켜보고 있었습니다.', 'As a child, I climbed onto the horse my father offered.\nI was afraid, but the horse held me steady,\nand my father stood watching.'))}</p></div>
+        <img src={V('no16-hand.jpg')} alt={t('말갈기에 얹은 아이의 손', 'A child’s hand on the horse’s mane')} loading="lazy"/></div>
+      <div className="n16-three">{[['no16-forest.jpg', '01 — The Forest', t('이끼 낀 숲의 바닥', 'The mossy forest floor')], ['no16-warmth.jpg', '02 — The Warmth', t('햇살을 받은 말의 갈기', 'The horse’s mane in sunlight')], ['no16-presence.jpg', '03 — The Presence', t('말 위의 아이를 지켜보는 아버지', 'A father watching his child on horseback')]].map(([im, cap, alt]) =>
+        <figure key={im}><img src={V(im)} alt={alt} loading="lazy"/><figcaption>{cap}</figcaption></figure>)}</div>
+      <div className="n16-foot"><p>Some moments never leave us.</p><a className="line-cta" href="/journal">CONTINUE THE STORY <span aria-hidden="true">→</span></a></div>
+    </section>
+    <section className="n16-childhood"><span className="label">{t('어린 시절', 'Childhood')}</span>
+      <p className="world-line">{t('푸릇푸릇한, 동화 속 같은 숲. 무서웠지만 나를 지탱해 주던 말. 그 순간은 지금도 선명하게 남아 있습니다.', 'A green forest, like a fairy tale. I was afraid, but the horse held me. That moment is still vivid.')}</p>
+      <p>{t('BELiOR는 테마마다 하나의 이야기를 담습니다. No. 16은 그 첫 기억입니다.', 'BELiOR gives every theme a story of its own. No. 16 is the first memory.')}</p>
+      <a className="line-cta" href="/private">{t('No. 16 프라이빗 문의', 'Enquire about No. 16')} <span aria-hidden="true">→</span></a></section>
+  </div>;
 
   const productPage = (d: string) => {
     if (d === 'no-16') return no16;
@@ -535,13 +562,13 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     page === 'atelier' ? atelier :
     page === 'journal' ? journal : privatePage;
 
-  return <LangCtx.Provider value={en}><div className="belior">
+  return <LangCtx.Provider value={en}><div className={'belior' + (page === 'products' && detail === 'no-16' ? ' ivory' : '')}>
     <div className="curtain" ref={curtainRef} aria-hidden="true"><div className="c-inner"><img className="c-mark" src={V('lion-motif.jpg')} alt=""/>
       <span className="c-world">LION</span><span className="c-line"/><span className="c-label">{LABELS[path] || 'BELiOR'}</span></div></div>
     <div className="topline"><span>A More Beautiful Tomorrow</span><span>Seoul</span></div>
     <header className="site-header">
       <button className="menu-btn" type="button" aria-expanded={menu} aria-controls="belior-menu" onClick={() => setMenu(!menu)}>{menu ? 'CLOSE' : 'MENU'}</button>
-      <a className="brand" href="/" aria-label="BELiOR home"><img src={V('mono-ivory.png')} alt="BELiOR" width={22} height={43}/></a>
+      <a className="brand" href="/" aria-label="BELiOR home"><img src={V(page === 'products' && detail === 'no-16' ? 'mono-black.png' : 'mono-ivory.png')} alt="BELiOR" width={22} height={43}/></a>
       <div className="head-right"><button className="lang" type="button" onClick={() => setEn(!en)} aria-label="Change language">{en ? 'KR' : 'EN'}</button><a className="head-link" href="/private">PRIVATE ENQUIRIES</a></div>
     </header>
     <nav className="menu-panel" id="belior-menu" hidden={!menu} aria-label="Menu">

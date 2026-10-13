@@ -58,4 +58,9 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 ## 2026-10-13 추가 변경
 - PRIVATE 페이지 첫 장면과 메인 마지막 장면: 혹등고래가 빛줄기 속을 천천히 헤엄치는 움직이는 장면(public/belior/v3/whale.jpg, CSS 애니메이션). 움직임 줄이기 설정에서는 멈춤.
 - 하단의 "제품·공간 이미지는 컬렉션 콘셉트…" 문구와 페이지 곳곳의 "시안 단계/Concept" 표기를 삭제.
-- No. 16 말 이미지: 캔바에서 새로 생성함(Canva media MAHX6fpZsBQ). 이 ZIP의 public/belior/v3/no16-horse.jpg는 아직 이전 참고 사진이므로 캔바 이미지(1536×1024)를 같은 이름으로 덮어써서 교체할 것.
+- No. 16 이미지: 대표가 보낸 No. 16 화면 2장에서 사진 6장을 잘라 사용(public/belior/v3/no16-*.jpg). 이전의 워터마크 말 사진은 교체됨.
+
+## 2026-10-13 추가 변경 (2)
+- /products/no-16: 대표가 보낸 화면 2장 그대로 재구성한 아이보리 페이지(No.16 · A memory, held. → The moments that stay. → Before it was a scent, it was a memory. → 01 The Forest · 02 The Warmth · 03 The Presence → 어린 시절).
+- 메인: 동물 슬라이드 다음에 원래 메종 첫 화면(음악에서 시작된 하나의 하우스. / A heritage for a brighter tomorrow / Art · People · Places and beauty / 컬렉션 살펴보기 · 연주 보기 · DISCOVER BELiOR)을 넣음.
+- 메종 소개 아래 BELiOR Gallery · Chapter 02 SWAN LAKE(Tchaikovsky — Swan Lake, Op. 20) 챕터를 넣음. 메인과 /maison에 모두 나옴.

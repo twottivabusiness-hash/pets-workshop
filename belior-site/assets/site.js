@@ -39,10 +39,15 @@
     });
   }
 
-  // Page turn: close on the destination's symbol, then navigate.
+  // Page turn: each turn shows the next animal of the house (Lion first), or the destination's own emblem.
   var curtainEl = document.querySelector('.curtain');
-  var pages = window.BELIOR_PAGES || {};
+  var data = window.BELIOR_PAGES || { labels: {}, sequence: [], own: {} };
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function nextAnimal() {
+    var n = 0;
+    try { n = parseInt(sessionStorage.getItem('belior-seq') || '0', 10) || 0; sessionStorage.setItem('belior-seq', String(n + 1)); } catch (e) {}
+    return data.sequence[n % Math.max(1, data.sequence.length)];
+  }
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a || !curtainEl || reduceMotion) return;
@@ -50,13 +55,19 @@
     var href = a.getAttribute('href');
     var m = href.match(/^([a-z0-9-]+)\.html(#[\w.~-]*)?$/i);
     if (!m) return;
-    var info = pages[m[1]] || { label: 'BELiOR', mark: 'assets/img/mono-ivory.png', round: false };
+    var here = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
+    if (m[1] === here && m[2]) return; // same-page anchor: just scroll
+    var info = data.own[m[1]] || nextAnimal();
+    if (!info) return;
     e.preventDefault();
     curtainEl.querySelector('.c-mark').src = info.mark;
-    curtainEl.querySelector('.c-label').textContent = info.label;
+    curtainEl.querySelector('.c-world').textContent = info.world;
+    curtainEl.querySelector('.c-label').textContent = data.labels[m[1]] || 'BELiOR';
     curtainEl.classList.toggle('round', !!info.round);
+    curtainEl.style.setProperty('--world', info.color);
+    try { sessionStorage.setItem('belior-turn', JSON.stringify(info)); } catch (err) {}
     curtainEl.classList.remove('leaving'); void curtainEl.offsetWidth; curtainEl.classList.add('leaving');
-    setTimeout(function () { window.location.href = href; }, 700);
+    setTimeout(function () { window.location.href = href; }, 800);
   });
   window.addEventListener('pageshow', function (e) { if (e.persisted && curtainEl) curtainEl.classList.remove('leaving'); });
 

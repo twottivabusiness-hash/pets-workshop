@@ -435,7 +435,7 @@ function MaisonIntro() {
   const {t, en} = useT(); void t; void en;
   return <section className="section maison-intro" id="maison">
     <div className="mi-head"><span className="label">BELiOR · Maison de l’Art de Vivre</span>
-      <h2>{lines(t('예술이 머무는 저녁,\n더 아름다운 내일을 위한 집.', 'An evening where art lingers,\na house for a more beautiful tomorrow.'))}</h2>
+      <h2 className="mi-title">{lines(t('예술이 머무는 저녁,\n더 아름다운 순간의 소리를 만듭니다.', 'An evening where art lingers,\nwe make the sound of a more beautiful moment.'))}</h2>
       <p className="muted">{t('BELiOR는 음악, 공간, 오브제, 향, 그리고 사람을 통해 일상의 순간들을 더 깊고 아름답게 만드는 라이프스타일 하우스입니다.', 'BELiOR is a lifestyle house that deepens everyday moments through music, space, objects, scent and people.')}</p></div>
     <div className="marquee" aria-hidden="true"><div>MUSIC · ART · PEOPLE · PLACES · OBJECTS · A MORE BEAUTIFUL TOMORROW · MUSIC · ART · PEOPLE · PLACES · OBJECTS · A MORE BEAUTIFUL TOMORROW ·</div></div>
     <SwanGallery/>
@@ -518,7 +518,12 @@ function InquiryForm({music}: {music?: boolean}) {
       if (!r.ok) throw Error();
       setStatus(t('문의가 접수되었습니다. 남겨주신 이메일로 회신드리겠습니다.', 'Your inquiry has been received. We will reply to your email.'));
       form.reset();
-    } catch { setStatus(t('접수하지 못했습니다. 이메일로 문의해 주세요.', 'Unable to submit. Please contact us by email.')); }
+    } catch {
+      // Static hosting (no inquiry API): hand the composed inquiry to the visitor's mail app instead.
+      const body = Object.entries(data).filter(([, v]) => v).map(([k, v]) => k + ': ' + v).join('\n');
+      window.location.href = 'mailto:' + MAIL + '?cc=' + MAIL2 + '&subject=' + encodeURIComponent('BELiOR ' + t('문의', 'Enquiry')) + '&body=' + encodeURIComponent(body);
+      setStatus(t('메일 앱이 열리면 보내기를 눌러 주세요. 열리지 않으면 ' + MAIL + ' 으로 보내 주세요.', 'Press send in your mail app. If it does not open, write to ' + MAIL + '.'));
+    }
     finally { setSending(false); }
   }
 
@@ -906,11 +911,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <footer className="site-footer">
       <div className="foot-top"><div className="foot-brand"><img src={V('mono-ivory.png')} alt="BELiOR" width={33} height={64}/><span className="wordmark">BELiOR</span><span className="label">Music · Art · People · Places</span></div>
         <nav className="foot-nav" aria-label="Footer">{MENU.map(m => <a href={m.href} key={m.href}>{m.name}</a>)}<a href="/office">OFFICE</a></nav></div>
-      <hr className="rule"/>
-      <dl className="biz"><div><dt>{t('상호', 'Company')}</dt><dd>벨리오르(BELIOR)</dd></div><div><dt>{t('대표', 'CEO')}</dt><dd>{t('여혜린', 'Hyerin Yeo')}</dd></div>
-        <div><dt>{t('사업자등록번호', 'Business No.')}</dt><dd>450-54-01129</dd></div>
-        <div><dt>Mail</dt><dd>{MAIL}<br/>{MAIL2}</dd></div></dl>
-      <div className="foot-base"><span className="label">A More Beautiful Tomorrow.</span><span className="muted small">© {new Date().getFullYear()} BELiOR</span></div>
+      <p className="foot-mail"><a href={'mailto:' + MAIL}>{MAIL}</a><a href={'mailto:' + MAIL2}>{MAIL2}</a></p>
     </footer>
   </div></LangCtx.Provider>;
 }

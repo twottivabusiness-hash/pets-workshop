@@ -812,3 +812,10 @@
 .belior .ex-grid .ex-card.rv:nth-child(2){transition-delay:.12s}.belior .ex-grid .ex-card.rv:nth-child(3){transition-delay:.24s}.belior .ex-grid .ex-card.rv:nth-child(4){transition-delay:.36s}
 @media (max-width:900px){.belior .ex-grid{grid-template-columns:1fr 1fr}.belior .experience{padding:90px var(--gutter)}}
 .belior .ex-cc h3 .ko{font-size:.72em}
+
+/* v13: quiet headline, minimal footer */
+.belior .mi-head h2.mi-title{font-size:clamp(17px,1.5vw,21px);line-height:1.8;letter-spacing:.02em;font-weight:400}
+.belior .mi-head h2.mi-title .ko{font-size:1em;font-weight:400}
+.belior .foot-mail{display:flex;flex-wrap:wrap;gap:8px 28px;margin:34px 0 0;font-size:11px;letter-spacing:.08em}
+.belior .foot-mail a{color:rgba(236,228,214,.6);text-decoration:none;transition:color .25s}
+.belior .foot-mail a:hover{color:var(--ivory)}

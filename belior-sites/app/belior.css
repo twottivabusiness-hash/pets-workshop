@@ -679,3 +679,105 @@
   .belior .rv,.belior .scene .inner > *{opacity:1!important;transform:none!important;transition:none!important}
   .belior .film .cue i,.belior .zs-hint i,.belior .dot i{animation:none}
 }
+
+/* ---------- b12 maison chapters ---------- */
+.belior .text-link{color:#e0d5bd;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid #8c7546;display:inline-flex;align-items:center;gap:15px;padding-bottom:8px;font-size:10px;text-decoration:none;transition:color .25s,border-color .25s,gap .4s}
+.belior .text-link:hover{color:#d1b87e;border-color:#b69a63;gap:22px}
+.belior .ko-line{color:#b69a63;letter-spacing:.08em;font-size:13px}
+.belior .b12-hero{position:relative;min-height:min(920px,100svh);display:flex;align-items:center;overflow:hidden;isolation:isolate}
+.belior .bh-img{position:absolute;inset:0;z-index:-2;background:url(/belior/v3/b12-panther.jpg) center 45%/cover;transform:scale(1.06);animation:bl-kb 18s ease-out forwards}
+@keyframes bl-kb{to{transform:scale(1)}}
+.belior .bh-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#070706cc,#07070638 75%),linear-gradient(0deg,rgba(7,7,6,.62),transparent 38%)}
+.belior .bh-copy{margin:80px 0 0 12.5%;max-width:600px;padding-right:var(--gutter)}
+.belior .b12-hero h2{font-family:var(--display);font-weight:400;font-size:clamp(56px,8vw,116px);line-height:.88;margin:28px 0}
+.belior .b12-hero em,.belior .b12-split em,.belior .b12-visit em,.belior .b12-jhero em{font-style:italic;color:#c4a96c}
+.belior .bh-text{font-size:13px;line-height:2;color:#c9c5bd;margin:30px 0}
+.belior .bh-foot{position:absolute;bottom:36px;left:6.2%;right:6.2%;display:flex;justify-content:space-between;color:#aba69c;font-size:9px;letter-spacing:.18em}
+.belior .b12-manifesto{text-align:center;padding:145px var(--gutter) 150px;background:#0c0b09}
+.belior .b12-manifesto h2{font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,76px);line-height:1.05;margin:26px auto;text-wrap:balance}
+.belior .b12-manifesto h2 span{color:#b69a63;font-style:italic}
+.belior .b12-manifesto .muted{max-width:560px;margin:24px auto 0;line-height:2}
+.belior .b12-manifesto .ko-line{margin-top:22px}
+.belior .b12-collections{padding:106px var(--gutter) 120px}
+.belior .b12-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;max-width:1440px;margin:0 auto 34px}
+.belior .b12-heading h2{font-family:var(--display);font-weight:400;font-size:clamp(44px,5vw,64px);margin:9px 0 0}
+.belior .b12-grid{max-width:1440px;margin:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:13px}
+.belior .b12-card{position:relative;grid-column:span 2;height:460px;overflow:hidden;background:#111;color:inherit;text-decoration:none}
+.belior .b12-card:nth-child(4),.belior .b12-card:nth-child(5){grid-column:span 3;height:510px}
+.belior .b12-card:nth-child(6){grid-column:span 6;height:520px}
+.belior .b12-card img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.belior .b12-card:hover img{transform:scale(1.045)}
+.belior .b12-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.82),transparent 65%)}
+.belior .b12-cc{position:absolute;bottom:28px;left:27px;right:20px}
+.belior .b12-cc > span:first-child{color:#d4be8a;font-size:11px;letter-spacing:.16em}
+.belior .b12-cc h3{font-family:var(--display);font-weight:400;font-size:43px;margin:3px 0;letter-spacing:.04em}
+.belior .b12-cc p{font-size:12px;color:#d0ccc3;margin:0 0 19px}
+.belior .b12-arrow{font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:#e0d5bd;transition:letter-spacing .4s}
+.belior .b12-card:hover .b12-arrow{letter-spacing:.3em}
+.belior .b12-split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:8%;padding:120px 10%}
+.belior .b12-split.night{background:#11100d}
+.belior .b12-split img{width:100%;height:480px;object-fit:cover}
+.belior .b12-split h2{font-family:var(--display);font-weight:400;font-size:clamp(46px,6vw,78px);line-height:.95;margin:22px 0}
+.belior .b12-split .muted{max-width:420px;line-height:2.1;margin:22px 0}
+.belior .b12-split .ko-line{margin:-6px 0 22px}
+.belior .b12-split .tc-sound .sound{color:inherit}
+.belior .b12-visit{text-align:center;padding:135px 20px 150px;background:radial-gradient(ellipse at center,#1b1710,#0a0908 70%)}
+.belior .b12-visit h2{font-family:var(--display);font-weight:400;font-size:clamp(44px,7vw,86px);line-height:.98;margin:25px auto 33px;text-wrap:balance}
+.belior .b12-story{text-align:center;padding:140px var(--gutter) 155px}
+.belior .b12-story h2{font-family:var(--display);font-weight:400;font-size:clamp(40px,7vw,80px);line-height:1;max-width:900px;margin:24px auto;text-wrap:balance}
+.belior .b12-story .muted{max-width:560px;margin:25px auto;line-height:2}
+.belior .b12-story .subtle{color:#b69a63;letter-spacing:.16em;text-transform:uppercase;font-size:10px;margin:0 0 22px}
+.belior .b12-next{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #1d1a15}
+.belior .b12-next a{position:relative;height:300px;overflow:hidden;display:flex;align-items:flex-end;padding:30px var(--gutter);color:inherit;text-decoration:none}
+.belior .b12-next img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:opacity .6s,transform 1.1s}
+.belior .b12-next a:hover img{opacity:.8;transform:scale(1.03)}
+.belior .b12-next a::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent 70%);z-index:1}
+.belior .b12-next div{position:relative;z-index:2}
+.belior .b12-next span{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#d4be8a}
+.belior .b12-next h3{font-family:var(--display);font-weight:400;font-size:40px;line-height:1;margin-top:8px}
+.belior .b12-next a:last-child{justify-content:flex-end;text-align:right}
+.belior .b12-emblems{text-align:center;padding:110px 20px 130px}
+.belior .b12-emblems h2{font-family:var(--display);font-weight:400;font-size:clamp(44px,7vw,80px);margin:18px}
+.belior .b12-emblems > div{max-width:860px;margin:48px auto;display:flex;justify-content:space-around;gap:20px;flex-wrap:wrap;font-family:var(--display);font-size:21px}
+.belior .b12-emblems > div a{color:#d4cbb9;text-decoration:none;transition:color .25s}
+.belior .b12-emblems > div a:hover{color:#d4be8a}
+.belior .b12-jhero{padding:150px 10% 90px;background:radial-gradient(ellipse at 70% 10%,#201a10,#0a0908 60%)}
+.belior .b12-jhero h2{font-family:var(--display);font-weight:400;font-size:clamp(60px,11vw,140px);line-height:.85;margin:26px 0}
+.belior .b12-journal{padding:55px 8% 110px;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px}
+.belior .b12-journal article{min-width:0}
+.belior .b12-journal img{width:100%;height:270px;object-fit:cover}
+.belior .b12-journal .feature img{height:410px}
+.belior .b12-journal .label{display:block;margin-top:25px}
+.belior .b12-journal h3{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.05;margin:12px 0}
+.belior .b12-journal .text-link{margin-top:16px}
+.belior .b12-film{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#05070b}
+.belior .b12-film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.belior .b12-film::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(10,9,8,.85),transparent 22%),linear-gradient(180deg,rgba(10,9,8,.55),transparent 20%)}
+.belior .bf-foot{position:absolute;z-index:2;left:var(--gutter);right:var(--gutter);bottom:calc(30px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:end;gap:20px;color:#aba69c;font-size:9px;letter-spacing:.24em;text-transform:uppercase}
+.belior .bf-foot button{background:none;border:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:6px 0}
+.belior .bf-cue{display:grid;justify-items:center;gap:10px;color:#d1c9ba;text-decoration:none}
+.belior .bf-cue i{display:block;width:1px;height:38px;background:linear-gradient(#b69a63,transparent);animation:bl-drop 2.4s ease-in-out infinite}
+@media (max-width:760px){
+  .belior .bh-copy{margin:80px 8% 0}
+  .belior .b12-hero{min-height:720px}
+  .belior .bh-img{background-position:59% center}
+  .belior .b12-manifesto{padding:100px 25px}
+  .belior .b12-collections{padding-top:78px;padding-bottom:78px}
+  .belior .b12-heading{display:block}
+  .belior .b12-heading .muted{display:block;margin-top:10px}
+  .belior .b12-grid{grid-template-columns:1fr 1fr}
+  .belior .b12-card,.belior .b12-card:nth-child(4),.belior .b12-card:nth-child(5){grid-column:span 1;height:370px}
+  .belior .b12-card:nth-child(5),.belior .b12-card:nth-child(6){grid-column:span 2;height:420px}
+  .belior .b12-cc{left:17px;bottom:20px}.belior .b12-cc h3{font-size:32px}
+  .belior .b12-split{grid-template-columns:1fr;padding:80px 8%;gap:38px}
+  .belior .b12-split img{height:320px}
+  .belior .b12-visit{padding:100px 18px}
+  .belior .b12-story{padding:100px 22px}
+  .belior .b12-next{grid-template-columns:1fr}.belior .b12-next a{height:220px}
+  .belior .b12-jhero{padding:130px 8% 70px}
+  .belior .b12-journal{grid-template-columns:1fr;padding:25px 8% 80px}
+  .belior .b12-journal img,.belior .b12-journal .feature img{height:300px}
+  .belior .bf-foot span{display:none}
+}
+@media (prefers-reduced-motion:reduce){.belior .bh-img,.belior .bf-cue i{animation:none;transform:none}.belior .b12-card img,.belior .b12-next img{transition:none}}
+@media (max-aspect-ratio:1/1){.belior .b12-film{height:auto;min-height:0;aspect-ratio:16/9;margin-top:64px}.belior .b12-film::after{background:linear-gradient(0deg,rgba(10,9,8,.6),transparent 30%)}.belior .bf-foot{bottom:10px;font-size:8px}.belior .bf-cue i{height:20px}}

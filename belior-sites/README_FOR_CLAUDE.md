@@ -97,3 +97,12 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 - 푸터·문의: contact@belior.co.kr + twottiva.business@gmail.com. 주소·면책 문구 없음.
 - 참고 이미지: public/belior/refs/ (REF 상수). 저해상도라 화면에는 쓰지 않음, 고해상도 원본 오면 교체.
 - .belior overflow-x: clip (sticky 동작 위해).
+
+## (8) v10 — belior.b12sites.com 구성을 직접 제작해 통합
+- 출처: 대표 아티팩트 "BELiOR Seoul"(b12 사이트 전체 재현본)의 이미지·로고 필름 → public/belior/v3/b12-*.jpg, b12-logo.mp4.
+- 홈: 필름 다음 "The art of being singular."(팬서) + "Not made to be seen. Made to be remembered." / 차이콥스키 다음 "Sound for the in-between."(리스닝 룸).
+- 컬렉션: b12 로고 필름(Replay·Scroll) + 비대칭 6장 카드 그리드(호버 줌). 각 동물 상세: b12 스토리 + 이전/다음 컬렉션 스트립.
+- 메종: "Luxury is not a volume. It is a feeling." / "Small gestures. Lasting things." / "Follow your nature." / 방문 섹션.
+- 저널: "A slower kind of looking." + 3개 글 그리드 + 리스닝 룸 + 방문 섹션.
+- 퍼퓸: Tchaikovsky Edition + "Kept close. Returned to."
+- b12의 maison@beliorseoul.com 메일, No. 01 'After the rain' 향 노트는 쓰지 않음(N° 01은 Tchaikovsky Edition).

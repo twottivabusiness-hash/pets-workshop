@@ -124,6 +124,62 @@ function ZoomStage({img, fx, fy, eyebrow, title, lede, href, cta, pos = 'center'
       <div className="inner"><span className="label">{eyebrow}</span><h1>{lines(title)}</h1>{lede && <p className="lede">{lede}</p>}{href && <Cta href={href}>{cta}</Cta>}</div></div></section>;
 }
 
+
+/* ---------- b12 maison chapters ---------- */
+const B12: Record<string, {img: string; ko: string; tag: string; pos?: string; body: [string, string]}> = {
+  lion: {img: 'b12-lion.jpg', ko: '사자의 기품', tag: 'An inheritance of presence.', body: ['수호자의 고요한 권위에서 출발한 컬렉션. 재단된 형태와 엄선한 가죽, 따뜻한 앰버의 잔향이 과시 없는 힘의 언어가 됩니다.', 'The Lion collection draws on the quiet authority of a guardian. Tailored forms, considered leather and a warm trace of amber make a language of strength without spectacle.']},
+  swan: {img: 'b12-swan.jpg', ko: '백조의 우아함', tag: 'Grace, held in stillness.', body: ['흐르는 실루엣과 빛나는 노트, 지니는 사람과 함께 움직이는 오브제. 부드럽지만 분명한 중심을 지닌 우아함입니다.', 'Swan is a study in poise: fluid silhouettes, luminous notes and objects that move with their wearer. An expression of softness with an unmistakable centre.']},
+  orca: {img: 'orca.jpg', ko: '오르카의 깊이', tag: 'A study in depth and contrast.', pos: '36% center', body: ['빛과 어둠 사이에 속한 컬렉션. 깨끗한 선이 예상하지 못한 깊이를 만나, 자신만의 물결을 찾는 이를 위한 작품이 됩니다.', 'Orca belongs to the space between light and dark. Clean lines meet unexpected depth in pieces made for those who find their own current.']},
+  leopard: {img: 'b12-leopard.jpg', ko: '표범의 본능', tag: 'The beauty of instinct.', body: ['관습이 아닌 본능을 따르는 컬렉션. 손끝에 닿는 표면, 결단력 있는 형태, 온전히 자기만의 에너지.', 'The Leopard collection follows instinct rather than convention. Tactile surfaces, decisive shapes and an energy that is entirely its own.']},
+  panther: {img: 'b12-panther.jpg', ko: '검은 표범의 밤', tag: 'Quiet power after dark.', body: ['메종의 밤을 닮은 시그니처. 블랙 래커와 그늘진 꽃, 조각 같은 형태가 은밀하고 확신에 찬 존재감을 만듭니다.', 'A nocturnal signature of the maison. Panther brings together black lacquer, shadowed florals and sculptural forms with an intimate, assured presence.']},
+  phoenix: {img: 'phoenix-scene.jpg', ko: '불사조의 비상', tag: 'Born beyond limits.', pos: '74% center', body: ['끝난 자리에서 시작되는 순간의 컬렉션. 불빛을 머금은 오팔과 따뜻한 금속, 다시 날아오르는 형태가 새로운 시작을 노래합니다.', 'Phoenix belongs to the moment after an ending. Fire-lit opal, warm metal and forms that rise again sing of beginnings.']},
+};
+
+function B12Hero() {
+  const {t} = useT();
+  return <section className="b12-hero"><div className="bh-img"/><div className="bh-shade"/>
+    <div className="bh-copy"><span className="label">An independent maison · Seoul</span><h2>The art of<br/><em>being singular.</em></h2>
+      <p className="bh-text">Objects of presence, shaped by instinct.<br/>{t('서울에서 시작된, 고요한 존재감의 미학.', '')}</p>
+      <a className="text-link" href="/collection">Enter the collections <span aria-hidden="true">↗</span></a></div>
+    <div className="bh-foot"><span>37°33′ N — 126°59′ E</span><span>Maison No. 01 · Seoul</span></div></section>;
+}
+
+function Manifesto() {
+  const {t} = useT();
+  return <section className="b12-manifesto"><span className="label">The BELiOR point of view</span><h2>Not made to be seen.<br/><span>Made to be remembered.</span></h2>
+    <p className="muted">{t('첫 숨의 향에서 손에 익은 오브제의 무게까지, BELiOR의 모든 것은 일상을 나만의 것으로 만드는 초대입니다.', 'We believe the most lasting luxury speaks softly. From a first breath of fragrance to the familiar weight of a cherished object, every BELiOR creation is an invitation to make the everyday your own.')}</p>
+    <p className="ko-line">{t('가장 오래 남는 아름다움은 조용히 말합니다.', 'The most lasting beauty speaks softly.')}</p></section>;
+}
+
+function CollectionGrid() {
+  const {t} = useT();
+  return <section className="b12-collections"><div className="b12-heading"><div><span className="label">Six expressions, one spirit</span><h2>The collections</h2></div><span className="muted">{t('여섯 가지 상징, 하나의 태도', 'Six symbols, one attitude')}</span></div>
+    <div className="b12-grid">{WORLDS.map(w => { const b = B12[w.slug]; return <a className="b12-card" href={'/collection/' + w.slug} key={w.slug} style={{['--world' as string]: w.color}}>
+      <img src={V(b.img)} alt={w.name + ' collection'} loading="lazy" style={{objectPosition: b.pos || 'center'}}/><div className="b12-ov"/>
+      <div className="b12-cc"><span>{b.ko}</span><h3>{w.name}</h3><p>{b.tag}</p><span className="b12-arrow">Explore ↗</span></div></a>; })}</div></section>;
+}
+
+function Listening() {
+  const {t} = useT();
+  return <section className="b12-split night"><img src={V('b12-vinyl.jpg')} alt={t('어두운 방의 턴테이블', 'A turntable in a dark listening room')} loading="lazy"/>
+    <div><span className="label">The listening room · 001</span><h2>Sound for<br/><em>the in-between.</em></h2>
+      <p className="muted">{t('낮과 밤 사이, 그 문턱을 위한 느린 선율. 어디에 있든 그 저녁으로 데려다 줄 음악입니다.', 'A slow sequence for the threshold between day and night. A soundtrack imagined in Seoul, made for wherever you are.')}</p>
+      <div className="tc-sound"><SoundButton label="Swan Lake · Rehearsal"/></div>
+      <a className="text-link" href="/music">Visit the listening room <span aria-hidden="true">↗</span></a></div></section>;
+}
+
+function Visit() {
+  return <section className="b12-visit"><span className="label">By invitation, always</span><h2>Some things are<br/>better discovered <em>in person.</em></h2>
+    <a className="text-link" href="/private">Arrange a private conversation <span aria-hidden="true">↗</span></a></section>;
+}
+
+function LogoFilm() {
+  const ref = useRef<HTMLVideoElement>(null);
+  return <section className="b12-film" aria-label="BELiOR logo film"><video ref={ref} src={V('b12-logo.mp4')} poster={V('b12-logo-poster.jpg')} autoPlay muted playsInline preload="auto" aria-label="BELiOR logo film"/>
+    <div className="bf-foot"><button type="button" onClick={() => { const v = ref.current; if (v) { v.currentTime = 0; void v.play().catch(() => {}); } }}>Replay film</button>
+      <a className="bf-cue" href="#collections">Scroll<i/></a><span>Maison No. 01 · Seoul</span></div></section>;
+}
+
 /* No. 01 — The Tchaikovsky Edition */
 function Tchaikovsky() {
   const {t} = useT();
@@ -504,7 +560,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   // scenes settle as they arrive
   useEffect(() => {
     document.querySelector('.belior')?.classList.add('js');
-    document.querySelectorAll('.belior .section-head, .belior .copy, .belior .tc-copy, .belior .finale > *, .belior .gj li, .belior .ar-grid > *, .belior .th-grid > *, .belior .doors > *').forEach(el => { if (!el.classList.contains('seen')) el.classList.add('rv'); });
+    document.querySelectorAll('.belior .section-head, .belior .copy, .belior .b12-manifesto > *, .belior .b12-heading, .belior .b12-card, .belior .b12-split > div, .belior .b12-story > *, .belior .b12-visit > *, .belior .b12-journal article, .belior .b12-emblems > *, .belior .tc-copy, .belior .finale > *, .belior .gj li, .belior .ar-grid > *, .belior .th-grid > *, .belior .doors > *').forEach(el => { if (!el.classList.contains('seen')) el.classList.add('rv'); });
     const els = document.querySelectorAll('.belior .scene, .belior .world, .belior .rv');
     if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('seen')); return; }
     const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('seen'); io.unobserve(en.target); } }), {threshold: .12});
@@ -529,6 +585,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="film-sound"><SoundButton label="Swan Lake · Rehearsal"/></div>
       <div className="cue" aria-hidden="true"><span>Scroll</span><i/></div>
     </section>
+    <B12Hero/><Manifesto/>
     <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
     <ZoomStage img="lion-portrait.jpg" fx={50} fy={40} eyebrow="Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계', 'One symbol, endless worlds')} pos="center 30%" href="/collection"/>
@@ -548,7 +605,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>A memory, held.</h3>
         <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
-    <Tchaikovsky/><ObjectsRow/><Services/><Finale/>
+    <Tchaikovsky/><Listening/><ObjectsRow/><Services/><Finale/>
     <Scene img="visual-arrival.jpg" eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
   </>;
 
@@ -562,7 +619,17 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <div className="symbol-card"><div className="mark"><img src={V('lion-motif.jpg')} alt="Lion-B monogram" style={{maxHeight: 150, borderRadius: 4}}/></div><span className="label">The Monogram</span><h3>{lines(t('사자-B 모노그램', 'Lion-B monogram'))}</h3><p className="muted">{t('현처럼 곧게 선 획 위에 별을 얹은 이니셜. 동물 세계관으로 들어가는 문입니다.', 'An initial straight as a string, crowned with a star. The door to the animal worlds.')}</p></div>
         <div className="symbol-card"><div className="mini">{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/></a>)}</div><span className="label">Collection Emblems</span><h3>{lines(t('여섯 엠블럼', 'Six emblems'))}</h3><p className="muted">LION · SWAN · ORCA · LEOPARD · PANTHER · PHOENIX.</p></div>
       </div></section>
-    <OneWorld/><Services/>
+    <section className="b12-manifesto"><span className="label">Our point of view</span><h2>Luxury is not a volume.<br/><span>It is a feeling.</span></h2>
+      <p className="muted">{t('BELiOR는 서울에서 태어난 독립 메종입니다. 향과 패션, 오브제를 하나의 추구로 엮습니다. 처음 닿는 순간부터 나의 것으로 느껴지고, 오래도록 의미가 남는 것을 만듭니다.', 'BELiOR is an independent maison born in Seoul. We bring together fragrance, fashion and objects in a single pursuit: to create things that feel personal from the very first touch, and meaningful for a long time after.')}</p></section>
+    <section className="b12-split night"><img src={V('b12-atelier.jpg')} alt={t('아틀리에에서 가죽 가방을 만드는 손', 'Hands making a leather bag in the atelier')} loading="lazy"/>
+      <div><span className="label">Our Seoul atelier</span><h2>Small gestures.<br/>Lasting things.</h2>
+        <p className="muted">{t('우리는 계절이 아니라 소재에서 시작합니다. 서두를 수 없는 디테일 — 솔기의 가장자리, 캡의 균형, 표면이 빛을 모으는 방식 — 로 몇 번이고 돌아갑니다.', 'We begin with material, not a season. Our makers work with patience, returning to the details that cannot be hurried: the edge of a seam, the balance of a cap, the way a surface gathers light.')}</p>
+        <p className="ko-line">{t('손끝의 작은 차이가 오래 기억됩니다.', 'Small differences at the fingertips are long remembered.')}</p>
+        <a className="text-link" href="/private">Visit by private arrangement <span aria-hidden="true">↗</span></a></div></section>
+    <section className="b12-emblems"><span className="label">Six emblems, six ways of seeing</span><h2>Follow your nature.</h2>
+      <div>{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}>{w.name.charAt(0) + w.name.slice(1).toLowerCase()} · {w.kw.split(' · ')[0]}</a>)}</div>
+      <a className="text-link" href="/collection">Explore the collections <span aria-hidden="true">↗</span></a></section>
+    <OneWorld/><Services/><Visit/>
   </>;
 
   const music = <>
@@ -623,7 +690,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const collection = <>
-    <Scene img="lion-wide.jpg" eyebrow="The Animal Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계. BELiOR의 메종 위에 여섯 동물의 세계가 펼쳐집니다.', 'One symbol, endless worlds. Six animal worlds unfold upon the maison.')} pos="center 35%"/>
+    <LogoFilm/><div id="collections"><CollectionGrid/></div>
     <section className="section"><div className="spread">
       <div className="copy c-6"><span className="label">From the Maison</span><h3>{lines(t('메종에서 시작된 여섯 개의 세계', 'Six worlds that began in the maison'))}</h3>
         <p className="muted">{t('음악과 오브제로 쌓아 온 BELiOR의 하우스 위에, 사자의 모노그램에서 출발한 동물들의 세계관을 더합니다. 각 세계는 고유의 색과 소재, 향과 사물을 가집니다.', 'Upon the house of music and objects, BELiOR adds animal worlds that begin with the lion monogram. Each has its own colour, material, scent and objects.')}</p>
@@ -672,7 +739,9 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       {w.slug === 'swan' && <section className="section"><figure className="wide-fig"><img src={V('swan-ballet.jpg')} alt={t('Swan Lake 1막 무대', 'Swan Lake, Act I on stage')} loading="lazy"/><figcaption>Swan Lake · Act I</figcaption></figure></section>}
       {w.alt && <section className="section"><figure className="wide-fig"><img src={V(w.alt)} alt="" loading="lazy"/><figcaption>The World of {w.name}</figcaption></figure></section>}
       <section className="section night"><Head eyebrow="Other Worlds" title={t('다른 세계로', 'Other worlds')}/><Emblems items={WORLDS.filter(x => x !== w)} five/></section>
-      <Band img={nxt.img || 'lion-wide.jpg'} eyebrow="Next World" title={nxt.name} text={nxt.kw} href={'/collection/' + nxt.slug} cta={t('다음 세계', 'Next world')}/>
+      <section className="b12-story"><span className="label">A BELiOR expression</span><h2>{B12[w.slug].tag}</h2><p className="muted">{B12[w.slug].body[en ? 1 : 0]}</p>
+        <p className="subtle">Fragrance · Objects · Form</p><a className="text-link" href="/private">Discover in private <span aria-hidden="true">↗</span></a></section>
+      <nav className="b12-next" aria-label={t('다른 컬렉션', 'Other collections')}>{[['Previous', WORLDS[(i + WORLDS.length - 1) % WORLDS.length]], ['Next', nxt]].map(([l, c]) => { const x = c as World; return <a href={'/collection/' + x.slug} key={l as string}><img src={V(B12[x.slug].img)} alt="" loading="lazy" style={{objectPosition: B12[x.slug].pos || 'center'}}/><div><span>{l as string} collection</span><h3>{x.name}</h3></div></a>; })}</nav>
       <OneWorld/>
     </div>;
   };
@@ -704,6 +773,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     const one = items.find(x => x[0] === d);
     return <>
       <Scene img="o-mk-home-objects.jpg" eyebrow="Parfum · Bag · Clothing · Objects" title={one ? one[1] : 'The Art of Everyday'} lede={t('감각을 담는 소재, 오래 머무는 형태.', 'Materials that hold feeling. Forms that endure.')}/>
+      {(d === '' || d === 'parfum') && <><Tchaikovsky/><section className="b12-split"><img src={V('b12-fragrance.jpg')} alt={t('검은 향수병과 난초', 'A dark glass bottle beside an orchid')} loading="lazy"/>
+        <div><span className="label">A considered object</span><h2>Kept close.<br/>Returned to.</h2>
+          <p className="muted">{t('건축적인 유리, 무게감 있는 캡, 손안에 자연스럽게 놓이는 형태. 모든 디테일은 의도되었고, 어느 것도 주목을 요구하지 않습니다.', 'Architectural glass, a weighted cap, and a form designed to rest naturally in the hand. Every detail is intentional; nothing asks for attention.')}</p>
+          <a className="text-link" href="/atelier">Our way of making <span aria-hidden="true">↗</span></a></div></section></>}
       {(d === '' || d === 'parfum') && <section className="section night"><div className="spread">
         <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('검은 말', 'A black horse')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
         <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{lines(t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me'))}</h3><a className="more" href="/products/no-16">{t('이야기 보기', 'Read the story')}</a></div></div></section>}
@@ -736,6 +809,16 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const journal = <>
     <Scene img="o-mk-home-journal.jpg" eyebrow="Journal" title={'Stories behind\nthe Maison'} lede={t('예술, 사람, 공간의 이야기를 기록합니다.', 'Stories of art, people and places.')}/>
+    <section className="b12-jhero"><span className="label">Notes from the maison · Volume 01</span><h2>A slower kind<br/><em>of looking.</em></h2><p className="muted">{t('관찰하고, 머물고, 기억하는 것들.', 'What we observe, stay with and remember.')}</p></section>
+    <section className="b12-journal">
+      <article className="feature"><img src={V('b12-atelier.jpg')} alt={t('가죽을 다루는 손', 'A maker’s hands shaping leather')} loading="lazy"/><span className="label">Atelier notes · 04 min read</span><h3>The beauty of what takes time</h3>
+        <p className="muted">{t('손으로 반복되는 몸짓, 그 아래에서 변해 가는 소재, 그리고 약간의 인내가 어떻게 하나의 오브제를 나의 것으로 만드는지에 대하여.', 'On the gestures repeated by hand, the material that changes beneath it, and why a little patience can make an object feel like yours.')}</p><a className="text-link" href="/maison">Read the note <span aria-hidden="true">↗</span></a></article>
+      <article><img src={V('tchaikovsky-poster.jpg')} alt="The Tchaikovsky Edition" loading="lazy"/><span className="label">The scent journal · 03 min read</span><h3>The moment the curtain falls</h3>
+        <p className="muted">{t('백조의 호수에 막이 내리는 순간, N° 01 The Tchaikovsky Edition의 첫 노트가 시작됩니다.', 'As the curtain falls on Swan Lake, N° 01 The Tchaikovsky Edition finds its first note.')}</p><a className="text-link" href="/products/parfum">Explore N° 01 <span aria-hidden="true">↗</span></a></article>
+      <article><img src={V('b12-vinyl.jpg')} alt={t('어둠 속의 레코드', 'Vinyl and tonearm in low light')} loading="lazy"/><span className="label">Listening room · 01</span><h3>An evening, side A</h3>
+        <p className="muted">{t('낮은 조명, 긴 그림자, 그리고 레코드가 도는 부드러운 결.', 'A sequence of low light, long shadows and the soft grain of a record turning.')}</p><a className="text-link" href="/music">Stay a while <span aria-hidden="true">↗</span></a></article>
+    </section>
+    <Listening/>
     <section className="section"><div className="rows">
       <a className="row" href="/products/no-16"><h3>{lines(t('No. 16 — 숲, 그리고 나를 지탱해 준 말', 'No. 16 — The forest, and the horse that held me'))}</h3><p>Parfum · Story</p><span className="more">Read</span></a>
       <a className="row" href="/music/gala"><h3>{lines(t('Brand Gala Dinner Show, 그날의 기록', 'Brand Gala Dinner Show, that evening'))}</h3><p>Music · Reception · Backstage</p><span className="more">Read</span></a>
@@ -743,7 +826,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <a className="row" href="/collection"><h3>{lines(t('하나의 상징, 여섯 개의 세계', 'One symbol, six worlds'))}</h3><p>Collection</p><span className="more">Read</span></a>
       <a className="row" href="/maison#symbol"><h3>{lines(t('메종 심볼과 사자-B 모노그램', 'The maison symbol and the lion-B monogram'))}</h3><p>Maison · Symbols</p><span className="more">Read</span></a>
     </div></section>
-    <OneWorld/>
+    <OneWorld/><Visit/>
   </>;
 
   const privatePage = <>

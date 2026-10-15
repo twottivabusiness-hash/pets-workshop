@@ -141,7 +141,7 @@ function B12Hero() {
     <div className="bh-copy"><span className="label">An independent maison · Seoul</span><h2>The art of<br/><em>being singular.</em></h2>
       <p className="bh-text">Objects of presence, shaped by instinct.<br/>{t('서울에서 시작된, 고요한 존재감의 미학.', '')}</p>
       <a className="text-link" href="/collection">Enter the collections <span aria-hidden="true">↗</span></a></div>
-    <div className="bh-foot"><span>37°33′ N — 126°59′ E</span><span>Maison No. 01 · Seoul</span></div></section>;
+    <div className="bh-foot"><span>Music · Art · People · Places</span><span>A More Beautiful Tomorrow</span></div></section>;
 }
 
 function Manifesto() {
@@ -177,7 +177,7 @@ function LogoFilm() {
   const ref = useRef<HTMLVideoElement>(null);
   return <section className="b12-film" aria-label="BELiOR logo film"><video ref={ref} src={V('b12-logo.mp4')} poster={V('b12-logo-poster.jpg')} autoPlay muted playsInline preload="auto" aria-label="BELiOR logo film"/>
     <div className="bf-foot"><button type="button" onClick={() => { const v = ref.current; if (v) { v.currentTime = 0; void v.play().catch(() => {}); } }}>Replay film</button>
-      <a className="bf-cue" href="#collections">Scroll<i/></a><span>Maison No. 01 · Seoul</span></div></section>;
+      <a className="bf-cue" href="#collections">Scroll<i/></a><span>The Animal Collection</span></div></section>;
 }
 
 
@@ -662,10 +662,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="b12-manifesto"><span className="label">Our point of view</span><h2>Luxury is not a volume.<br/><span>It is a feeling.</span></h2>
       <p className="muted">{t('BELiOR는 서울에서 태어난 독립 메종입니다. 향과 패션, 오브제를 하나의 추구로 엮습니다. 처음 닿는 순간부터 나의 것으로 느껴지고, 오래도록 의미가 남는 것을 만듭니다.', 'BELiOR is an independent maison born in Seoul. We bring together fragrance, fashion and objects in a single pursuit: to create things that feel personal from the very first touch, and meaningful for a long time after.')}</p></section>
     <section className="b12-split night"><img src={V('b12-atelier.jpg')} alt={t('아틀리에에서 가죽 가방을 만드는 손', 'Hands making a leather bag in the atelier')} loading="lazy"/>
-      <div><span className="label">Our Seoul atelier</span><h2>Small gestures.<br/>Lasting things.</h2>
+      <div><span className="label">The atelier</span><h2>Small gestures.<br/>Lasting things.</h2>
         <p className="muted">{t('우리는 계절이 아니라 소재에서 시작합니다. 서두를 수 없는 디테일 — 솔기의 가장자리, 캡의 균형, 표면이 빛을 모으는 방식 — 로 몇 번이고 돌아갑니다.', 'We begin with material, not a season. Our makers work with patience, returning to the details that cannot be hurried: the edge of a seam, the balance of a cap, the way a surface gathers light.')}</p>
         <p className="ko-line">{t('손끝의 작은 차이가 오래 기억됩니다.', 'Small differences at the fingertips are long remembered.')}</p>
-        <a className="text-link" href="/private">Visit by private arrangement <span aria-hidden="true">↗</span></a></div></section>
+        <a className="text-link" href="/private">Arrange a private conversation <span aria-hidden="true">↗</span></a></div></section>
     <section className="b12-emblems"><span className="label">Six emblems, six ways of seeing</span><h2>Follow your nature.</h2>
       <div>{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}>{w.name.charAt(0) + w.name.slice(1).toLowerCase()} · {w.kw.split(' · ')[0]}</a>)}</div>
       <a className="text-link" href="/collection">Explore the collections <span aria-hidden="true">↗</span></a></section>

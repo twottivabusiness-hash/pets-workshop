@@ -781,3 +781,15 @@
 }
 @media (prefers-reduced-motion:reduce){.belior .bh-img,.belior .bf-cue i{animation:none;transform:none}.belior .b12-card img,.belior .b12-next img{transition:none}}
 @media (max-aspect-ratio:1/1){.belior .b12-film{height:auto;min-height:0;aspect-ratio:16/9;margin-top:64px}.belior .b12-film::after{background:linear-gradient(0deg,rgba(10,9,8,.6),transparent 30%)}.belior .bf-foot{bottom:10px;font-size:8px}.belior .bf-cue i{height:20px}}
+
+/* No. 16 poster */
+.belior .n16-poster{position:relative;min-height:100svh;display:grid;grid-template-rows:auto 1fr auto;justify-items:center;text-align:center;isolation:isolate;overflow:hidden;color:#f6f1e6;padding:clamp(56px,9vh,110px) var(--gutter) clamp(40px,7vh,80px)}
+.belior .n16-poster .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;z-index:-2;transform:scale(1.04);transition:transform 6s ease}
+.belior .n16-poster::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,16,10,.35),transparent 28%,transparent 62%,rgba(6,12,12,.5))}
+.belior .np-brand{display:block;font-family:var(--display);font-weight:400;font-size:clamp(46px,8vw,104px);letter-spacing:.18em;line-height:1;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+.belior .np-no{display:block;font-family:var(--display);font-size:clamp(18px,2vw,26px);margin-top:12px;letter-spacing:.06em}
+.belior .np-bottom{grid-row:3}
+.belior .np-line{font-family:var(--display);font-size:clamp(28px,4vw,52px);letter-spacing:.04em;margin:0;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.belior .np-ko{margin:12px 0 0;font-size:13px;letter-spacing:.24em}
+.belior .np-foot{display:block;margin-top:44px;font-size:10px;letter-spacing:.42em;text-transform:uppercase;opacity:.85}
+.belior .seoul-gala img{height:auto;aspect-ratio:4/5;max-height:720px}

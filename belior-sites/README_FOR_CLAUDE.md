@@ -106,3 +106,7 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 - 저널: "A slower kind of looking." + 3개 글 그리드 + 리스닝 룸 + 방문 섹션.
 - 퍼퓸: Tchaikovsky Edition + "Kept close. Returned to."
 - b12의 maison@beliorseoul.com 메일, No. 01 'After the rain' 향 노트는 쓰지 않음(N° 01은 Tchaikovsky Edition).
+
+## (9) v11 — 대표 제공 고해상도 이미지
+- orca-portrait.jpg(컬렉션 카드), seoul-gala.jpg(MUSIC "VIP Presents."), monogram-hd.jpg(사자-B 모노그램 원본 → 메종 심볼·컬렉션·도어), prod-bag-hd.jpg / prod-clothing-hd.jpg(BAG·CLOTHING), no16-pool.jpg(어린 시절 숲속 물가).
+- No. 16 페이지: 글씨 없는 원본 위에 HTML로 "BELiOR / No. 16 / Some memories hold us. / 나를 지탱해주던, 그날의 기억. / A Memory in Scent" 조판(N16Poster).

@@ -198,6 +198,23 @@ function SeoulGala() {
       <a className="text-link" href="/private">Request an invitation <span aria-hidden="true">↗</span></a></div></section>;
 }
 
+
+/* The worlds BELiOR lets you live: childhood, Paris, Monte-Carlo, Seoul */
+function Experience() {
+  const {t} = useT();
+  const items: [string, string, string, string, string, string][] = [
+    ['no16-pool.jpg', 'I · Childhood', t('숲속 물가의 기억', 'A forest pool, remembered'), t('나를 지탱해주던 그날의 숲과 말.', 'The forest, and the horse that held me.'), '/products/no-16', 'center 40%'],
+    ['swan-ballet.jpg', 'II · Paris', t('막이 오르기 직전', 'Before the curtain rises'), t('오페라 극장의 정적, 그리고 백조의 호수.', 'The hush of the opera house, and Swan Lake.'), '/collection/swan', 'center'],
+    ['visual-arrival.jpg', 'III · Monte-Carlo', t('불빛 아래 도착하는 밤', 'Arriving under the lights'), t('차 문이 열리고, 저녁이 시작됩니다.', 'A car door opens, and the evening begins.'), '/private', 'center'],
+    ['seoul-gala-hall.jpg', 'IV · Seoul', t('초대받은 이들의 갈라', 'A gala, by invitation'), t('대리석 기둥 사이로 켜지는 보면대의 불빛.', 'Music stands glowing between marble columns.'), '/music', 'center'],
+  ];
+  return <section className="experience"><div className="ex-head"><span className="label">The BELiOR Experience</span>
+      <h2>{lines(t('물건이 아니라,', 'Not an object.'))}<br/><em>{lines(t('그 순간을 경험하게 합니다.', 'A moment you live.'))}</em></h2>
+      <p className="muted">{t('프랑스와 이탈리아에서 온 현의 소리로 — 어린 시절의 숲에서 파리의 무대, 몬테카를로의 밤, 서울의 갈라까지.', 'In the voice of strings from France and Italy — from a childhood forest to a Paris stage, a Monte-Carlo night and a gala in Seoul.')}</p></div>
+    <div className="ex-grid">{items.map(([im, k, h, p, href, pos]) => <a className="ex-card" href={href} key={k}><img src={V(im)} alt="" loading="lazy" style={{objectPosition: pos}}/><div className="ex-ov"/>
+      <div className="ex-cc"><span>{k}</span><h3>{lines(h)}</h3><p>{p}</p></div></a>)}</div></section>;
+}
+
 /* No. 01 — The Tchaikovsky Edition */
 function Tchaikovsky() {
   const {t} = useT();
@@ -578,7 +595,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   // scenes settle as they arrive
   useEffect(() => {
     document.querySelector('.belior')?.classList.add('js');
-    document.querySelectorAll('.belior .section-head, .belior .copy, .belior .b12-manifesto > *, .belior .b12-heading, .belior .b12-card, .belior .b12-split > div, .belior .b12-story > *, .belior .b12-visit > *, .belior .b12-journal article, .belior .b12-emblems > *, .belior .tc-copy, .belior .finale > *, .belior .gj li, .belior .ar-grid > *, .belior .th-grid > *, .belior .doors > *').forEach(el => { if (!el.classList.contains('seen')) el.classList.add('rv'); });
+    document.querySelectorAll('.belior .section-head, .belior .copy, .belior .ex-head > *, .belior .ex-card, .belior .b12-manifesto > *, .belior .b12-heading, .belior .b12-card, .belior .b12-split > div, .belior .b12-story > *, .belior .b12-visit > *, .belior .b12-journal article, .belior .b12-emblems > *, .belior .tc-copy, .belior .finale > *, .belior .gj li, .belior .ar-grid > *, .belior .th-grid > *, .belior .doors > *').forEach(el => { if (!el.classList.contains('seen')) el.classList.add('rv'); });
     const els = document.querySelectorAll('.belior .scene, .belior .world, .belior .rv');
     if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('seen')); return; }
     const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('seen'); io.unobserve(en.target); } }), {threshold: .12});
@@ -623,7 +640,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>A memory, held.</h3>
         <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
-    <Tchaikovsky/><Listening/><ObjectsRow/><Services/><Finale/>
+    <Tchaikovsky/><Listening/><Experience/><ObjectsRow/><Services/><Finale/>
     <Scene img="visual-arrival.jpg" eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
   </>;
 
@@ -647,7 +664,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="b12-emblems"><span className="label">Six emblems, six ways of seeing</span><h2>Follow your nature.</h2>
       <div>{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}>{w.name.charAt(0) + w.name.slice(1).toLowerCase()} · {w.kw.split(' · ')[0]}</a>)}</div>
       <a className="text-link" href="/collection">Explore the collections <span aria-hidden="true">↗</span></a></section>
-    <OneWorld/><Services/><Visit/>
+    <Experience/><OneWorld/><Services/><Visit/>
   </>;
 
   const music = <>

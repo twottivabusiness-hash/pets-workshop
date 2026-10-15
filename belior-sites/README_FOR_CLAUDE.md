@@ -110,3 +110,7 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 ## (9) v11 — 대표 제공 고해상도 이미지
 - orca-portrait.jpg(컬렉션 카드), seoul-gala.jpg(MUSIC "VIP Presents."), monogram-hd.jpg(사자-B 모노그램 원본 → 메종 심볼·컬렉션·도어), prod-bag-hd.jpg / prod-clothing-hd.jpg(BAG·CLOTHING), no16-pool.jpg(어린 시절 숲속 물가).
 - No. 16 페이지: 글씨 없는 원본 위에 HTML로 "BELiOR / No. 16 / Some memories hold us. / 나를 지탱해주던, 그날의 기억. / A Memory in Scent" 조판(N16Poster).
+
+## (10) v12 — The BELiOR Experience
+- 홈·메종: "물건이 아니라, 그 순간을 경험하게 합니다." 4장 카드(I Childhood 숲속 물가 → No.16 / II Paris 백조의 호수 / III Monte-Carlo 밤의 도착 / IV Seoul 갈라). 프랑스·이탈리아 현악기 언급(대표 확인).
+- seoul-gala-hall.jpg: 포스터 상단(기둥)만 잘라 카드용으로 사용.

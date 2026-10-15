@@ -21,7 +21,7 @@
   background: var(--ink);
   color: var(--ivory);
   font: 400 1rem/1.85 var(--body);
-  overflow-x: hidden;}
+  overflow-x: clip;}
 .belior img, .belior video{display: block; max-width: 100%;}
 .belior a{color: inherit;}
 .belior :focus-visible{outline: 1px solid var(--champagne); outline-offset: 4px;}
@@ -610,3 +610,72 @@
 .belior .sy-list h3{font-size:1.5rem}
 .belior .sy-list p{color:var(--taupe)}
 @media (max-width:980px){.belior .symphonic{grid-template-columns:1fr 1fr}.belior .sy-copy{grid-column:1 / -1;grid-row:1}.belior .symphonic figure{max-height:60svh}}
+
+/* ---------- v9 motion ---------- */
+/* text rises into place as it enters (class added by script only) */
+.belior .rv{opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.6,.2,1),transform 1.1s cubic-bezier(.2,.6,.2,1)}
+.belior .rv.seen{opacity:1;transform:none}
+.belior .doors > .rv:nth-child(2),.belior .ar-grid > .rv:nth-child(2),.belior .gj li.rv:nth-child(2),.belior .th-grid > .rv:nth-child(2){transition-delay:.12s}
+.belior .doors > .rv:nth-child(3),.belior .ar-grid > .rv:nth-child(3),.belior .gj li.rv:nth-child(3){transition-delay:.24s}
+.belior .doors > .rv:nth-child(4),.belior .ar-grid > .rv:nth-child(4),.belior .gj li.rv:nth-child(4){transition-delay:.36s}
+.belior .gj li.rv:nth-child(5){transition-delay:.48s}.belior .gj li.rv:nth-child(6){transition-delay:.6s}.belior .gj li.rv:nth-child(7){transition-delay:.72s}
+/* scene headline lines arrive one after another */
+.belior .scene .inner > *{transition:opacity 1.2s ease,transform 1.2s cubic-bezier(.2,.6,.2,1)}
+.belior.js .scene:not(.seen):not(.film) .inner > *{opacity:0;transform:translateY(22px)}
+.belior .scene.seen .inner > :nth-child(2){transition-delay:.15s}
+.belior .scene.seen .inner > :nth-child(3){transition-delay:.3s}
+.belior .scene.seen .inner > :nth-child(4){transition-delay:.45s}
+
+/* film scroll cue */
+.belior .film .cue{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-50%);display:grid;justify-items:center;gap:10px;color:rgba(239,233,221,.75);font-size:9px;letter-spacing:.32em;text-transform:uppercase;pointer-events:none}
+.belior .film .cue i,.belior .zs-hint i{display:block;width:1px;height:42px;background:linear-gradient(var(--gold,#c9a46a),transparent);animation:bl-drop 2.4s ease-in-out infinite}
+@keyframes bl-drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* zoom stage: pinned frame, camera pulls back on scroll */
+.belior .zoom-stage{position:relative;height:100svh;background:#0a0907}
+.belior .zoom-stage.live{height:260svh}
+.belior .zs-frame{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;align-items:end}
+.belior .zs-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:var(--fx) var(--fy);transform:scale(var(--z,1));filter:brightness(calc(.9 + var(--p,1) * .1));will-change:transform}
+.belior .zs-veil{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 48% 56% at var(--fx) var(--fy),rgba(10,9,7,0) 0%,rgba(10,9,7,.1) 50%,rgba(10,9,7,.7) 85%,rgba(10,9,7,.85) 100%);opacity:calc(1 - var(--p,1))}
+.belior .zs-frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(10,9,7,.78),transparent 45%)}
+.belior .zs-frame .inner{position:relative;z-index:2;text-align:center;padding:0 var(--gutter,24px) calc(env(safe-area-inset-bottom,0px) + 12vh);opacity:var(--p,1);transform:translateY(calc((1 - var(--p,1)) * 40px))}
+.belior .zoom-stage:not(.live) .zs-frame .inner{opacity:1;transform:none}
+.belior .zs-frame h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,84px);line-height:1.02;letter-spacing:.02em;margin:14px 0}
+.belior .zs-hint{position:absolute;z-index:2;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-50%);display:grid;justify-items:center;gap:10px;color:rgba(239,233,221,.75);font-size:9px;letter-spacing:.32em;text-transform:uppercase;opacity:calc(1 - var(--p,1) * 4)}
+.belior .zoom-stage:not(.live) .zs-hint{display:none}
+
+/* carousel: Ferrari-style progress dot and pause */
+.belior .dot{position:relative;overflow:hidden}
+.belior .dot[aria-current="true"]{background:rgba(239,233,221,.25)}
+.belior .dot i{position:absolute;inset:0;background:var(--ivory);transform-origin:left;animation:bl-fill 6s linear forwards}
+.belior .carousel.hold .dot i{animation:none;transform:none}
+@keyframes bl-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.belior .car-toggle{position:absolute;right:var(--gutter,24px);bottom:26px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(239,233,221,.5);background:rgba(12,11,10,.35);color:var(--ivory);font-size:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+
+/* No. 01 The Tchaikovsky Edition */
+.belior .tchai{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center;gap:7%;padding:120px 9%;background:#efe9dd;color:#141210}
+.belior .tc-film{aspect-ratio:3/4;overflow:hidden;background:#e6e0d4}
+.belior .tc-film video{width:100%;height:100%;object-fit:cover;display:block}
+.belior .tchai .label{color:#8a6f3c}
+.belior .tchai h2{font-family:var(--display);font-weight:400;font-size:clamp(40px,5vw,70px);line-height:1;margin:18px 0 26px;letter-spacing:.01em}
+.belior .tc-line{font-family:var(--display);font-style:italic;font-size:clamp(18px,1.6vw,22px);line-height:1.6;max-width:30ch;margin:0 0 18px}
+.belior .tchai .muted{color:#5b544a}
+.belior .tchai .more{color:#141210;border-color:#141210}
+.belior .tc-sound{margin:26px 0}
+.belior .tc-sound .sound{color:#141210;border-color:rgba(20,18,16,.4)}
+@media (max-width:760px){.belior .tchai{grid-template-columns:1fr;padding:80px 7%;gap:40px}}
+
+/* finale */
+.belior .finale{text-align:center;padding:170px var(--gutter,24px) 150px;background:radial-gradient(ellipse at 50% 30%,#1a1712,#0a0907 65%)}
+.belior .fn-a,.belior .fn-b{font-family:var(--display);font-weight:400;font-size:clamp(30px,4vw,54px);line-height:1.15;margin:0}
+.belior .fn-b{font-style:italic;color:var(--gold,#c9a46a)}
+.belior .finale .fn-b.rv{transition-delay:.5s}
+.belior .fn-ko{margin:22px 0 0;color:rgba(239,233,221,.6)}
+.belior .fn-team{margin:110px auto 0;max-width:520px}
+.belior .fn-c{font-family:var(--display);font-size:clamp(24px,2.6vw,34px);margin:14px 0 8px}
+.belior .fn-team .cta{margin-top:28px;display:inline-flex}
+
+@media (prefers-reduced-motion:reduce){
+  .belior .rv,.belior .scene .inner > *{opacity:1!important;transform:none!important;transition:none!important}
+  .belior .film .cue i,.belior .zs-hint i,.belior .dot i{animation:none}
+}

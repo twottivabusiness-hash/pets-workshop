@@ -87,3 +87,13 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 - orca.jpg: 새 원본(84)에서 2560px 고화질로 교체(기존 43KB 저화질). 틸 색감 그대로.
 - phoenix-scene.jpg 신규(85, 2560px). PHOENIX도 다른 동물처럼 풀 화면 장면 사용(기존 232px 이미지 확대 → 깨짐 해결).
 - posOf(): ORCA 36% 45%(모바일에서 머리 보이게), PHOENIX 74% 45%.
+
+## (7) v9 — 움직임 · 필름 자막 삭제 · 메일 2개
+- 브랜드 필름: 원본에서 "BEYOND FORM / 관습을 벗어난 아름다움, NUNRT." 자막 구간(원본 32.6–39.5s) 삭제 → belior-film-v9.mp4 (1080p, 2-pass 1600k).
+- ZoomStage: 사자 눈에서 시작해 스크롤하면 전체로 물러나는 카메라(홈 One Symbol, 모든 컬렉션 상세). FOCAL 표에서 눈 위치 조정.
+- 텍스트 등장(.rv, JS가 있을 때만), 장면 제목 순차 등장, 필름 Scroll 표시, 컬렉션 슬라이드 6초 자동 넘김 + 진행 점 + 일시정지(페라리 방식).
+- 신규: No. 01 The Tchaikovsky Edition(tchaikovsky.mp4), 피날레 "The music ends. The moonlight stays. / One team, one enquiry."
+- 문구: "무대가 아닌 곳에서도, 무대처럼" → "바람이 지나간 자리에 선율이 남습니다". '콘셉트' 표현 삭제.
+- 푸터·문의: contact@belior.co.kr + twottiva.business@gmail.com. 주소·면책 문구 없음.
+- 참고 이미지: public/belior/refs/ (REF 상수). 저해상도라 화면에는 쓰지 않음, 고해상도 원본 오면 교체.
+- .belior overflow-x: clip (sticky 동작 위해).

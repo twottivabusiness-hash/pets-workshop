@@ -43,10 +43,11 @@ const WORLDS: World[] = [
     notes: 'Woody · Musk · Spicy', scent: ['깊은 우디 노트와 머스크가 어우러진, 신비롭고 매혹적인 향.', 'Deep woods and musk. A mysterious, captivating scent.'],
     atelier: ['어둠과 빛의 대비에서 탄생한 시크한 오브제.', 'Objects born from the contrast of dark and light.']},
   {slug: 'phoenix', name: 'PHOENIX', kw: 'Renewal · Elegance · Transcendence', mat: 'Fire Opal', color: '#e2803a',
-    chips: ['#f2b25c', '#e2803a', '#9c3a1c', '#2a120a'], img: null, alt: null, tag: ['Born Beyond Limits.', '한계를 넘어 다시 태어나다.'],
+    chips: ['#f2b25c', '#e2803a', '#9c3a1c', '#2a120a'], img: 'phoenix-scene.jpg', alt: null, tag: ['Born Beyond Limits.', '한계를 넘어 다시 태어나다.'],
     world: ['불꽃 속에서 다시 태어나는 불사조. 끝이 아닌 시작을 노래하는 세계입니다.', 'The phoenix, reborn in fire. A world that sings of beginnings, not endings.'],
     notes: null, scent: null, atelier: null},
 ];
+const posOf = (w: {slug: string}, d = 'center 35%') => w.slug === 'phoenix' ? '74% 45%' : w.slug === 'orca' ? '36% 45%' : d;
 
 const MENU: {href: string; name: string; ko: string; subs: [string, string, string][]}[] = [
   {href: '/maison', name: 'MAISON', ko: '메종', subs: [['/maison', '하우스 소개', 'The house'], ['/maison#house', '무대에서 시작된 하우스', 'Born on stage'], ['/maison#symbol', '심볼 체계', 'Symbol system']]},
@@ -475,7 +476,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="carousel" aria-label={t('여섯 개의 컬렉션', 'Six collections')}>
       <div className="track" ref={trackRef} onScroll={e => setSlide(Math.round(e.currentTarget.scrollLeft / Math.max(1, e.currentTarget.clientWidth)))}>
         {WORLDS.map(w => <div className="slide" role="group" aria-label={w.name} key={w.slug} style={{['--world' as string]: w.color}}>
-          <img className="bg" src={V(w.img || 'phoenix.jpg')} alt="" loading="lazy"/>
+          <img className="bg" src={V(w.img || 'phoenix.jpg')} alt="" loading="lazy" style={{objectPosition: posOf(w, 'center')}}/>
           <div className="inner"><span className="label">The Animal Collection</span><h2>{w.name}</h2><p className="lede">{w.kw}</p><Cta href={'/collection/' + w.slug}/></div></div>)}
       </div>
       <div className="dots">{WORLDS.map((w, i) => <button type="button" className="dot" key={w.slug} aria-label={w.name} aria-current={slide === i}
@@ -571,7 +572,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <figure className="c-5" style={{gridColumn: '8 / span 5'}}><img src={V('lion-motif.jpg')} alt="Lion-B monogram" loading="lazy"/><figcaption>The Monogram</figcaption></figure></div></section>
     <section className="section night"><Head eyebrow="Emblem Collection" title={t('여섯 개의 엠블럼', 'Six emblems')}/><Emblems items={WORLDS}/></section>
     <div className="worlds">{WORLDS.map(w => <a className="world" href={'/collection/' + w.slug} key={w.slug} style={{['--world' as string]: w.color}}>
-      <img className="bg" src={V(w.img || 'phoenix.jpg')} alt="" loading="lazy"/><span className="label mat" style={{color: w.color}}>{w.mat}</span>
+      <img className="bg" src={V(w.img || 'phoenix.jpg')} alt="" loading="lazy" style={{objectPosition: posOf(w, 'center')}}/><span className="label mat" style={{color: w.color}}>{w.mat}</span>
       <div className="txt"><h3>{w.name}</h3><span className="kw">{w.kw}</span><span className="more" style={{color: w.color}}>Explore</span></div></a>)}</div>
     <section className="section"><Head eyebrow="Pattern & Motif" title={t('세계마다 다른 결', 'A texture for every world')}/>
       <div className="patterns">{WORLDS.map(w => <figure key={w.slug}><img src={V(w.slug + '-pattern.jpg')} alt={w.name + ' pattern'} loading="lazy"/><figcaption>{w.name} · {w.mat}</figcaption></figure>)}</div></section>
@@ -586,7 +587,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     const lede = w.tag ? (en ? w.tag[0] : w.tag[0] + ' ' + w.tag[1]) : w.kw;
     const mock = w.slug !== 'phoenix';
     return <div className="world-page" style={{['--world' as string]: w.color}}>
-      {w.img ? <Scene img={w.img} eyebrow={'The Animal Collection · ' + w.mat} title={w.name + '\nCollection'} lede={lede} pos="center 35%"/> :
+      {w.img ? <Scene img={w.img} eyebrow={'The Animal Collection · ' + w.mat} title={w.name + '\nCollection'} lede={lede} pos={posOf(w)}/> :
         <section className="scene plain"><div className="inner"><div className="phoenix-frame"><img src={V('phoenix.jpg')} alt="Phoenix"/></div>
           <span className="label">{'The Animal Collection · ' + w.mat}</span><h1>{w.name}<br/><span className="accent">Collection</span></h1><p className="lede">{lede}</p></div></section>}
       {w.slug === 'swan' && <section className="section night"><Head eyebrow="Swan Lake · TWOTTIVA × BELiOR" title={t('달빛 아래의 호수', 'A lake under the moon')} text={t('리허설에서 녹음한 Swan Lake 연주입니다. 소리를 켜고 보세요.', 'Swan Lake, recorded in rehearsal. Watch with sound.')}/><video className="performance-video" controls playsInline preload="metadata" poster={V('swan-lake-poster.jpg')} src={V('swan-lake-film.mp4')}/></section>}

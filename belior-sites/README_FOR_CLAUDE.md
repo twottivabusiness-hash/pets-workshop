@@ -82,3 +82,8 @@ node_modules, Git 인증 토큰, 환경변수 비밀값, 실행 캐시 및 고�
 - 브랜드 필름 1080p H.264(belior-film-1080.mp4, 2-pass 1400k).
 - 신규 섹션: TwoHouses, VisualTeam(피아노 사진), Founder, Artists, OfficialStage, GuestJourney, SymphonicAtelier, BeyondLogo, Operation.
 - AstonHouse 제안서에서는 일반 BELiOR 내용만 사용. 고객명·금액은 넣지 않음.
+
+## (6) v8 — ORCA · PHOENIX 화질 복구
+- orca.jpg: 새 원본(84)에서 2560px 고화질로 교체(기존 43KB 저화질). 틸 색감 그대로.
+- phoenix-scene.jpg 신규(85, 2560px). PHOENIX도 다른 동물처럼 풀 화면 장면 사용(기존 232px 이미지 확대 → 깨짐 해결).
+- posOf(): ORCA 36% 45%(모바일에서 머리 보이게), PHOENIX 74% 45%.

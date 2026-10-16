@@ -1102,3 +1102,54 @@
 .belior .ct2 .pf-status{color:var(--ivory)}
 @media (max-width:900px){.belior .ct2{grid-template-columns:1fr}.belior .ct2-side{position:static}}
 .belior .ct2 .pf-consent dd,.belior .ct2 .pf-note{font-size:12px}
+/* ---------- Lounge world ---------- */
+.belior .lw-open{position:relative;min-height:calc(100svh - 64px);display:grid;align-items:end;isolation:isolate;overflow:hidden;background:#0b0f0c}
+.belior .lw-open .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;z-index:-2;transform:scale(1.04);animation:lw-drift 18s ease-in-out infinite alternate}
+@keyframes lw-drift{from{transform:scale(1.04) translateY(0)}to{transform:scale(1.08) translateY(-1.5%)}}
+.belior .lw-open::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(8,10,8,.25),transparent 35%,rgba(8,10,8,.82) 100%)}
+.belior .lw-open-copy{padding:clamp(48px,8vw,120px) var(--gutter) clamp(40px,6vw,80px);display:grid;gap:16px;max-width:36rem}
+.belior .lw-open-copy h1{font-family:var(--ko);font-weight:400;font-size:clamp(26px,3vw,40px);letter-spacing:.04em}
+.belior .lw-open-copy .muted{font-size:13px;line-height:1.95}
+.belior .lw-open-copy .sound{justify-self:start;margin-top:6px}
+.belior .lw-worlds{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center;padding:clamp(56px,8vw,110px) var(--gutter);background:#0a0908}
+.belior .lw-map{position:relative;max-width:560px;width:100%;justify-self:center}
+.belior .lw-map img{display:block;width:100%;height:auto}
+.belior .lw-spot{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;background:none;cursor:pointer;padding:0}
+.belior .lw-spot i{position:absolute;inset:12px;border-radius:50%;border:1px solid var(--world);box-shadow:0 0 0 0 var(--world);animation:lw-pulse 2.8s ease-out infinite}
+.belior .lw-spot.on i{background:var(--world);animation:none}
+@keyframes lw-pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--world) 70%,transparent)}100%{box-shadow:0 0 0 16px transparent}}
+.belior .lw-world-copy{display:grid;gap:14px;align-content:center;min-height:240px}
+.belior .lw-world-copy h2{font-size:clamp(2rem,4vw,3.4rem);letter-spacing:.12em}
+.belior .lw-world-copy .lw-kw{font:400 .72rem/1.6 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--champagne);margin:0}
+.belior .lw-world-copy .muted{font-size:13px;line-height:1.95;max-width:30rem}
+.belior .lw-world-copy .text-link{justify-self:start}
+.belior .lw-games{padding:clamp(56px,8vw,110px) var(--gutter);background:#0d0c0a;border-top:1px solid rgba(201,170,108,.18)}
+.belior .lw-games-head{text-align:center;display:grid;gap:12px;margin-bottom:clamp(36px,5vw,64px)}
+.belior .lw-games-head h2{font-family:var(--ko);font-weight:400;font-size:clamp(22px,2.4vw,30px)}
+.belior .lw-games-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);max-width:1200px;margin:0 auto}
+.belior .lw-game{display:grid;gap:12px;align-content:start}
+.belior .lw-game h3{font-family:var(--ko);font-weight:400;font-size:clamp(18px,1.8vw,24px)}
+.belior .lw-game .muted{font-size:13px;line-height:1.9;margin:0}
+.belior .lw-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px;max-width:460px}
+.belior .lw-card{position:relative;aspect-ratio:3/4;border:0;background:none;padding:0;cursor:pointer;perspective:800px}
+.belior .lw-card .back,.belior .lw-card .face{position:absolute;inset:0;border:1px solid rgba(201,170,108,.35);display:grid;place-items:center;backface-visibility:hidden;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.belior .lw-card .back{background:#161310}
+.belior .lw-card .back b{font:500 clamp(22px,3vw,34px)/1 var(--display);color:var(--champagne);letter-spacing:.1em}
+.belior .lw-card .face{transform:rotateY(180deg);background:#000;overflow:hidden}
+.belior .lw-card .face img{width:100%;height:100%;object-fit:cover}
+.belior .lw-card.show .back{transform:rotateY(180deg)}
+.belior .lw-card.show .face{transform:rotateY(0)}
+.belior .lw-card.done .face{border-color:var(--world);box-shadow:0 0 18px color-mix(in srgb,var(--world) 40%,transparent)}
+.belior .lw-score{display:flex;gap:18px;align-items:center;font:400 .72rem/1.6 var(--label);letter-spacing:.16em;text-transform:uppercase;color:var(--champagne);margin:6px 0 0}
+.belior .lw-score .text-link{background:none;border:0;border-bottom:1px solid currentColor;padding:0;font:inherit;color:var(--ivory);cursor:pointer}
+.belior .lw-strings{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:10px;height:clamp(240px,34vw,360px);border:1px solid rgba(201,170,108,.25);background:linear-gradient(180deg,#141210,#0a0908)}
+.belior .lw-string{position:relative;border:0;background:none;cursor:pointer;display:grid;grid-template-rows:auto 1fr auto;justify-items:center;padding:16px 0;color:var(--ivory);touch-action:manipulation}
+.belior .lw-string+.lw-string{border-left:1px solid rgba(201,170,108,.12)}
+.belior .lw-string i{width:2px;background:linear-gradient(180deg,rgba(236,228,214,.2),var(--champagne),rgba(236,228,214,.2));transition:transform .08s}
+.belior .lw-string:nth-child(2) i{width:2.5px}.belior .lw-string:nth-child(3) i{width:3px}.belior .lw-string:nth-child(4) i{width:4px}
+.belior .lw-string.hit i{animation:lw-vib .26s ease-out}
+@keyframes lw-vib{0%,100%{transform:translateX(0)}20%{transform:translateX(3px)}40%{transform:translateX(-3px)}60%{transform:translateX(2px)}80%{transform:translateX(-1px)}}
+.belior .lw-sname{font:400 .72rem/1.4 var(--label);letter-spacing:.2em;text-transform:uppercase}
+.belior .lw-snote{font:400 1.1rem/1 var(--display);color:var(--champagne)}
+@media (max-width:860px){.belior .lw-worlds,.belior .lw-games-grid{grid-template-columns:1fr}.belior .lw-open .bg{object-position:center 35%}.belior .lw-cards{max-width:none}}
+@media (max-width:860px){.belior .lw-open{align-items:start}.belior .lw-open::after{background:linear-gradient(180deg,rgba(8,10,8,.78) 0%,rgba(8,10,8,.35) 38%,transparent 60%)}.belior .lw-open-copy{padding-top:28px;padding-bottom:0}.belior .lw-open .bg{object-position:center 62%}}

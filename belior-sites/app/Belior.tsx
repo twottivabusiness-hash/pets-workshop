@@ -224,6 +224,96 @@ function MuseFilm({src = 'belior-film-v9.mp4', poster = 'film-poster.jpg', label
       <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button>}</section>;
 }
 
+/* ---------- The Lounge world: a private place to rest and play, opened by the house's invitation code ---------- */
+const WORLD_SPOTS: [string, number, number][] = [['lion', 17, 19], ['swan', 46, 14], ['orca', 75, 17], ['leopard', 14, 41], ['panther', 85, 36], ['phoenix', 81, 52]];
+
+function LoungeOpening() {
+  const {t} = useT();
+  return <section className="lw-open" aria-label="BELiOR Lounge">
+    <img className="bg" src={V('lounge-forest.jpg')} alt={t('숲속 물가, 말에 오른 아이와 아버지', 'A forest pool, a child on a horse and her father')}/>
+    <div className="lw-open-copy"><p className="label">BELiOR Lounge · A world reserved for you</p>
+      <h1>{lines(t('잠시, 어린 날로', 'For a while, a child again'))}</h1>
+      <p className="muted">{t('이곳에서는 직함도 나이도 내려놓으셔도 됩니다. 쉬고, 놀고, 다시 돌아오세요.', 'Here, titles and years can be set down. Rest, play, and come back whenever you need to.')}</p>
+      <SoundButton label={t('백조의 호수 듣기', 'Listen · Swan Lake')}/></div></section>;
+}
+
+function LoungeWorlds() {
+  const {t} = useT();
+  const [cur, setCur] = useState<string>('');
+  const w = WORLDS.find(x => x.slug === cur);
+  return <section className="lw-worlds"><div className="lw-map">
+      <img src={V('lounge-world.jpg')} alt={t('BELiOR 여섯 세계의 지도', 'The map of the six BELiOR worlds')}/>
+      {WORLD_SPOTS.map(([slug, x, y]) => { const ww = WORLDS.find(z => z.slug === slug)!; return <button type="button" key={slug} className={'lw-spot' + (cur === slug ? ' on' : '')} style={{left: x + '%', top: y + '%', ['--world' as string]: ww.color}} aria-label={ww.name} onClick={() => setCur(cur === slug ? '' : slug)}><i/></button>; })}
+    </div>
+    <div className="lw-world-copy"><span className="label">The Animal Collection · Six worlds</span>
+      {w ? <><h2 style={{color: w.color}}>{w.name}</h2><p className="lw-kw">{w.kw}</p><p className="muted">{t(w.world[0], w.world[1])}</p>
+        <a className="text-link" href={'/collection/' + w.slug} style={{color: w.color, borderColor: w.color}}>{t('이 세계로 들어가기', 'Enter this world')} <span aria-hidden="true">→</span></a></>
+      : <><h2>{lines(t('여섯 개의 세계', 'Six worlds'))}</h2><p className="muted">{t('지도 위의 동물을 누르면 그 세계가 열립니다.', 'Touch an animal on the map to open its world.')}</p></>}
+    </div></section>;
+}
+
+/* Game I — the emblem pairs: twelve cards, six worlds */
+function EmblemPairs() {
+  const {t} = useT();
+  const deal = () => WORLDS.flatMap(w => [w.slug, w.slug]).map((s, i) => ({id: i, slug: s, r: Math.random()})).sort((a, b) => a.r - b.r);
+  const [cards, setCards] = useState<{id: number; slug: string; r: number}[]>([]);
+  const [up, setUp] = useState<number[]>([]), [done, setDone] = useState<string[]>([]), [moves, setMoves] = useState(0), [lock, setLock] = useState(false);
+  useEffect(() => { setCards(deal()); }, []);
+  const reset = () => { setCards(deal()); setUp([]); setDone([]); setMoves(0); setLock(false); };
+  const flip = (c: {id: number; slug: string}) => {
+    if (lock || up.includes(c.id) || done.includes(c.slug)) return;
+    const next = [...up, c.id];
+    setUp(next);
+    if (next.length === 2) {
+      setMoves(m => m + 1); setLock(true);
+      const [a, b] = next.map(id => cards.find(x => x.id === id)!);
+      window.setTimeout(() => { if (a.slug === b.slug) setDone(d => [...d, a.slug]); setUp([]); setLock(false); }, a.slug === b.slug ? 500 : 900);
+    }
+  };
+  const won = done.length === WORLDS.length && cards.length > 0;
+  return <div className="lw-game"><span className="label">Game I · The Emblem Pairs</span><h3>{lines(t('엠블럼 짝 맞추기', 'The emblem pairs'))}</h3>
+    <p className="muted">{t('열두 장의 카드 속에 여섯 세계가 두 장씩 숨어 있습니다.', 'Six worlds, two cards each, hidden among twelve.')}</p>
+    <div className="lw-cards">{cards.map(c => { const show = up.includes(c.id) || done.includes(c.slug); const w = WORLDS.find(x => x.slug === c.slug)!;
+      return <button type="button" key={c.id} className={'lw-card' + (show ? ' show' : '') + (done.includes(c.slug) ? ' done' : '')} style={{['--world' as string]: w.color}} onClick={() => flip(c)} aria-label={show ? w.name : t('카드', 'Card')}>
+        <span className="back"><b>B</b></span><span className="face"><img src={V('emblem-' + c.slug + '.jpg')} alt=""/></span></button>; })}</div>
+    <p className="lw-score">{won ? t(`모두 찾으셨습니다 · ${moves}번`, `All six found · ${moves} turns`) : t(`${done.length} / 6 · ${moves}번`, `${done.length} / 6 · ${moves} turns`)}
+      <button type="button" className="text-link" onClick={reset}>{t('다시 섞기', 'Shuffle again')}</button></p></div>;
+}
+
+/* Game II — four strings: Vn I · Vn II · Va · Vc, plucked by hand (synthesised, not a recording) */
+let lwCtx: AudioContext | null = null;
+function pluck(freq: number) {
+  const C = (window as unknown as {AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext});
+  const Ctor = C.AudioContext || C.webkitAudioContext; if (!Ctor) return;
+  if (!lwCtx) lwCtx = new Ctor();
+  const ctx = lwCtx; if (ctx.state === 'suspended') void ctx.resume();
+  const sr = ctx.sampleRate, n = Math.round(sr / freq), len = Math.round(sr * 2.4), buf = ctx.createBuffer(1, len, sr), d = buf.getChannelData(0);
+  const ring = new Float32Array(n); for (let i = 0; i < n; i++) ring[i] = Math.random() * 2 - 1;
+  const decay = freq < 200 ? .997 : .995;
+  for (let i = 0, p = 0; i < len; i++, p = (p + 1) % n) { const nx = (p + 1) % n; d[i] = ring[p]; ring[p] = (ring[p] + ring[nx]) * .5 * decay; }
+  const src = ctx.createBufferSource(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = Math.min(6000, freq * 8); g.gain.value = .5;
+  src.buffer = buf; src.connect(lp); lp.connect(g); g.connect(ctx.destination); src.start();
+}
+const STRINGS: [string, string, number][] = [['Vn I', 'E', 659.25], ['Vn II', 'A', 440], ['Va', 'C', 261.63], ['Vc', 'G', 98]];
+function FourStrings() {
+  const {t} = useT();
+  const [hit, setHit] = useState(-1);
+  const play = (i: number) => { pluck(STRINGS[i][2]); setHit(i); window.setTimeout(() => setHit(h => (h === i ? -1 : h)), 260); };
+  return <div className="lw-game"><span className="label">Game II · Four Strings</span><h3>{lines(t('네 개의 현', 'Four strings'))}</h3>
+    <p className="muted">{t('바이올린 둘, 비올라, 첼로. 현을 건드리면 소리가 납니다.', 'Two violins, a viola and a cello. Touch a string and it sounds.')}</p>
+    <div className="lw-strings" role="group" aria-label={t('네 개의 현', 'Four strings')}>{STRINGS.map(([name, note], i) =>
+      <button type="button" key={name} className={'lw-string' + (hit === i ? ' hit' : '')} onPointerDown={() => play(i)} aria-label={name + ' · ' + note}>
+        <span className="lw-sname">{name}</span><i/><span className="lw-snote">{note}</span></button>)}</div></div>;
+}
+
+function LoungeGames() {
+  const {t} = useT();
+  return <section className="lw-games"><div className="lw-games-head"><span className="label">The Playroom</span><h2>{lines(t('놀이방', 'The playroom'))}</h2>
+      <p className="muted">{t('잠깐이면 됩니다. 한 판, 한 소절.', 'A minute is enough. One round, one phrase.')}</p></div>
+    <div className="lw-games-grid"><EmblemPairs/><FourStrings/></div></section>;
+}
+
 /* ---------- Inquiry, as on the September site ----------
    Enquiries are delivered by Web3Forms with the house's public form key (the same key the
    September site used). If sending fails, the form opens the visitor's mail app instead. */
@@ -440,8 +530,7 @@ function Lounge() {
       <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
-    <section className="lounge-head"><p className="label">BELiOR Lounge · Welcome</p><h1>{lines(t('라운지에 오신 것을 환영합니다', 'Welcome to the Lounge'))}</h1>
-      <p className="muted">{t('BELiOR의 저녁을 함께한 분들께만 보여드리는 향과 오브제입니다.', 'Scents and pieces shown only to guests of BELiOR evenings.')}</p></section>
+    <LoungeOpening/><LoungeWorlds/><LoungeGames/>
     <GiftScents/>
     <section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>

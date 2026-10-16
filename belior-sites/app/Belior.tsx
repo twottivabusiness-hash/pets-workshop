@@ -309,6 +309,31 @@ function pluck(freq: number, strength = 1) {
   g.gain.setValueAtTime(0, ctx.currentTime); g.gain.linearRampToValueAtTime(.42 * strength, ctx.currentTime + .004);
   src.buffer = buf; src.connect(body); body.connect(tone); tone.connect(g); g.connect(ctx.destination); if (lwVerb) g.connect(lwVerb); src.start();
 }
+/* The bow: a sustained voice that follows the hand. Faster strokes play louder; the pitch slides to the position under the bow. */
+type Bow = {o1: OscillatorNode; o2: OscillatorNode; lfo: OscillatorNode; lfoG: GainNode; f: BiquadFilterNode; g: GainNode};
+function bowStart(freq: number): Bow | null {
+  const ctx = lwAudio(); if (!ctx) return null;
+  const o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), lfo = ctx.createOscillator(), lfoG = ctx.createGain(), f = ctx.createBiquadFilter(), body = ctx.createBiquadFilter(), g = ctx.createGain();
+  o1.type = 'sawtooth'; o2.type = 'sawtooth'; o1.frequency.value = freq; o2.frequency.value = freq; o1.detune.value = -5; o2.detune.value = 5;
+  lfo.frequency.value = 5.4; lfoG.gain.setValueAtTime(0, ctx.currentTime); lfoG.gain.linearRampToValueAtTime(freq * .006, ctx.currentTime + .6);   // vibrato arrives after the attack
+  lfo.connect(lfoG); lfoG.connect(o1.frequency); lfoG.connect(o2.frequency);
+  f.type = 'lowpass'; f.frequency.value = Math.min(6500, freq * 3.2); f.Q.value = 1.1;
+  body.type = 'peaking'; body.frequency.value = freq < 200 ? 180 : 420; body.Q.value = 1.2; body.gain.value = 4;
+  g.gain.setValueAtTime(0, ctx.currentTime);
+  o1.connect(f); o2.connect(f); f.connect(body); body.connect(g); g.connect(ctx.destination); if (lwVerb) g.connect(lwVerb);
+  o1.start(); o2.start(); lfo.start();
+  return {o1, o2, lfo, lfoG, f, g};
+}
+function bowMove(b: Bow, freq: number, speed: number) {
+  const ctx = lwAudio(); if (!ctx) return; const t = ctx.currentTime;
+  b.o1.frequency.setTargetAtTime(freq, t, .035); b.o2.frequency.setTargetAtTime(freq, t, .035); b.f.frequency.setTargetAtTime(Math.min(6500, freq * 3.2), t, .05);
+  b.g.gain.setTargetAtTime(Math.max(.08, Math.min(.5, speed / 900)), t, .06);                     // bow pressure follows the stroke
+}
+function bowStop(b: Bow) {
+  const ctx = lwAudio(); if (!ctx) return; const t = ctx.currentTime;
+  b.g.gain.cancelScheduledValues(t); b.g.gain.setTargetAtTime(0, t, .12);
+  window.setTimeout(() => { try { b.o1.stop(); b.o2.stop(); b.lfo.stop(); } catch {} }, 700);
+}
 const STRINGS: {name: string; base: number; w: number}[] = [{name: 'Vn I', base: 659.25, w: 1.2}, {name: 'Vn II', base: 440, w: 1.6}, {name: 'Va', base: 261.63, w: 2.2}, {name: 'Vc', base: 98, w: 3}];
 const POS = 12;                                           // positions along each string (semitones)
 const NOTE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
@@ -320,6 +345,8 @@ function StringStage() {
   const canvas = useRef<HTMLCanvasElement>(null), wrap = useRef<HTMLDivElement>(null);
   const vib = useRef<{s: number; x: number; t0: number}[]>([]), glow = useRef<{s: number; p: number; t0: number}[]>([]);
   const last = useRef<string>(''), phrase = useRef<Note[]>([]), played = useRef<Note[]>([]);
+  const hand = useRef<{x: number; y: number; in: boolean; down: boolean; touch: boolean}>({x: 0, y: 0, in: false, down: false, touch: false});
+  const bow = useRef<{v: Bow; s: number; lastX: number; lastT: number} | null>(null);
   const [mode, setMode] = useState<'free' | 'listen' | 'repeat' | 'won' | 'miss'>('free'), [round, setRound] = useState(1), [note, setNote] = useState('');
   const geo = () => { const c = canvas.current!; const W = c.clientWidth, H = c.clientHeight; return {W, H, padL: 56, padR: 20, y: (s: number) => H * (.2 + s * .2)}; };
   const sound = (s: number, p: number, strength = 1) => {
@@ -351,16 +378,41 @@ function StringStage() {
         ctx.stroke(); ctx.shadowBlur = 0;
         ctx.fillStyle = 'rgba(236,228,214,.55)'; ctx.font = '500 10px Jost, "Helvetica Neue", Arial, sans-serif'; ctx.textAlign = 'right'; ctx.fillText(st.name.toUpperCase(), x0 - 14, yy + 3.5);
       });
+      const hd = hand.current;                                                                  // the bow follows the hand
+      if (hd.in && !hd.touch) {
+        const bowing = !!bow.current, bx = hd.x, by = bowing ? y(bow.current!.s) : hd.y, L = Math.min(170, W * .16), tilt = bowing ? -.08 : -.42, k = Math.cos(tilt), j = Math.sin(tilt);
+        ctx.save(); ctx.translate(bx, by); ctx.rotate(tilt); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 6;
+        ctx.strokeStyle = 'rgba(236,228,214,' + (bowing ? .5 : .32) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-L * .62, 7); ctx.lineTo(L * .5, 7); ctx.stroke();        // the hair
+        ctx.strokeStyle = '#6b4a2a'; ctx.lineWidth = 3.2; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-L * .62, 0); ctx.quadraticCurveTo(0, -5, L * .5, 2); ctx.stroke();      // pernambuco stick
+        ctx.fillStyle = '#1a1512'; ctx.fillRect(-L * .62 - 2, 0, 16, 11); ctx.fillStyle = '#c9aa6c'; ctx.fillRect(-L * .62 - 2, 4, 16, 1.2);                                           // the frog, with its gold slide
+        ctx.fillStyle = '#ece4d6'; ctx.beginPath(); ctx.moveTo(L * .5, 2); ctx.lineTo(L * .5 + 9, -5); ctx.lineTo(L * .5 + 9, 8); ctx.closePath(); ctx.fill();                       // the tip
+        ctx.restore(); void k; void j;
+      }
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw); return () => cancelAnimationFrame(raf);
   }, []);
-  const hit = (e: RPointerEvent<HTMLCanvasElement>, drag: boolean) => {
+  const where = (e: RPointerEvent<HTMLCanvasElement>) => {
     const r = canvas.current!.getBoundingClientRect(), {W, H, padL, padR} = geo(), x = e.clientX - r.left, yy = e.clientY - r.top;
-    const s = Math.max(0, Math.min(3, Math.round((yy / H - .2) / .2))); if (Math.abs(yy - H * (.2 + s * .2)) > H * .11) return;
+    hand.current.x = x; hand.current.y = yy; hand.current.touch = e.pointerType === 'touch';
+    const s = Math.max(0, Math.min(3, Math.round((yy / H - .2) / .2))), on = Math.abs(yy - H * (.2 + s * .2)) <= H * .11;
     const p = Math.max(0, Math.min(POS - 1, Math.floor((x - padL) / ((W - padL - padR) / POS))));
+    return {x, s, p, on};
+  };
+  const stroke = (e: RPointerEvent<HTMLCanvasElement>) => {                                     // the bow on the string
+    const {x, s, p, on} = where(e); if (!on) { if (bow.current) { bowStop(bow.current.v); bow.current = null; } return; }
+    const now = performance.now();
+    if (!bow.current || bow.current.s !== s) { if (bow.current) bowStop(bow.current.v); const v = bowStart(freqOf(s, p)); bow.current = v ? {v, s, lastX: x, lastT: now} : null; }
+    const b = bow.current; if (!b) return;
+    const dt = Math.max(8, now - b.lastT), speed = Math.abs(x - b.lastX) / dt * 1000; b.lastX = x; b.lastT = now;
+    bowMove(b.v, freqOf(s, p), speed);
+    vib.current.push({s, x, t0: now}); if (vib.current.length > 24) vib.current.splice(0, vib.current.length - 24);
+    setNote(STRINGS[s].name + ' · ' + nameOf(s, p));
+  };
+  const hit = (e: RPointerEvent<HTMLCanvasElement>, drag: boolean) => {
+    const {s, p, on} = where(e); if (!on) return;
     const key = s + ':' + p; if (drag && key === last.current) return; last.current = key;
-    sound(s, p, drag ? .7 : 1);
+    if (drag) { stroke(e); } else sound(s, p, 1);
     if (mode === 'repeat') { played.current.push([s, p]); const i = played.current.length - 1, want = phrase.current[i];
       if (!want || want[0] !== s || want[1] !== p) { setMode('miss'); return; }
       if (played.current.length === phrase.current.length) setMode('won'); }
@@ -372,12 +424,16 @@ function StringStage() {
     ph.forEach((n, i) => window.setTimeout(() => sound(n[0], n[1], .9), 420 * i + 300));
     window.setTimeout(() => setMode('repeat'), 420 * len + 500);
   };
-  const msg = {free: t('현을 건드리면 소리가 납니다. 따라 긋듯 밀면 음이 이어집니다.', 'Touch a string to sound it; draw along it and the notes run together.'),
+  const msg = {free: t('툭 치면 피치카토, 누른 채 현을 따라 그으면 활이 됩니다. 빠르게 그을수록 소리가 커집니다.', 'Tap for pizzicato; press and draw along the string to bow it. The faster the stroke, the fuller the sound.'),
     listen: t('듣고 계세요…', 'Listen…'), repeat: t('이제 같은 소절을 연주해 보세요.', 'Now play the same phrase back.'),
     won: t(`같은 소절입니다. ${round}번째 소절 완성.`, `That is the phrase. Round ${round} complete.`), miss: t('조금 달랐습니다. 다시 들어 볼까요?', 'Not quite. Shall we hear it again?')}[mode];
   return <div className="lw-game lw-stage"><span className="label">Game II · The String Stage</span><h3>{lines(t('현의 무대', 'The string stage'))}</h3>
     <p className="muted">{msg}</p>
-    <div className="lw-board" ref={wrap}><canvas ref={canvas} onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); hit(e, false); }} onPointerMove={e => { if (e.buttons) hit(e, true); }} onPointerUp={() => { last.current = ''; }} aria-label={t('네 개의 현', 'Four strings')}/>
+    <div className="lw-board" ref={wrap}><canvas ref={canvas} onPointerEnter={() => { hand.current.in = true; }} onPointerLeave={() => { hand.current.in = false; }}
+        onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); hand.current.down = true; hit(e, false); }}
+        onPointerMove={e => { if (e.buttons) { hit(e, true); stroke(e); } else where(e); }}
+        onPointerUp={() => { last.current = ''; hand.current.down = false; if (bow.current) { bowStop(bow.current.v); bow.current = null; } }}
+        onPointerCancel={() => { hand.current.down = false; if (bow.current) { bowStop(bow.current.v); bow.current = null; } }} aria-label={t('네 개의 현', 'Four strings')}/>
       <span className="lw-note" aria-live="polite">{note}</span></div>
     <p className="lw-score">
       {mode === 'won' ? <button type="button" className="text-link" onClick={() => { setRound(r => r + 1); listen(); }}>{t('다음 소절', 'Next phrase')}</button>

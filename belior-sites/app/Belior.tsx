@@ -314,6 +314,15 @@ function LoungeGames() {
     <div className="lw-games-grid"><EmblemPairs/><FourStrings/></div></section>;
 }
 
+/* Car diffuser — Tchaikovsky No.16, holiday edition (copy as written by the house) */
+function CarDiffuser() {
+  const {t} = useT();
+  return <section className="b12-split night car-diff"><img src={V('car-diffuser.jpg')} alt={t('차량 송풍구에 꽂은 BELiOR 디퓨저, 나무 엠블럼', 'BELiOR car diffuser on a dashboard vent, tree emblem')} loading="lazy"/>
+    <div><span className="label">Parfum · Holiday Limited Edition 🎄</span><h2>{lines(t('당신만을 위한\n차이코프스키 No.16 향', 'Tchaikovsky No.16,\nfor you alone'))}</h2>
+      <p className="muted">{t('샌달우드와 크리스마스 한정 에디션. 37개의 향료와 영국·프랑스에서 들여온 엄선한 향료로, 내 차 안을 고급지고 힐링 가득한 연말 순간으로.', 'Sandalwood, in a Christmas limited edition. Thirty-seven notes, with materials chosen from England and France, turning the inside of your car into a composed, restful moment of the year’s end.')}</p>
+      <a className="text-link" href="/private">{t('기프트 문의', 'Gift enquiries')} <span aria-hidden="true">↗</span></a></div></section>;
+}
+
 /* ---------- Inquiry, as on the September site ----------
    Enquiries are delivered by Web3Forms with the house's public form key (the same key the
    September site used). If sending fails, the form opens the visitor's mail app instead. */
@@ -530,7 +539,7 @@ function Lounge() {
       <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
-    <LoungeOpening/><LoungeWorlds/><LoungeGames/>
+    <LoungeOpening/><LoungeWorlds/><LoungeGames/><CarDiffuser/>
     <GiftScents/>
     <section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>
@@ -1121,7 +1130,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="n16-hero"><img className="bg" src={V('no16-hero.jpg')} alt={t('푸른 숲에서 말에 오른 아이와 지켜보는 아버지', 'A child on a horse in a green forest, her father watching')}/>
       <div className="inner"><h1 className="keep">No.16<br/>A memory, held.</h1><p className="lede">{t('푸른 숲, 어린 시절의 한 장면.', 'A green forest, a childhood scene.')}</p>
         <a className="line-cta" href="#memory">DISCOVER THE STORY <span aria-hidden="true">→</span></a></div></section>
-    <N16Poster/>
+    <N16Poster/><CarDiffuser/>
     <section className="n16-stay"><div className="txt"><h2>The moments that stay.</h2>
       <p>{lines(t('향은 우리를 어떤 장소로 데려갑니다 —\n우리를 만든 감정과, 여전히 안에 살아 있는\n고요한 힘으로.', 'Scent can return us to a place —\nto the feelings that shaped us, and the quiet strength\nthat still lives within.'))}</p></div>
       <img src={V('no16-stream.jpg')} alt={t('햇살이 비치는 이끼와 시냇물', 'Moss and a sunlit stream')} loading="lazy"/></section>
@@ -1145,7 +1154,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     const one = items.find(x => x[0] === d);
     return <>
       <Scene img="o-mk-home-objects.jpg" eyebrow="Parfum · Bag · Clothing · Objects" title={one ? one[1] : 'The Art of Everyday'} lede={t('감각을 담는 소재, 오래 머무는 형태.', 'Materials that hold feeling. Forms that endure.')}/>
-      {(d === '' || d === 'parfum') && <><Tchaikovsky/><section className="b12-split"><img src={V('b12-fragrance.jpg')} alt={t('검은 향수병과 난초', 'A dark glass bottle beside an orchid')} loading="lazy"/>
+      {(d === '' || d === 'parfum') && <><Tchaikovsky/><CarDiffuser/><section className="b12-split"><img src={V('b12-fragrance.jpg')} alt={t('검은 향수병과 난초', 'A dark glass bottle beside an orchid')} loading="lazy"/>
         <div><span className="label">A considered object</span><h2>Kept close.<br/>Returned to.</h2>
           <p className="muted">{t('건축적인 유리, 무게감 있는 캡, 손안에 자연스럽게 놓이는 형태. 모든 디테일은 의도되었고, 어느 것도 주목을 요구하지 않습니다.', 'Architectural glass, a weighted cap, and a form designed to rest naturally in the hand. Every detail is intentional; nothing asks for attention.')}</p>
           <a className="text-link" href="/atelier">Our way of making <span aria-hidden="true">↗</span></a></div></section></>}

@@ -1153,3 +1153,4 @@
 .belior .lw-snote{font:400 1.1rem/1 var(--display);color:var(--champagne)}
 @media (max-width:860px){.belior .lw-worlds,.belior .lw-games-grid{grid-template-columns:1fr}.belior .lw-open .bg{object-position:center 35%}.belior .lw-cards{max-width:none}}
 @media (max-width:860px){.belior .lw-open{align-items:start}.belior .lw-open::after{background:linear-gradient(180deg,rgba(8,10,8,.78) 0%,rgba(8,10,8,.35) 38%,transparent 60%)}.belior .lw-open-copy{padding-top:28px;padding-bottom:0}.belior .lw-open .bg{object-position:center 62%}}
+.belior .car-diff img{height:auto;aspect-ratio:4/3;object-fit:cover}

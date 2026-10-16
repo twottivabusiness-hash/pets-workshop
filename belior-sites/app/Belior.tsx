@@ -1063,7 +1063,7 @@ function GuestJourney() {
 function SymphonicAtelier() {
   const {t} = useT();
   return <section className="symphonic">
-    <figure className="sy-a"><img src={V('sym-violin.jpg')} alt={t('바이올린 현과 활의 클로즈업', 'Violin strings and bow, close up')} loading="lazy"/></figure>
+    <figure className="sy-a"><img src={V('sym-harp-duo.jpg')} alt={t('하프와 바이올린', 'Harp and violin')} loading="lazy"/></figure>
     <div className="sy-copy"><span className="label">BELiOR · Signature Ensemble</span><h2>The Symphonic Atelier</h2>
       <p className="muted">{t('현악의 골드 위에 하프와 클라리넷이 빛을 더하고, 타악과 일렉기타가 대담함을 완성합니다.', 'Harp and clarinet add light to the gold of the strings; percussion and electric guitar bring the daring cut.')}</p>
       <ol className="sy-list">
@@ -1294,7 +1294,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const maison = <>
-    <MaisonIntro/><TheHouse/>
+    <MaisonIntro/>
+    <section className="section night"><div className="spread"><figure className="c-5 statue"><img src={V('maison-statue.jpg')} alt={t('바이올린을 든 뮤즈 조각상, 「Where Love Becomes Music」', 'A marble muse with a violin — “Where Love Becomes Music”')} loading="lazy"/><figcaption>The House · Seoul</figcaption></figure>
+      <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">The House</span><h3>Where Love<br/>Becomes Music.</h3><p className="muted">{t('음악과 사람, 문화, 그리고 더 아름다운 내일. 하우스가 지키는 네 단어입니다.', 'Music, people, culture, and a more beautiful tomorrow: the four words the house keeps.')}</p></div></div></section>
+    <TheHouse/>
     <section className="section" id="symbol"><Head eyebrow="Symbol System" title={t('하나의 하우스, 하나의 심볼, 여섯 개의 세계', 'One house, one symbol, six worlds')}
       text={t('메종 심볼은 하우스 전체를, 사자-B 모노그램은 동물 세계관의 시작을, 여섯 엠블럼은 각 컬렉션을 대표합니다.', 'The maison symbol stands for the whole house, the lion-B monogram opens the animal worlds, and six emblems stand for each collection.')}/>
       <div className="symbols three">
@@ -1460,6 +1463,9 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
           <p className="muted">{t('건축적인 유리, 무게감 있는 캡, 손안에 자연스럽게 놓이는 형태. 모든 디테일은 의도되었고, 어느 것도 주목을 요구하지 않습니다.', 'Architectural glass, a weighted cap, and a form designed to rest naturally in the hand. Every detail is intentional; nothing asks for attention.')}</p>
           <a className="text-link" href="/atelier">Our way of making <span aria-hidden="true">↗</span></a></div></section></>}
       {(d === '' || d === 'parfum') && <GiftScents/>}
+      {d === 'clothing' && <section className="section night"><figure className="wide-fig"><img src={V('clothing-board.jpg')} alt={t('BELiOR 의류 컬렉션 — 코트, 재킷, 드레스, 구두, 가방', 'The BELiOR clothing collection — coats, jackets, dresses, shoes, bag')} loading="lazy"/><figcaption>The Signature · Day to Night · Modern Classic</figcaption></figure>
+        <div className="spread" style={{marginTop: 40}}><figure className="c-6"><img src={V('clothing-top.jpg')} alt={t('트위드 재킷과 검은 리본', 'Tweed jacket and a black ribbon')} loading="lazy"/><figcaption>A Life in Harmony</figcaption></figure>
+          <div className="copy c-5" style={{gridColumn: '8 / span 5'}}><span className="label">Clothing</span><h3>{lines(t('음악처럼 입는 옷', 'Worn like music'))}</h3><p className="muted">{t('시그니처 코트와 재킷, 낮에서 밤으로 이어지는 드레스. 하우스의 심볼을 작게 새깁니다.', 'Signature coats and jackets, dresses that carry from day to night. The house symbol, set small.')}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')} <span aria-hidden="true">↗</span></a></div></div></section>}
       <section className="section"><Head eyebrow="The Art of Everyday" title={t('일상의 예술', 'The art of everyday')} text={t('출시 소식은 프라이빗 문의로 먼저 안내드립니다.', 'Launch news is shared first through private enquiries.')}/>
         <div className="lines">{items.map(([s, n, ko, im]) => <a className="line-item" href={'/products/' + s} key={s}><div className="ph"><img src={V(im)} alt={n} loading="lazy" style={{objectPosition: im.includes('clothing') ? '66% center' : im.includes('bag') ? '56% center' : undefined}}/></div><span className="label">{n}</span><p className="muted">{t(ko, n)}</p></a>)}</div></section>
       <ObjectsRow/><OneWorld/>
@@ -1489,14 +1495,14 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const journal = <>
-    <Scene img="o-mk-home-journal.jpg" eyebrow="Journal" title={'Stories behind\nthe Maison'} lede={t('예술, 사람, 공간의 이야기를 기록합니다.', 'Stories of art, people and places.')}/>
+    <Scene img="journal-lake.jpg" eyebrow="Journal" title={'Stories behind\nthe Maison'} lede={t('예술, 사람, 공간의 이야기를 기록합니다.', 'Stories of art, people and places.')}/>
     <section className="b12-jhero"><span className="label">Notes from the maison · Volume 01</span><h2>A slower kind<br/><em>of looking.</em></h2><p className="muted">{t('관찰하고, 머물고, 기억하는 것들.', 'What we observe, stay with and remember.')}</p></section>
     <section className="b12-journal">
       <article className="feature"><img src={V('b12-atelier.jpg')} alt={t('가죽을 다루는 손', 'A maker’s hands shaping leather')} loading="lazy"/><span className="label">Atelier notes · 04 min read</span><h3>The beauty of what takes time</h3>
         <p className="muted">{t('손으로 반복되는 몸짓, 그 아래에서 변해 가는 소재, 그리고 약간의 인내가 어떻게 하나의 오브제를 나의 것으로 만드는지에 대하여.', 'On the gestures repeated by hand, the material that changes beneath it, and why a little patience can make an object feel like yours.')}</p><a className="text-link" href="/maison">Read the note <span aria-hidden="true">↗</span></a></article>
       <article><img src={V('tchaikovsky-poster.jpg')} alt="The Tchaikovsky Edition" loading="lazy"/><span className="label">The scent journal · 03 min read</span><h3>The moment the curtain falls</h3>
         <p className="muted">{t('백조의 호수에 막이 내리는 순간, N° 01 The Tchaikovsky Edition의 첫 노트가 시작됩니다.', 'As the curtain falls on Swan Lake, N° 01 The Tchaikovsky Edition finds its first note.')}</p><a className="text-link" href="/products/parfum">Explore N° 01 <span aria-hidden="true">↗</span></a></article>
-      <article><img src={V('b12-vinyl.jpg')} alt={t('어둠 속의 레코드', 'Vinyl and tonearm in low light')} loading="lazy"/><span className="label">Listening room · 01</span><h3>An evening, side A</h3>
+      <article><img src={V('journal-evening.jpg')} alt={t('어둠 속의 샴페인 잔과 실크', 'Champagne and silk in low light')} loading="lazy"/><span className="label">Listening room · 01</span><h3>An evening, side A</h3>
         <p className="muted">{t('낮은 조명, 긴 그림자, 그리고 레코드가 도는 부드러운 결.', 'A sequence of low light, long shadows and the soft grain of a record turning.')}</p><a className="text-link" href="/music">Stay a while <span aria-hidden="true">↗</span></a></article>
     </section>
     <Listening/>

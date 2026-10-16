@@ -1235,3 +1235,4 @@
 .belior .lw-village-enter .label{border:1px solid var(--champagne);padding:14px 26px;color:var(--ivory)}
 .belior .lw-village .lw-keys a{color:var(--champagne)}
 @media (max-width:860px){.belior .lw-village-frame{aspect-ratio:auto;height:min(78svh,640px)}}
+.belior .statue img{max-width:520px;margin:0 auto;display:block}

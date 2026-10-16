@@ -1,6 +1,6 @@
 "use client";
 import {createContext, Fragment, useContext, useEffect, useRef, useState} from 'react';
-import type {FormEvent, ReactNode} from 'react';
+import type {FormEvent, PointerEvent as RPointerEvent, ReactNode} from 'react';
 import './belior.css';
 
 /* BELiOR — the maison site.
@@ -281,38 +281,116 @@ function EmblemPairs() {
       <button type="button" className="text-link" onClick={reset}>{t('다시 섞기', 'Shuffle again')}</button></p></div>;
 }
 
-/* Game II — four strings: Vn I · Vn II · Va · Vc, plucked by hand (synthesised, not a recording) */
-let lwCtx: AudioContext | null = null;
-function pluck(freq: number) {
+/* Game II — The String Stage. Four strings across a lacquered board: touch a string anywhere to sound that note,
+   draw along it for a glissando. "Echo" plays a short phrase on the strings; the guest plays it back. */
+let lwCtx: AudioContext | null = null, lwVerb: ConvolverNode | null = null;
+function lwAudio() {
   const C = (window as unknown as {AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext});
-  const Ctor = C.AudioContext || C.webkitAudioContext; if (!Ctor) return;
-  if (!lwCtx) lwCtx = new Ctor();
-  const ctx = lwCtx; if (ctx.state === 'suspended') void ctx.resume();
-  const sr = ctx.sampleRate, n = Math.round(sr / freq), len = Math.round(sr * 2.4), buf = ctx.createBuffer(1, len, sr), d = buf.getChannelData(0);
-  const ring = new Float32Array(n); for (let i = 0; i < n; i++) ring[i] = Math.random() * 2 - 1;
-  const decay = freq < 200 ? .997 : .995;
-  for (let i = 0, p = 0; i < len; i++, p = (p + 1) % n) { const nx = (p + 1) % n; d[i] = ring[p]; ring[p] = (ring[p] + ring[nx]) * .5 * decay; }
-  const src = ctx.createBufferSource(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
-  lp.type = 'lowpass'; lp.frequency.value = Math.min(6000, freq * 8); g.gain.value = .5;
-  src.buffer = buf; src.connect(lp); lp.connect(g); g.connect(ctx.destination); src.start();
+  const Ctor = C.AudioContext || C.webkitAudioContext; if (!Ctor) return null;
+  if (!lwCtx) {
+    lwCtx = new Ctor();
+    const sr = lwCtx.sampleRate, len = Math.round(sr * 1.8), ir = lwCtx.createBuffer(2, len, sr);   // a small, dark hall
+    for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2) * .5; }
+    lwVerb = lwCtx.createConvolver(); lwVerb.buffer = ir; const wet = lwCtx.createGain(); wet.gain.value = .28; lwVerb.connect(wet); wet.connect(lwCtx.destination);
+  }
+  if (lwCtx.state === 'suspended') void lwCtx.resume();
+  return lwCtx;
 }
-const STRINGS: [string, string, number][] = [['Vn I', 'E', 659.25], ['Vn II', 'A', 440], ['Va', 'C', 261.63], ['Vc', 'G', 98]];
-function FourStrings() {
+function pluck(freq: number, strength = 1) {
+  const ctx = lwAudio(); if (!ctx) return;
+  const sr = ctx.sampleRate, len = Math.round(sr * (freq < 200 ? 3.2 : 2.2)), buf = ctx.createBuffer(1, len, sr), d = buf.getChannelData(0);
+  const n = Math.round(sr / freq), ring = new Float32Array(n);
+  for (let i = 0; i < n; i++) ring[i] = (Math.random() * 2 - 1) * (i < n * .5 ? 1 : .35);   // plucked nearer the bridge: brighter
+  const decay = freq < 200 ? .9985 : freq < 400 ? .997 : .995;
+  for (let i = 0, p = 0; i < len; i++, p = (p + 1) % n) { const nx = (p + 1) % n; d[i] = ring[p]; ring[p] = (ring[p] * .55 + ring[nx] * .45) * decay; }
+  const src = ctx.createBufferSource(), body = ctx.createBiquadFilter(), tone = ctx.createBiquadFilter(), g = ctx.createGain();
+  body.type = 'peaking'; body.frequency.value = freq < 200 ? 180 : 420; body.Q.value = 1.4; body.gain.value = 5;   // the instrument's body
+  tone.type = 'lowpass'; tone.frequency.value = Math.min(7000, freq * 9); tone.Q.value = .7;
+  g.gain.setValueAtTime(0, ctx.currentTime); g.gain.linearRampToValueAtTime(.42 * strength, ctx.currentTime + .004);
+  src.buffer = buf; src.connect(body); body.connect(tone); tone.connect(g); g.connect(ctx.destination); if (lwVerb) g.connect(lwVerb); src.start();
+}
+const STRINGS: {name: string; base: number; w: number}[] = [{name: 'Vn I', base: 659.25, w: 1.2}, {name: 'Vn II', base: 440, w: 1.6}, {name: 'Va', base: 261.63, w: 2.2}, {name: 'Vc', base: 98, w: 3}];
+const POS = 12;                                           // positions along each string (semitones)
+const NOTE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+const freqOf = (s: number, p: number) => STRINGS[s].base * Math.pow(2, p / 12);
+const nameOf = (s: number, p: number) => { const midi = Math.round(69 + 12 * Math.log2(freqOf(s, p) / 440)); return NOTE_NAMES[midi % 12] + (Math.floor(midi / 12) - 1); };
+type Note = [number, number];                             // [string, position]
+function StringStage() {
   const {t} = useT();
-  const [hit, setHit] = useState(-1);
-  const play = (i: number) => { pluck(STRINGS[i][2]); setHit(i); window.setTimeout(() => setHit(h => (h === i ? -1 : h)), 260); };
-  return <div className="lw-game"><span className="label">Game II · Four Strings</span><h3>{lines(t('네 개의 현', 'Four strings'))}</h3>
-    <p className="muted">{t('바이올린 둘, 비올라, 첼로. 현을 건드리면 소리가 납니다.', 'Two violins, a viola and a cello. Touch a string and it sounds.')}</p>
-    <div className="lw-strings" role="group" aria-label={t('네 개의 현', 'Four strings')}>{STRINGS.map(([name, note], i) =>
-      <button type="button" key={name} className={'lw-string' + (hit === i ? ' hit' : '')} onPointerDown={() => play(i)} aria-label={name + ' · ' + note}>
-        <span className="lw-sname">{name}</span><i/><span className="lw-snote">{note}</span></button>)}</div></div>;
+  const canvas = useRef<HTMLCanvasElement>(null), wrap = useRef<HTMLDivElement>(null);
+  const vib = useRef<{s: number; x: number; t0: number}[]>([]), glow = useRef<{s: number; p: number; t0: number}[]>([]);
+  const last = useRef<string>(''), phrase = useRef<Note[]>([]), played = useRef<Note[]>([]);
+  const [mode, setMode] = useState<'free' | 'listen' | 'repeat' | 'won' | 'miss'>('free'), [round, setRound] = useState(1), [note, setNote] = useState('');
+  const geo = () => { const c = canvas.current!; const W = c.clientWidth, H = c.clientHeight; return {W, H, padL: 56, padR: 20, y: (s: number) => H * (.2 + s * .2)}; };
+  const sound = (s: number, p: number, strength = 1) => {
+    pluck(freqOf(s, p), strength); const {W, padL, padR} = geo();
+    vib.current.push({s, x: padL + (p + .5) * (W - padL - padR) / POS, t0: performance.now()}); glow.current.push({s, p, t0: performance.now()});
+    setNote(STRINGS[s].name + ' · ' + nameOf(s, p));
+  };
+  useEffect(() => {                                          // the board
+    const c = canvas.current!, ctx = c.getContext('2d')!; let raf = 0;
+    const draw = () => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1), W = c.clientWidth, H = c.clientHeight;
+      if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      const {padL, padR, y} = geo(), now = performance.now(), x0 = padL, x1 = W - padR, span = x1 - x0;
+      ctx.fillStyle = 'rgba(201,170,108,.12)'; ctx.fillRect(x0 - 6, H * .08, 2, H * .84);                                     // the nut
+      for (let p = 1; p < POS; p++) { ctx.fillStyle = 'rgba(236,228,214,' + ([5, 7].includes(p) ? .16 : .06) + ')'; ctx.fillRect(x0 + p * span / POS, H * .12, 1, H * .76); }
+      for (let p = 0; p < POS; p++) if ([2, 4, 6, 9].includes(p)) { ctx.fillStyle = 'rgba(201,170,108,.35)'; ctx.beginPath(); ctx.arc(x0 + (p + .5) * span / POS, H * .5, 2.2, 0, 7); ctx.fill(); }
+      glow.current = glow.current.filter(g => now - g.t0 < 900);
+      for (const g of glow.current) { const a = 1 - (now - g.t0) / 900, gx = x0 + (g.p + .5) * span / POS, gy = y(g.s); const rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, 26); rg.addColorStop(0, 'rgba(201,170,108,' + .55 * a + ')'); rg.addColorStop(1, 'rgba(201,170,108,0)'); ctx.fillStyle = rg; ctx.fillRect(gx - 26, gy - 26, 52, 52); }
+      vib.current = vib.current.filter(v => now - v.t0 < 1600);
+      STRINGS.forEach((st, s) => {
+        const yy = y(s), vs = vib.current.filter(v => v.s === s);
+        ctx.beginPath(); ctx.lineWidth = st.w; ctx.strokeStyle = 'rgba(214,186,128,.95)'; ctx.shadowColor = 'rgba(201,170,108,.5)'; ctx.shadowBlur = vs.length ? 8 : 0;
+        for (let x = x0; x <= x1; x += 3) {
+          let dy = 0;
+          for (const v of vs) { const age = (now - v.t0) / 1000, env = Math.exp(-age * 2.6) * (1 - Math.min(1, Math.abs(x - v.x) / span) * .6); const shape = Math.sin(Math.PI * (x - x0) / span); dy += Math.sin(age * (60 + 20 * s) * 2) * 7 * env * shape; }
+          if (x === x0) ctx.moveTo(x, yy + dy); else ctx.lineTo(x, yy + dy);
+        }
+        ctx.stroke(); ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(236,228,214,.55)'; ctx.font = '500 10px Jost, "Helvetica Neue", Arial, sans-serif'; ctx.textAlign = 'right'; ctx.fillText(st.name.toUpperCase(), x0 - 14, yy + 3.5);
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw); return () => cancelAnimationFrame(raf);
+  }, []);
+  const hit = (e: RPointerEvent<HTMLCanvasElement>, drag: boolean) => {
+    const r = canvas.current!.getBoundingClientRect(), {W, H, padL, padR} = geo(), x = e.clientX - r.left, yy = e.clientY - r.top;
+    const s = Math.max(0, Math.min(3, Math.round((yy / H - .2) / .2))); if (Math.abs(yy - H * (.2 + s * .2)) > H * .11) return;
+    const p = Math.max(0, Math.min(POS - 1, Math.floor((x - padL) / ((W - padL - padR) / POS))));
+    const key = s + ':' + p; if (drag && key === last.current) return; last.current = key;
+    sound(s, p, drag ? .7 : 1);
+    if (mode === 'repeat') { played.current.push([s, p]); const i = played.current.length - 1, want = phrase.current[i];
+      if (!want || want[0] !== s || want[1] !== p) { setMode('miss'); return; }
+      if (played.current.length === phrase.current.length) setMode('won'); }
+  };
+  const listen = () => {
+    const len = Math.min(8, 3 + round), ph: Note[] = []; let s = 1 + Math.floor(Math.random() * 2), p = 2 + Math.floor(Math.random() * 5);
+    for (let i = 0; i < len; i++) { ph.push([s, p]); const step = [-2, -1, 1, 2][Math.floor(Math.random() * 4)]; p += step; if (p < 0 || p >= POS) { p -= step * 2; } if (Math.random() < .25) s = Math.max(0, Math.min(3, s + (Math.random() < .5 ? -1 : 1))); }
+    phrase.current = ph; played.current = []; setMode('listen');
+    ph.forEach((n, i) => window.setTimeout(() => sound(n[0], n[1], .9), 420 * i + 300));
+    window.setTimeout(() => setMode('repeat'), 420 * len + 500);
+  };
+  const msg = {free: t('현을 건드리면 소리가 납니다. 따라 긋듯 밀면 음이 이어집니다.', 'Touch a string to sound it; draw along it and the notes run together.'),
+    listen: t('듣고 계세요…', 'Listen…'), repeat: t('이제 같은 소절을 연주해 보세요.', 'Now play the same phrase back.'),
+    won: t(`같은 소절입니다. ${round}번째 소절 완성.`, `That is the phrase. Round ${round} complete.`), miss: t('조금 달랐습니다. 다시 들어 볼까요?', 'Not quite. Shall we hear it again?')}[mode];
+  return <div className="lw-game lw-stage"><span className="label">Game II · The String Stage</span><h3>{lines(t('현의 무대', 'The string stage'))}</h3>
+    <p className="muted">{msg}</p>
+    <div className="lw-board" ref={wrap}><canvas ref={canvas} onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); hit(e, false); }} onPointerMove={e => { if (e.buttons) hit(e, true); }} onPointerUp={() => { last.current = ''; }} aria-label={t('네 개의 현', 'Four strings')}/>
+      <span className="lw-note" aria-live="polite">{note}</span></div>
+    <p className="lw-score">
+      {mode === 'won' ? <button type="button" className="text-link" onClick={() => { setRound(r => r + 1); listen(); }}>{t('다음 소절', 'Next phrase')}</button>
+        : mode === 'miss' ? <button type="button" className="text-link" onClick={() => { played.current = []; setMode('listen'); phrase.current.forEach((n, i) => window.setTimeout(() => sound(n[0], n[1], .9), 420 * i + 300)); window.setTimeout(() => setMode('repeat'), 420 * phrase.current.length + 500); }}>{t('다시 듣기', 'Hear it again')}</button>
+        : <button type="button" className="text-link" disabled={mode === 'listen'} onClick={listen}>{mode === 'repeat' ? t('다시 듣기', 'Hear it again') : t('한 소절 듣고 따라 하기', 'Echo · listen and play back')}</button>}
+      {mode !== 'free' && <button type="button" className="text-link" onClick={() => { setMode('free'); setRound(1); }}>{t('자유 연주', 'Free play')}</button>}</p></div>;
 }
 
 function LoungeGames() {
   const {t} = useT();
   return <section className="lw-games"><div className="lw-games-head"><span className="label">The Playroom</span><h2>{lines(t('놀이방', 'The playroom'))}</h2>
       <p className="muted">{t('잠깐이면 됩니다. 한 판, 한 소절.', 'A minute is enough. One round, one phrase.')}</p></div>
-    <div className="lw-games-grid"><EmblemPairs/><FourStrings/></div></section>;
+    <div className="lw-games-grid"><EmblemPairs/><StringStage/></div></section>;
 }
 
 /* Car diffuser — Tchaikovsky No.16, holiday edition (copy as written by the house) */
@@ -522,7 +600,7 @@ const LOUNGE_API = '';
 type Guest = {k: string; name: string; tier: Tier};
 async function verifyGuest(k: string): Promise<Guest | null> {
   if (!LOUNGE_API) return null;
-  try { const r = await fetch(LOUNGE_API + '/verify', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({k})}); if (!r.ok) return null; const d = await r.json(); return d.ok ? {k, name: d.name, tier: d.tier} : null; } catch { return null; }
+  try { const r = await fetch(LOUNGE_API + '/verify', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({k})}); if (!r.ok) return null; const d = await r.json() as {ok?: boolean; name?: string; tier?: Tier}; return d.ok && d.name && d.tier ? {k, name: d.name, tier: d.tier} : null; } catch { return null; }
 }
 const TIER_HASH: Record<string, Tier> = {
   '519ff6faf7fc99c02d1dbd5a5cd568f45d3618210c35b11c22ca9599918d9328': 'guest',
@@ -585,7 +663,6 @@ function Lounge() {
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
     <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><LoungeGames/>{tier === 'circle' && <CarDiffuser/>}
-    <GiftScents/>
     {tier === 'circle' && <><section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>
         <figcaption><span className="label">{t(...cat)}</span><h3>{lines(t(...name))}</h3><p>{line}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')}</a></figcaption></figure>)}</div></section></>}

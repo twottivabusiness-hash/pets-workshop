@@ -1330,7 +1330,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const music = <>
     <Scene img="eve-quartet.jpg" eyebrow="BELiOR Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술. 실제 무대와 현장에서 연주하는 BELiOR의 음악입니다.', 'Music performed live, on real stages and at real events.')} pos="86% 55%"/>
-    <YouTubeFilm/>
+    <MuseFilm src="performance.mp4" poster="performance-poster.jpg" label="The Muse of BELiOR · Live"/>
     <section className="section"><Head eyebrow="Music" title={t('음악은 저녁을 작곡합니다', 'Music composes the evening')} text="Where Music Becomes Memory."/>
       <div className="doors">
         <Door href="/music/artists" img="bu-backstage.jpg" eyebrow="Artists" title={t('연주진', 'Artists')} text={t('현장에서 함께 호흡하는 연주진.', 'The musicians on stage.')}/>
@@ -1351,7 +1351,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const performances = <>
     <Scene img="o-gala-ensemble.jpg" eyebrow="Music · Performances" title={t('공연 포트폴리오', 'Performances')} lede="The Sound of an Extraordinary Evening."/>
-    <MuseFilm src="muse-v2.mp4" poster="muse-v2-poster.jpg" label="The Muse of BELiOR"/>
+    <MuseFilm src="performance.mp4" poster="performance-poster.jpg" label="The Muse of BELiOR · Live"/>
     <section className="section"><Head eyebrow="Portfolio" title={t('함께한 저녁', 'Evenings we shared')}/>
       <div className="rows">
         <a className="row" href="/music/gala"><h3>Brand Gala Dinner Show</h3><p>{t('서울 · 한강을 내려다보는 야외 디너 · 현악 4중주 라이브 연주', 'Seoul · Outdoor dinner above the Han River · Live string quartet')}</p><span className="more">Editorial</span></a>
@@ -1367,7 +1367,6 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const gala = <>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial · Brand Gala Dinner Show, Seoul" title={t('강 위로 저무는 저녁', 'An evening over the river')} lede={t('브랜드 갈라 디너 쇼에서 BELiOR는 현장의 라이브 연주를 맡았고, 연주에 대해 좋은 평가를 받았습니다.', 'At a brand gala dinner show, BELiOR performed live and was well received.')} pos="center 55%"/>
-    <MuseFilm src="reel-scent.mp4" poster="reel-scent-poster.jpg" label="Scent of a Woman · performance" vertical/>
     <section className="section">
       <div className="spread"><figure className="c-8"><img src={V('eve-quartet.jpg')} alt={t('행사장 앞 야외 4중주', 'Outdoor quartet at the venue')} loading="lazy"/><figcaption>I. Reception</figcaption></figure>
         <div className="copy c-4"><span className="label">Reception</span><h3>{lines(t('손님이 도착하는 시간', 'As the guests arrive'))}</h3><p className="muted">{t('조명이 켜지기 시작할 무렵, 리셉션의 공기를 현악 4중주로 채웠습니다.', 'As the lights came on, a string quartet filled the reception.')}</p></div></div>

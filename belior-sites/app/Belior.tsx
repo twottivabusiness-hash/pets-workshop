@@ -226,6 +226,162 @@ function MuseFilm() {
       <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button></section>;
 }
 
+/* ---------- Inquiry, as on the September site ----------
+   Enquiries are delivered by Web3Forms. Paste the house's Web3Forms access key below
+   (web3forms.com → your form → Access Key). While it is empty, the form opens the visitor's
+   mail app with the enquiry already written, addressed to the house. */
+const W3F_KEY = '';
+const KAKAO = 'https://pf.kakao.com/_UAxfxiX';
+type Field = {name: string; label: [string, string]; type: 'select' | 'text' | 'date' | 'tel' | 'email' | 'textarea'; options?: [string, string][]; ph?: [string, string]; req?: boolean; full?: boolean};
+const CONTACT_FIELDS: Field[] = [
+  {name: 'contact_name', label: ['담당자 성함', 'Your name'], type: 'text'},
+  {name: 'contact_phone', label: ['연락처', 'Phone'], type: 'tel', req: true},
+  {name: 'contact_email', label: ['이메일', 'Email'], type: 'email', full: true},
+];
+const PERF_FIELDS: Field[] = [
+  {name: 'type', label: ['행사 유형', 'Occasion'], type: 'select', options: [['기업 행사', 'Corporate event'], ['호텔 연회 · 갈라 디너', 'Hotel banquet · gala dinner'], ['브랜드 행사', 'Brand event'], ['프라이빗 디너', 'Private dinner'], ['웨딩', 'Wedding'], ['기타', 'Other']]},
+  {name: 'guests', label: ['예상 인원', 'Guests'], type: 'select', options: [['30명 이하', 'Up to 30'], ['30–100명', '30–100'], ['100–300명', '100–300'], ['300명 이상', '300+'], ['미정', 'Not yet known']]},
+  {name: 'date', label: ['희망 날짜', 'Date'], type: 'date'},
+  {name: 'ensemble', label: ['선호 편성', 'Ensemble'], type: 'select', options: [['솔로', 'Solo'], ['듀오', 'Duo'], ['트리오', 'Trio'], ['현악 4중주', 'String quartet'], ['확장 편성 (피아노 · 하프 등)', 'Extended (piano, harp…)'], ['상담 후 결정', 'To discuss']]},
+  {name: 'venue', label: ['행사 장소', 'Venue'], type: 'text'},
+  {name: 'mood', label: ['프로그램 분위기', 'Programme mood'], type: 'select', options: [['우아한 클래식', 'Elegant classical'], ['영화 OST · 크로스오버', 'Film & crossover'], ['로맨틱', 'Romantic'], ['웅장 · 격식', 'Grand & formal'], ['상담 후 결정', 'To discuss']]},
+  {name: 'city', label: ['도시', 'City'], type: 'select', options: [['서울', 'Seoul'], ['경기 · 인천', 'Gyeonggi · Incheon'], ['그 외 지역', 'Elsewhere']]},
+  {name: 'time', label: ['시간', 'Time'], type: 'text', ph: ['예: 18:30 리셉션 / 19:00 본행사', 'e.g. 18:30 reception / 19:00 dinner']},
+  ...CONTACT_FIELDS,
+  {name: 'message', label: ['추가 요청 사항', 'Further requests'], type: 'textarea', full: true, ph: ['세부 내용이나 특별히 원하시는 사항을 자유롭게 적어 주세요.', 'Anything else you would like us to know.']},
+];
+const TOPICS: [string, string][] = [['프라이빗 이벤트', 'Private event'], ['음악이 있는 저녁', 'An evening with music'], ['기프팅 · 퍼스널라이즈', 'Gifting & personalisation'], ['콘텐츠 제작 · 영상 · 기획', 'Content — film & planning'], ['오브제', 'Objects'], ['기타', 'Other']];
+const EXPERIENCES: [string, string][] = [['음악', 'Music'], ['공간 연출', 'Spatial direction'], ['기프트 · 오브제', 'Gifts & objects'], ['영상', 'Film']];
+
+async function sendInquiry(subject: string, title: string, body: string[], d: Record<string, string>) {
+  if (!W3F_KEY) throw Error('no key');
+  const r = await fetch('https://api.web3forms.com/submit', {method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+    body: JSON.stringify({access_key: W3F_KEY, subject: '[BELiOR ' + subject + '] ' + title + ' / ' + (d.date || '일정 미정'), from_name: 'BELiOR 홈페이지 ' + subject,
+      name: d.contact_name || title, email: d.contact_email || MAIL2, message: body.join('\n')})});
+  let j: {success?: boolean} | null = null; try { j = await r.json(); } catch {}
+  if (!r.ok || (j && j.success === false)) throw Error('HTTP ' + r.status);
+}
+
+function Consent({on, set, items}: {on: boolean; set: (v: boolean) => void; items: [string, string]}) {
+  const {t} = useT();
+  return <div className="pf-consent"><label className="pf-check"><input type="checkbox" checked={on} onChange={e => set(e.target.checked)}/>{t('[필수] 개인정보 수집·이용에 동의합니다.', '[Required] I agree to the collection and use of personal information.')}</label>
+    <dl><div><dt>{t('수집 항목', 'Collected')}</dt><dd>{t(...items)}</dd></div><div><dt>{t('이용 목적', 'Purpose')}</dt><dd>{t('문의 확인 및 답변', 'Replying to your enquiry')}</dd></div>
+      <div><dt>{t('보유 기간', 'Retention')}</dt><dd>{t('문의 처리 후 1년 (관계 법령에 따라 보존이 필요한 경우 해당 기간). 메일 전송 서비스(Web3Forms, 미국 서버)에는 최대 3년 보관될 수 있습니다.', 'One year after handling (longer where law requires). The mail relay (Web3Forms, US servers) may keep it up to three years.')}</dd></div></dl>
+    <p className="pf-note">{t('동의를 거부하실 수 있으나, 거부하시면 문의 접수가 어렵습니다.', 'You may decline, but we cannot then receive your enquiry.')}</p></div>;
+}
+
+function useSend() {
+  const {t} = useT();
+  const [state, setState] = useState<'' | 'sending' | 'done' | 'error'>(''), [msg, setMsg] = useState('');
+  async function run(ok: boolean, why: string, job: () => Promise<void>, fallback: () => string) {
+    if (!ok) { setMsg(why); return false; }
+    setMsg(''); setState('sending');
+    try { await job(); setState('done'); setMsg(t('문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.', 'Thank you. The house will be in touch.')); return true; }
+    catch { setState('error'); setMsg(t('메일 앱이 열리면 보내기를 눌러 주세요. 열리지 않으면 ' + MAIL + ' 으로 보내 주세요.', 'Press send in your mail app. If it does not open, write to ' + MAIL + '.')); window.location.href = fallback(); return false; }
+  }
+  return {state, msg, run};
+}
+
+function FieldInput({f, value, set}: {f: Field; value: string; set: (v: string) => void}) {
+  const {t} = useT();
+  const ph = f.ph ? t(...f.ph) : undefined;
+  return <label className={f.full ? 'full' : ''}><span>{t(...f.label)}{f.req && <span className="req">*</span>}</span>
+    {f.type === 'select' ? <select value={value} onChange={e => set(e.target.value)}><option value="">{t('선택해 주세요', 'Please choose')}</option>{(f.options || []).map(([k, e]) => <option key={k} value={k}>{t(k, e)}</option>)}</select>
+      : f.type === 'textarea' ? <textarea rows={5} value={value} placeholder={ph} onChange={e => set(e.target.value)}/>
+      : <input type={f.type} value={value} placeholder={ph} required={f.req} onChange={e => set(e.target.value)}/>}</label>;
+}
+
+const mailto = (subject: string, body: string[]) => 'mailto:' + MAIL + '?cc=' + MAIL2 + '&subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body.join('\n'));
+
+function PerformanceInquiry() {
+  const {t} = useT();
+  const [d, setD] = useState<Record<string, string>>({}), [ok, setOk] = useState(false);
+  const {state, msg, run} = useSend();
+  const set = (k: string) => (v: string) => setD(x => ({...x, [k]: v}));
+  const body = () => PERF_FIELDS.map(f => '■ ' + f.label[0] + ' : ' + (d[f.name] || '-'));
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fine = await run(!!d.contact_phone && ok, !d.contact_phone ? t('연락처를 입력해 주세요.', 'Please add a phone number.') : t('개인정보 수집·이용에 동의해 주세요.', 'Please accept the personal information notice.'),
+      () => sendInquiry('공연 문의', d.type || '공연', body(), d), () => mailto('[BELiOR 공연 문의] ' + (d.type || ''), body()));
+    if (fine) { setD({}); setOk(false); }
+  }
+  return <div className="pf">
+    <section className="pi-hero"><img src={V('pi-hero.jpg')} alt=""/><div className="pi-hero-in"><img className="sym" src={V('symbol-gold.png')} alt=""/>
+      <h1>PERFORMANCE<br/>INQUIRY</h1><p className="ko-sub">공연 문의</p><span className="rule"/><p className="tag">MUSIC CREATES A MORE BEAUTIFUL TOMORROW</p></div></section>
+    <section className="pi-intro"><p className="side-label">BELiOR<br/>PERFORMANCE<br/>INQUIRY</p>
+      <div className="pi-intro-copy"><h2>{lines(t('특별한 순간을 위한,\n가장 아름다운 음악의 경험.', 'For the moments that matter,\nthe most beautiful music.'))}</h2>
+        <p>{t('BELiOR는 공간과 사람, 그리고 이야기에 맞는 최적의 공연을 제안합니다. 프라이빗 만찬부터 기업 행사, 브랜드 이벤트까지 — 예술이 머무는 순간을 함께 만들어갑니다.', 'BELiOR proposes the right performance for the place, the people and the story — from private dinners to corporate and brand evenings.')}</p>
+        <p>{t('연주는 ', 'Performed by ')}<a href="/music/artists">{t('TWOTTIVA 현악앙상블', 'TWOTTIVA string ensemble')}</a>{t('이 맡습니다.', '.')}</p></div>
+      <div className="pi-intro-media"><p className="tag">TAILORED MUSIC<br/>FOR MEANINGFUL MOMENTS.</p><img src={V('pi-intro.jpg')} alt="" loading="lazy"/></div></section>
+    <section className="pi-form-sec" id="brief"><div className="pi-form-media"><img src={V('pi-side.jpg')} alt="" loading="lazy"/>
+        <div><p className="big">A MORE<br/>BEAUTIFUL<br/>TOMORROW</p><span className="rule"/><p>{t('음악은 단순한 연주가 아닌, 사람과 공간을 잇는 특별한 경험입니다. BELiOR는 고객의 철학과 목적에 맞춰 세심하게 기획된 공연을 제안합니다.', 'Music is not only playing — it joins people and place. BELiOR proposes performances planned carefully around your purpose.')}</p></div></div>
+      <form className="pf-card" onSubmit={submit} noValidate><h2>INQUIRY FORM</h2><p className="pf-intro">{t('아래 내용을 알려주시면, 담당자가 확인 후 맞춤형 제안을 드립니다.', 'Share the details below and we will return with a tailored proposal.')}</p>
+        <div className="pf-grid">{PERF_FIELDS.map(f => <FieldInput key={f.name} f={f} value={d[f.name] || ''} set={set(f.name)}/>)}</div>
+        <Consent on={ok} set={setOk} items={['담당자 성함, 연락처, 이메일, 행사 정보', 'Name, phone, email and event details']}/>
+        <button className="pf-submit" type="submit" disabled={state === 'sending'}>{state === 'sending' ? t('보내는 중…', 'Sending…') : 'SUBMIT INQUIRY →'}</button>
+        {msg && <p className="pf-status" role="status">{msg}</p>}</form></section>
+    <section className="pi-process"><p className="eyebrow">CONSULTATION PROCESS</p><p className="sub">{t('세심한 상담을 통해, 가장 완벽한 순간을 준비합니다.', 'Careful consultation, for the right moment.')}</p>
+      <ol>{[['INQUIRY', '공연 문의', 'Inquiry', '행사 개요를 전달해 주세요.', 'Send us the outline of the occasion.'], ['CONSULTATION', '상담 및 기획', 'Consultation', '담당자가 세부 내용을 바탕으로 맞춤 제안을 드립니다.', 'We return with a proposal built on the details.'], ['PROPOSAL', '제안 및 확정', 'Proposal', '공연 구성과 세부 사항을 확정하고, 최상의 무대를 준비합니다.', 'Programme and details are confirmed, and the stage prepared.']].map(([en, k1, e1, k2, e2], i) =>
+        <li key={en}><span className="no">0{i + 1}</span><b>{en}</b><span className="ko">{t(k1, e1)}</span><p>{t(k2, e2)}</p></li>)}</ol></section>
+    <section className="pi-ours"><div className="lead"><h2>OUR<br/>PERFORMANCE</h2><p>{t('공간과 목적에 맞춘, 다양한 형태의 공연을 제안합니다.', 'Performances shaped to the place and the purpose.')}</p></div>
+      {[['pi-o1.jpg', 'PRIVATE DINNER', '프라이빗 만찬', 'Private dinner'], ['pi-o2.jpg', 'CORPORATE EVENT', '기업 행사', 'Corporate'], ['pi-o3.jpg', 'BRAND EVENT', '브랜드 이벤트', 'Brand'], ['pi-o4.jpg', 'SPECIAL OCCASION', '특별한 순간', 'Special occasions']].map(([im, en, k, e]) =>
+        <figure key={en}><img src={V(im)} alt="" loading="lazy"/><figcaption><b>{en}</b><span>{t(k, e)}</span></figcaption></figure>)}</section>
+  </div>;
+}
+
+function InviteContact() {
+  const {t} = useT();
+  const [d, setD] = useState<Record<string, string>>({}), [exp, setExp] = useState<string[]>([]), [ok, setOk] = useState(false), [open, setOpen] = useState('appointment');
+  const {state, msg, run} = useSend();
+  const set = (k: string) => (v: string) => setD(x => ({...x, [k]: v}));
+  const body = () => ['■ 문의 주제 : ' + (d.topic || '-'), '■ 행사명 : ' + (d.event_name || '-'), '■ 담당자 : ' + (d.contact_name || '-'), '■ 연락처 : ' + (d.contact_phone || '-'), '■ 이메일 : ' + (d.contact_email || '-'),
+    '■ 희망 일자 : ' + (d.date || '-') + ' ' + (d.time || ''), '■ 장소 : ' + (d.venue || '-'), '■ 예상 인원 : ' + (d.guests || '-'), '■ 원하는 경험 : ' + (exp.join(', ') || '-'), '■ 내용 : ' + (d.message || '-')];
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const need = !d.event_name || !d.contact_phone;
+    const fine = await run(!need && ok, need ? t('행사명과 연락처를 입력해 주세요.', 'Please add the occasion and a phone number.') : t('개인정보 수집·이용에 동의해 주세요.', 'Please accept the personal information notice.'),
+      () => sendInquiry(d.topic || '문의', d.event_name, body(), d), () => mailto('[BELiOR 문의] ' + (d.event_name || ''), body()));
+    if (fine) { setD({}); setExp([]); setOk(false); }
+  }
+  const services: [string, [string, string], [string, string], string[], string?][] = [
+    ['appointment', ['프라이빗 상담', 'Private appointment'], ['원하시는 저녁과 오브제에 관해 하우스와 직접 이야기를 나누실 수 있습니다.', 'Speak with the house directly about the evening, or the piece, you have in mind.'], ['ct-appt1.jpg', 'ct-appt2.jpg']],
+    ['personal', ['퍼스널라이즈', 'Personalisation'], ['로고 각인과 메시지 카드로, 건네는 분의 마음이 오브제에 남도록 준비합니다.', 'Engraving and message cards, so that the giver remains with the piece.'], ['ct-pers1.jpg', 'ct-pers2.jpg'], '/objects'],
+    ['gifting', ['기프팅', 'Gifting'], ['총회와 갈라디너, 연말의 감사 인사까지. 수량과 예산에 맞춰 하우스의 오브제로 구성합니다.', 'Assemblies, gala dinners and year-end thanks — composed from the house’s objects to quantity and budget.'], ['ct-gift1.jpg', 'ct-gift2.jpg'], '/objects'],
+    ['evening', ['음악이 있는 저녁', 'The evening'], ['자리의 흐름을 먼저 읽고, 그 위에 음악과 공간을 함께 구성합니다.', 'We read the flow of the room first, then compose music and place upon it.'], ['pi-hero.jpg', 'ct-eve2.jpg'], '/music'],
+    ['content', ['콘텐츠 제작', 'Content production'], ['무대 배경 영상과 영상 편집, 프로그램 그래픽까지 그 저녁의 세계관에 맞춰 기획하고 제작합니다.', 'Stage visuals, film editing and programme graphics, made for the world of each evening.'], ['op-onsite.jpg', 'visual-piano.jpg'], '/atelier'],
+  ];
+  return <div className="pf">
+    <section className="ct-hero"><div className="envelope" aria-hidden="true"><div className="card"><em>You are invited to write to the house.</em></div></div>
+      <p className="eyebrow">BY INVITATION</p><h1>{lines(t('초대를 청하다', 'Request an invitation'))}</h1>
+      <p className="lead">{t('BELiOR의 저녁은 초대로 열립니다. 함께하고 싶은 저녁의 이야기를 남겨 주시면, 하우스가 직접 회신드립니다.', 'Evenings at BELiOR open by invitation. Tell us about the evening you have in mind, and the house will reply in person.')}</p></section>
+    <section className="ct-services"><p className="eyebrow">{t('BELiOR 서비스 경험', 'The BELiOR services')}</p>
+      {services.map(([id, title, text, imgs, link]) => <div className={'acc' + (open === id ? ' on' : '')} key={id}>
+        <button type="button" onClick={() => setOpen(open === id ? '' : id)} aria-expanded={open === id}>{lines(t(...title))}<span aria-hidden="true">{open === id ? '−' : '+'}</span></button>
+        {open === id && <div className="acc-body"><div className="acc-imgs">{imgs.map(im => <img key={im} src={V(im)} alt="" loading="lazy"/>)}</div>
+          <div className="acc-foot"><p>{t(...text)}</p>{link ? <a className="text-link" href={link}>{t('자세히 보기', 'Learn more')}</a> : <a className="text-link" href={KAKAO} target="_blank" rel="noopener noreferrer">{t('카카오톡으로 상담하기', 'Speak with us on KakaoTalk')}</a>}</div></div>}</div>)}</section>
+    <form className="pf-card ct-form" onSubmit={submit} noValidate><p className="eyebrow">ENQUIRY</p><h2>{lines(t('문의 남기기', 'Leave an enquiry'))}</h2>
+      <p className="pf-intro">{t('행사의 목적과 원하시는 저녁을 들려주세요. 정해지지 않은 항목은 비워 두셔도 됩니다.', 'Tell us the purpose and the evening you imagine. Leave blank anything not yet decided.')}</p>
+      <div className="pf-grid">
+        <FieldInput f={{name: 'topic', label: ['문의 주제', 'Subject'], type: 'select', options: TOPICS, full: true}} value={d.topic || ''} set={set('topic')}/>
+        <FieldInput f={{name: 'event_name', label: ['행사명', 'Occasion'], type: 'text', req: true, full: true, ph: ['예: 창립 기념 갈라디너', 'e.g. Anniversary gala dinner']}} value={d.event_name || ''} set={set('event_name')}/>
+        {CONTACT_FIELDS.map(f => <FieldInput key={f.name} f={f} value={d[f.name] || ''} set={set(f.name)}/>)}
+        <FieldInput f={{name: 'date', label: ['희망 일자', 'Date'], type: 'date'}} value={d.date || ''} set={set('date')}/>
+        <FieldInput f={{name: 'time', label: ['시간', 'Time'], type: 'text', ph: ['예: 19:00', 'e.g. 19:00']}} value={d.time || ''} set={set('time')}/>
+        <FieldInput f={{name: 'venue', label: ['장소', 'Venue'], type: 'text'}} value={d.venue || ''} set={set('venue')}/>
+        <FieldInput f={{name: 'guests', label: ['예상 인원', 'Guests'], type: 'text'}} value={d.guests || ''} set={set('guests')}/>
+        <fieldset className="full"><legend>{t('원하시는 경험', 'The experience you have in mind')}</legend><div className="pf-chips">{EXPERIENCES.map(([k, e]) => <label key={k} className={'pf-chip' + (exp.includes(k) ? ' on' : '')}>
+          <input type="checkbox" checked={exp.includes(k)} onChange={() => setExp(x => x.includes(k) ? x.filter(y => y !== k) : [...x, k])}/>{t(k, e)}</label>)}</div></fieldset>
+        <FieldInput f={{name: 'message', label: ['행사 목적과 원하시는 분위기', 'Purpose and atmosphere'], type: 'textarea', full: true}} value={d.message || ''} set={set('message')}/></div>
+      <Consent on={ok} set={setOk} items={['담당자 성함, 연락처, 이메일, 문의 내용', 'Name, phone, email and enquiry']}/>
+      <button className="pf-submit" type="submit" disabled={state === 'sending'}>{state === 'sending' ? t('보내는 중…', 'Sending…') : t('초대 요청 보내기', 'Send the request')}</button>
+      {msg && <p className="pf-status" role="status">{msg}</p>}</form>
+    <section className="ct-kakao"><p className="eyebrow">KAKAOTALK CHANNEL</p><h2>{lines(t('카카오톡으로도 이야기 나눌 수 있습니다', 'We are also on KakaoTalk'))}</h2>
+      <p>{t('저녁과 오브제, 선물에 관한 이야기를 편하게 남겨 주세요. 하우스가 이어서 안내해 드립니다.', 'Leave a note about an evening, a piece or a gift, and the house will take it from there.')}</p>
+      <a className="pf-submit inline" href={KAKAO + '/chat'} target="_blank" rel="noopener noreferrer">{t('카카오톡으로 상담하기', 'Chat on KakaoTalk')}</a>
+      <a className="text-link" href={KAKAO} target="_blank" rel="noopener noreferrer">{t('채널 추가하기', 'Add the channel')}</a></section>
+  </div>;
+}
+
 /* No. 01 — The Tchaikovsky Edition */
 function Tchaikovsky() {
   const {t} = useT();
@@ -339,18 +495,53 @@ function Founder() {
   </section>;
 }
 
+const PRINCIPALS: {im: string; ko: string; en: string; inst: string; role: [string, string]; edu: [string, string][]; stage: [string, string][]}[] = [
+  {im: 'sa-hyerin.jpg', ko: '여혜린', en: 'Hyerin Yeo', inst: 'Violin I', role: ['바이올리니스트 · 예술감독 · 편곡', 'Violinist · Artistic Director · Arranger'],
+    edu: [['성신여자대학교 기악과 바이올린 전공', 'Violin, Sungshin Women’s University'], ['TWOTTIVA 프로그램 기획 및 공연 총괄', 'Programme and performance director, TWOTTIVA']],
+    stage: [['한국여성공인회계사회 이·취임식 총괄', 'Directed the Korea Women CPA Association inauguration'], ['국회의원 내빈행사 — 아르테움 컵처', 'Parliamentary guest event — Arteum'], ['KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th anniversary concert']]},
+  {im: 'sa-samuel.jpg', ko: '김사무엘', en: 'Samuel Kim', inst: 'Violin II', role: ['바이올리니스트', 'Violinist'],
+    edu: [['한국예술종합학교 출신', 'Korea National University of Arts']],
+    stage: [['청와대 영빈관 대통령 초청 만찬', 'Presidential state dinner, Cheong Wa Dae guest house'], ['2022 대통령 취임식 만찬 · 서울신라호텔', '2022 presidential inauguration dinner, The Shilla Seoul'], ['하나은행', 'Hana Bank']]},
+  {im: 'sa-dohyun.jpg', ko: '김도현', en: 'Dohyun Kim', inst: 'Viola', role: ['비올리스트', 'Violist'],
+    edu: [['한국예술종합학교 출신', 'Korea National University of Arts'], ['심포니송 단원', 'Member, Symphony S.O.N.G']],
+    stage: [['삼성화재 초청 콘서트 · 시그니엘 서울', 'Samsung Fire & Marine concert · Signiel Seoul'], ['롯데호텔', 'Lotte Hotel'], ['2023 Carnegie Hall', '2023 Carnegie Hall']]},
+  {im: 'sa-yohan.jpg', ko: '김요한', en: 'Yohan Kim', inst: 'Cello', role: ['첼리스트 · 아트 디렉터', 'Cellist · Art Director'],
+    edu: [['미국 메네스 음악대학 · 신시내티 음악대학 출신', 'Mannes School of Music · Cincinnati College-Conservatory of Music'], ['국내외 주요 공연장 및 오케스트라 수석 연주', 'Principal chair with orchestras in Korea and abroad']],
+    stage: [['주한 이탈리아대사관 초청 연주', 'Invited performance, Embassy of Italy in Korea'], ['CCM Philharmonia 수석', 'Principal, CCM Philharmonia']]},
+];
+const COLLECTIVE: [string, string, string, string, [string, string][]][] = [
+  ['ac-hsb.jpg', '한솔빈', 'Solbin Han', 'Violin', [['이화여자대학교 출신', 'Ewha Womans University'], ['기업·호텔행사 현악앙상블 다수 활동', 'Corporate and hotel ensembles']]],
+  ['ac-lsi.jpg', '이수인', 'Suin Lee', 'Viola', [['이화여자대학교 출신', 'Ewha Womans University'], ['실내악·행사 연주 다수 활동', 'Chamber music and events']]],
+  ['ac-wks.jpg', '우경식', 'Kyungsik Woo', 'Viola', [['경희대학교 대학원 출신', 'Kyung Hee University, graduate school'], ['국립심포니콘서트오케스트라 단원', 'Member, National Symphony Concert Orchestra']]],
+  ['ac-kse.jpg', '김송은', 'Songeun Kim', 'Cello', [['성신여자대학교 출신', 'Sungshin Women’s University'], ['독일 국립 Augsburg, LMC 석사과정 재학', 'Master’s study, Leopold Mozart College, Augsburg']]],
+  ['ac-jjh.jpg', '정자현', 'Jahyun Jung', 'Harp', [['한국예술종합학교 출신', 'Korea National University of Arts'], ['국내 주요 행사 하프 협연 활동', 'Harp at major events in Korea']]],
+  ['ac-psj.jpg', '박승준', 'Seungjun Park', 'Timpani', [['서울대학교 출신', 'Seoul National University'], ['국내 오케스트라 및 행사 타악기 연주', 'Percussion with orchestras and events']]],
+];
+
 function Artists() {
   const {t} = useT();
-  const people: [string, string, string, string, string[]][] = [
-    ['artist-hyerin.jpg', '여혜린', 'Hyerin Yeo', 'Violin I · Founder · Artistic Director', [t('한국여성공인회계사회 이·취임식 총괄', 'Directed the Korea Women CPA Association inauguration'), t('국회의원 내빈행사 총괄', 'Directed a National Assembly guest event')]],
-    ['artist-samuel.jpg', '김사무엘', 'Samuel Kim', 'Violin II', [t('청와대 영빈관 대통령 초청 만찬', 'Presidential state dinner, Cheong Wa Dae guest house'), t('2022 대통령 취임식 만찬 · 서울신라호텔', '2022 Presidential inauguration dinner · The Shilla Seoul'), t('하나은행', 'Hana Bank')]],
-    ['artist-dohyun.jpg', '김도현', 'Dohyun Kim', 'Viola', [t('삼성화재 초청 콘서트 · 시그니엘 서울', 'Samsung Fire & Marine concert · Signiel Seoul'), t('롯데호텔', 'Lotte Hotel'), '2023 Carnegie Hall']],
-    ['artist-yohan.jpg', '김요한', 'Yohan Kim', 'Cello · Art Director', [t('주한 이탈리아대사관 초청 연주', 'Invited performance, Embassy of Italy in Korea'), t('Mannes 석사 · CCM Philharmonia 수석', 'Mannes M.M. · Principal, CCM Philharmonia')]],
-  ];
-  return <section className="section artists"><Head eyebrow="The Artists · Signature Quartet" title="The Artists on Stage" text={t('BELiOR 현악 4중주 무대에 서는 TWOTTIVA 시그니처 연주진입니다.', 'The TWOTTIVA signature artists who take the stage for BELiOR’s string quartet.')}/>
-    <div className="ar-grid">{people.map(([im, ko, en, role, cv]) => <figure className="ar" key={ko}><div className="ph"><img src={V(im)} alt={t(ko, en)} loading="lazy"/></div>
-      <figcaption><span className="label">{role}</span><h3>{lines(t(ko, en))}</h3><ul>{cv.map(c => <li key={c}>{c}</li>)}</ul></figcaption></figure>)}</div>
-    <p className="muted small">{t('개인 이력은 해당 연주자의 수행 경력입니다.', 'Credits are each artist’s own performance history.')}</p></section>;
+  return <section className="section artists" id="artists"><Head eyebrow="The Artists · Signature Quartet" title="The Artists on Stage" text={t('BELiOR 무대에 서는 TWOTTIVA 시그니처 연주진입니다.', 'The TWOTTIVA signature quartet on the BELiOR stage.')}/>
+    <div className="ar-grid">{PRINCIPALS.map(a => <figure className="ar" key={a.ko}><div className="ph"><img src={V(a.im)} alt={t(a.ko, a.en)} loading="lazy" style={{objectPosition: 'center 12%'}}/></div>
+      <figcaption><span className="label">{a.inst}</span><h3>{lines(t(a.ko, a.en))}</h3><p className="ar-role">{t(...a.role)}</p>
+        <ul className="ar-edu">{a.edu.map(([k, e]) => <li key={k}>{t(k, e)}</li>)}</ul>
+        <ul>{a.stage.map(([k, e]) => <li key={k}>{t(k, e)}</li>)}</ul></figcaption></figure>)}</div>
+    <div className="collective"><span className="label">Artist Collective</span><h3>{lines(t('함께 무대에 서는 연주자', 'Artists who join the stage'))}</h3>
+      <p className="muted">{t('행사의 규모와 편성에 맞춰 함께하는 TWOTTIVA 협업 연주진입니다.', 'TWOTTIVA collaborators, joining as the occasion and ensemble require.')}</p>
+      <div className="col-grid">{COLLECTIVE.map(([im, ko, en, inst, cv]) => <figure key={ko}><div className="ph"><img src={V(im)} alt={t(ko, en)} loading="lazy"/></div>
+        <figcaption><span className="label">{inst}</span><h4>{lines(t(ko, en))}</h4><ul>{cv.map(([k, e]) => <li key={k}>{t(k, e)}</li>)}</ul></figcaption></figure>)}</div></div>
+    <div className="quality"><span className="label">Quality Standard</span>
+      <ol>{[['PROGRAMMING', '행사 목적과 분위기에 맞춘 프로그램 구성', 'A programme shaped to the purpose and mood'], ['DIRECTION', '사전 악보 및 연주 방향 공유', 'Scores and direction shared in advance'], ['REHEARSAL', '편성별 리허설과 음악 디렉팅', 'Rehearsal and musical direction for each ensemble'], ['SYSTEM CHECK', '큐시트·동선·음향 사전 확인', 'Cue sheet, movement and sound checked beforehand'], ['MANAGEMENT', '행사 당일 현장 진행 및 타임라인 관리', 'On-the-day running and timeline']].map(([en, ko, e], k) =>
+        <li key={en}><span className="q-no">{String(k + 1).padStart(2, '0')}</span><div><b>{en}</b><p>{t(ko, e)}</p></div></li>)}</ol></div>
+    <p className="muted small">{t('공연 이력은 TWOTTIVA와 각 연주자의 수행 경력입니다.', 'Credits are TWOTTIVA’s and each artist’s own performance history.')}</p></section>;
+}
+
+/* Home: the four principals, one tap from their full profiles */
+function ArtistsStrip() {
+  const {t} = useT();
+  return <section className="artists-strip"><div className="as-head"><span className="label">The Artists</span><h2>{lines(t('무대에 서는 사람들', 'The people on stage'))}</h2>
+      <a className="text-link" href="/music/artists">{t('연주진 전체 보기', 'Meet all the artists')} <span aria-hidden="true">↗</span></a></div>
+    <div className="as-grid">{PRINCIPALS.map(a => <a href="/music/artists" key={a.ko}><div className="ph"><img src={V(a.im)} alt={t(a.ko, a.en)} loading="lazy"/></div>
+      <span className="label">{a.inst}</span><h3>{lines(t(a.ko, a.en))}</h3><p>{t(...a.edu[0])}</p></a>)}</div></section>;
 }
 
 function OfficialStage() {
@@ -516,50 +707,6 @@ function Services() {
       <h2>{lines(t('“더 아름다운 내일은, 오늘의 한 순간을 어떻게 짜는가에서 시작됩니다.”', '“A more beautiful tomorrow begins with how we compose a single moment today.”'))}</h2><p className="label">BELiOR · Music · Art · People · Places</p></div></section></>;
 }
 
-function InquiryForm({music}: {music?: boolean}) {
-  const {t, en} = useT(); void en;
-  const [status, setStatus] = useState(''), [sending, setSending] = useState(false);
-  async function submit(e: FormEvent<HTMLFormElement>, compose?: (d: Record<string, string>) => string) {
-    e.preventDefault(); setSending(true); setStatus('');
-    const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
-    if (compose) data.message = compose(data);
-    try {
-      const r = await fetch('/api/inquiries', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)});
-      if (!r.ok) throw Error();
-      setStatus(t('문의가 접수되었습니다. 남겨주신 이메일로 회신드리겠습니다.', 'Your inquiry has been received. We will reply to your email.'));
-      form.reset();
-    } catch {
-      // Static hosting (no inquiry API): hand the composed inquiry to the visitor's mail app instead.
-      const body = Object.entries(data).filter(([, v]) => v).map(([k, v]) => k + ': ' + v).join('\n');
-      window.location.href = 'mailto:' + MAIL + '?cc=' + MAIL2 + '&subject=' + encodeURIComponent('BELiOR ' + t('문의', 'Enquiry')) + '&body=' + encodeURIComponent(body);
-      setStatus(t('메일 앱이 열리면 보내기를 눌러 주세요. 열리지 않으면 ' + MAIL + ' 으로 보내 주세요.', 'Press send in your mail app. If it does not open, write to ' + MAIL + '.'));
-    }
-    finally { setSending(false); }
-  }
-
-    const compose = music ? (d: Record<string, string>) => [
-      `${t('행사명', 'Event')}: ${d.event || '-'}`, `${t('장소', 'Venue')}: ${d.venue || '-'}`, `${t('예상 인원', 'Guests')}: ${d.guests || '-'}`,
-      `${t('연주 시간', 'Performance length')}: ${d.length || '-'}`, `${t('예산', 'Budget')}: ${d.budget || '-'}`, '', d.message || ''].join('\n') : undefined;
-    return <form className="form" onSubmit={e => submit(e, compose)}>
-      <div className="field"><label htmlFor="f-name">{t('성함 / 회사', 'Name / Company')}</label><input id="f-name" name="name" required maxLength={120}/></div>
-      <div className="field"><label htmlFor="f-email">{t('이메일', 'Email')}</label><input id="f-email" type="email" name="email" required maxLength={180}/></div>
-      <div className="field"><label htmlFor="f-type">{t('문의 유형', 'Inquiry type')}</label><select id="f-type" name="type">
-        {(music ? ['Corporate event', 'Hotel reception', 'Gala dinner', 'Brand event', 'VIP reception', 'Private performance'] : ['Private performance', 'Brand / corporate event', 'Corporate gifting', 'Atelier collaboration', 'Collection']).map(o => <option key={o}>{o}</option>)}</select></div>
-      <div className="field"><label htmlFor="f-date">{t('예정일', 'Preferred date')}</label><input id="f-date" type="date" name="date"/></div>
-      {music && <><div className="field"><label htmlFor="f-event">{t('행사명', 'Event')}</label><input id="f-event" name="event" maxLength={120}/></div>
-        <div className="field"><label htmlFor="f-venue">{t('장소', 'Venue')}</label><input id="f-venue" name="venue" maxLength={120}/></div>
-        <div className="field"><label htmlFor="f-guests">{t('예상 인원', 'Guests')}</label><input id="f-guests" name="guests" maxLength={40}/></div>
-        <div className="field"><label htmlFor="f-length">{t('연주 시간', 'Performance length')}</label><input id="f-length" name="length" maxLength={60}/></div>
-        <div className="field wide"><label htmlFor="f-budget">{t('예산', 'Budget')}</label><input id="f-budget" name="budget" maxLength={60}/></div></>}
-      <div className="field wide"><label htmlFor="f-msg">{t('문의 내용', 'Your inquiry')}</label><textarea id="f-msg" name="message" required rows={5} maxLength={3400}/></div>
-      <label className="consent wide"><input type="checkbox" required/>{t('문의 응대를 위한 성함·이메일·문의 내용 수집에 동의합니다. 처리 후 1년 이내 삭제하며 이메일로 삭제를 요청할 수 있습니다.', 'I consent to the collection of my name, email and inquiry for response purposes. Records are deleted within one year of resolution; deletion may be requested by email.')}</label>
-      <button className="btn" disabled={sending}>{sending ? t('접수 중…', 'Submitting…') : t('문의 보내기', 'Send inquiry')}</button>
-      <p className="wide" role="status">{status}</p>
-    </form>;
-  
-}
-
 export default function Belior({page = 'home', detail = ''}: {page?: string; detail?: string}) {
   const [en, setEn] = useState(false), [menu, setMenu] = useState(false);
   const [filmPaused, setFilmPaused] = useState(false), [slide, setSlide] = useState(0), [carHold, setCarHold] = useState(false);
@@ -651,7 +798,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         onClick={() => trackRef.current?.scrollTo({left: i * (trackRef.current?.clientWidth || 0), behavior: 'smooth'})}>{slide === i && <i key={slide}/>}</button>)}</div>
       <button type="button" className="car-toggle" aria-label={carHold ? t('자동 넘김 재생', 'Play slides') : t('자동 넘김 정지', 'Pause slides')} onPointerDown={e => e.stopPropagation()} onClick={() => setCarHold(h => !h)}><span aria-hidden="true">{carHold ? '▶' : 'II'}</span></button>
     </section>
-    <MaisonHero/><MaisonIntro/><TwoHouses/><VisualTeam/><TheHouse/><Founder/><TheEvening/><SymphonicAtelier/><GuestJourney/><AtelierContent/><OneWorld/>
+    <MaisonHero/><MaisonIntro/><TwoHouses/><ArtistsStrip/><VisualTeam/><TheHouse/><Founder/><TheEvening/><SymphonicAtelier/><GuestJourney/><AtelierContent/><OneWorld/>
     <section className="section night"><div className="spread">
       <figure className="c-5"><img src={V('no16-pool.jpg')} alt={t('숲속 물가에서 말에 오른 아이와 아버지', 'A child on a horse by a forest pool, her father beside her')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
       <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>A memory, held.</h3>
@@ -732,14 +879,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="section night"><div className="statement"><span className="label">BELiOR Music</span><h2>Where Music Becomes Memory.</h2><p>{t('음악이 기억이 되는 순간.', 'Where music becomes memory.')}</p><Cta href="/music/inquiry">{t('공연 문의', 'Inquire')}</Cta></div></section>
   </>;
 
-  const musicInquiry = <>
-    <section className="lux-hero"><img className="bg" src={V('gala-hall.jpg')} alt={t('촛불이 켜진 연회장에서 연주하는 앙상블', 'An ensemble performing in a candlelit hall')}/>
-      <div className="inner"><span className="label">BELiOR Music · Performance Enquiry</span><h1 className="keep">{lines(t('당신의 저녁을 위해\n작곡합니다.', 'An evening,\ncomposed for you.'))}</h1></div></section>
-    <section className="lux-form"><div className="lf-intro"><span className="label">The Enquiry</span><h2>{lines(t('일정과 장소,\n원하시는 분위기를 들려주세요.', 'Tell us the date, the place\nand the atmosphere you imagine.'))}</h2>
-      <p className="muted">{t('모르는 항목은 비워두셔도 됩니다. 확인 후 프로그램과 편성을 제안드립니다.', 'Leave blank anything you are unsure of. We will reply with a programme and ensemble.')}</p>
-      <p className="lf-mail">{MAIL}<br/>{MAIL2}</p></div>
-      <InquiryForm music/></section>
-  </>;
+  const musicInquiry = <div className="pf-page"><PerformanceInquiry/></div>;
 
   const collection = <>
     <LogoFilm/><div id="collections"><CollectionGrid/></div>
@@ -888,9 +1028,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="iv-body"><h1 className="keep">Three Cities. One Vision.</h1><p className="label">A More Beautiful Tomorrow.</p><span className="iv-rule"/>
         <p className="iv-only">Invitation Only</p><p className="iv-sub">Some things are not made for everyone.</p>
         <p className="muted">{t('프라이빗 공연, 브랜드 행사, 기업 선물과 아틀리에 협업은 초대와 개별 상담으로 진행합니다.', 'Private performances, brand events, corporate gifting and atelier collaborations are arranged by invitation.')}</p>
-        <InquiryForm/></div>
+        <a className="iv-cta" href="#enquiry">{t('초대 요청하기', 'Request an invitation')} <span aria-hidden="true">↓</span></a></div>
       <div className="iv-foot"><span>Art · Objects · People · A Brighter Tomorrow</span><span>BELiOR Atelier</span></div>
     </section>
+    <div className="pf-page" id="enquiry"><InviteContact/></div>
   </>;
 
   const world = WORLDS.find(w => w.slug === detail);

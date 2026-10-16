@@ -1161,3 +1161,27 @@
 .belior .lw-note{position:absolute;right:14px;top:10px;font:400 .72rem/1.4 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--champagne);min-height:1em}
 .belior .lw-score .text-link:disabled{opacity:.5;cursor:default}
 @media (max-width:860px){.belior .lw-board canvas{height:300px}}
+/* The secret garden */
+.belior .lw-garden{padding:clamp(56px,8vw,110px) 0 clamp(40px,6vw,80px);background:#070809;border-top:1px solid rgba(201,170,108,.18)}
+.belior .lw-garden .lw-games-head{padding:0 var(--gutter)}
+.belior .lw-garden .lw-games-head .muted{max-width:38rem;margin:0 auto;font-size:13px;line-height:1.95}
+.belior .lw-hall{position:relative;height:min(78svh,760px);min-height:420px;background:#05070a;overflow:hidden;border-top:1px solid rgba(201,170,108,.25);border-bottom:1px solid rgba(201,170,108,.25)}
+.belior .lw-hall canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.belior .lw-loading{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:var(--champagne)}
+.belior .lw-hud{position:absolute;top:14px;left:var(--gutter);right:var(--gutter);display:flex;justify-content:space-between;pointer-events:none}
+.belior .lw-hud .label{color:var(--champagne);background:rgba(5,7,10,.55);padding:6px 10px;backdrop-filter:blur(4px)}
+.belior .lw-hint{animation:lw-fade 2.4s ease-in-out infinite alternate}
+@keyframes lw-fade{from{opacity:.55}to{opacity:1}}
+.belior .lw-pad{position:absolute;left:16px;bottom:16px;display:grid;grid-template-columns:repeat(3,44px);gap:4px;opacity:.75}
+.belior .lw-pad button{height:44px;border:1px solid rgba(201,170,108,.5);background:rgba(5,7,10,.6);color:var(--ivory);font-size:14px;cursor:pointer;touch-action:none;backdrop-filter:blur(4px)}
+@media (hover:hover) and (pointer:fine){.belior .lw-pad{opacity:.35}.belior .lw-hall.on .lw-pad{opacity:.2}}
+.belior .lw-look{position:absolute;right:16px;bottom:22px;border:1px solid var(--champagne);background:rgba(5,7,10,.7);color:var(--ivory);padding:12px 18px;font:400 .72rem/1.4 var(--label);letter-spacing:.2em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(4px)}
+.belior .lw-panel{position:absolute;inset:auto 16px 16px 16px;margin:0 auto;max-width:520px;background:rgba(8,9,12,.9);border:1px solid rgba(201,170,108,.45);padding:22px 24px;display:grid;gap:10px;backdrop-filter:blur(8px)}
+.belior .lw-panel h3{font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:.12em}
+.belior .lw-panel .lw-kw{font:400 .72rem/1.6 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--champagne);margin:0}
+.belior .lw-panel .muted{font-size:13px;line-height:1.9;margin:0}
+.belior .lw-panel-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.belior .lw-panel-row .text-link{background:none;border:0;border-bottom:1px solid currentColor;padding:0;font:inherit;color:var(--ivory);cursor:pointer}
+.belior .lw-done{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);margin:0;color:var(--champagne);background:rgba(5,7,10,.6);padding:8px 14px;white-space:nowrap}
+.belior .lw-keys{text-align:center;font-size:11px;letter-spacing:.04em;padding:14px var(--gutter) 0;margin:0}
+@media (max-width:860px){.belior .lw-hall{height:min(70svh,640px)}.belior .lw-done{white-space:normal;width:80%;text-align:center}}

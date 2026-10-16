@@ -442,6 +442,85 @@ function StringStage() {
       {mode !== 'free' && <button type="button" className="text-link" onClick={() => { setMode('free'); setRound(1); }}>{t('자유 연주', 'Free play')}</button>}</p></div>;
 }
 
+/* Game III — The Secret Garden. The guest guides a small light through the moonlit hall of the six worlds,
+   finds each animal and keeps a starlight for every world found. Progress stays on the guest's device. */
+const GARDEN: {slug: string; x: number; y: number}[] = [{slug: 'lion', x: .14, y: .5}, {slug: 'swan', x: .36, y: .58}, {slug: 'orca', x: .64, y: .56}, {slug: 'leopard', x: .835, y: .49}, {slug: 'panther', x: .95, y: .56}];
+const MOON = {x: .65, y: .26};
+function SecretGarden() {
+  const {t} = useT();
+  const canvas = useRef<HTMLCanvasElement>(null), img = useRef<HTMLImageElement | null>(null);
+  const pos = useRef({x: .5, y: .82}), target = useRef<{x: number; y: number} | null>(null), keys = useRef<Record<string, boolean>>({}), trail = useRef<{x: number; y: number; t: number}[]>([]);
+  const [active, setActive] = useState(false), [near, setNear] = useState<string>(''), [found, setFound] = useState<string[]>([]), [panel, setPanel] = useState<string>(''), [ready, setReady] = useState(false);
+  const nearRef = useRef(''); nearRef.current = near;
+  useEffect(() => { try { setFound(JSON.parse(localStorage.getItem('belior-garden') || '[]')); } catch {} const im = new Image(); im.onload = () => { img.current = im; setReady(true); }; im.src = V('garden-night.jpg'); }, []);
+  useEffect(() => {                                                                         // the walk
+    const c = canvas.current!, ctx = c.getContext('2d')!; let raf = 0, last = performance.now();
+    const step = (now: number) => {
+      const dt = Math.min(2, (now - last) / 16.7); last = now;
+      const im = img.current, dpr = Math.min(2, window.devicePixelRatio || 1), W = c.clientWidth, H = c.clientHeight;
+      if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#05070a'; ctx.fillRect(0, 0, W, H);
+      if (im) {
+        const sc = Math.max(W / im.width, H / im.height) * (W < 700 ? 1.7 : 1.45), ww = im.width * sc, hh = im.height * sc;   // the hall is wider than the window: the view follows the light
+        const p = pos.current, k = keys.current, v = .0075 * dt;
+        let dx = (k.right ? 1 : 0) - (k.left ? 1 : 0), dy = (k.down ? 1 : 0) - (k.up ? 1 : 0);
+        if (!dx && !dy && target.current) { const tx = target.current.x - p.x, ty = target.current.y - p.y, d = Math.hypot(tx * ww, ty * hh); if (d < 6) target.current = null; else { dx = tx * ww / d; dy = ty * hh / d; } }
+        const l = Math.hypot(dx, dy) || 1; p.x = Math.max(.03, Math.min(.97, p.x + dx / l * v * (H / ww) * 1.2)); p.y = Math.max(.08, Math.min(.95, p.y + dy / l * v * (H / hh)));
+        if (dx || dy) { trail.current.push({x: p.x, y: p.y, t: now}); if (trail.current.length > 40) trail.current.shift(); }
+        const camx = Math.max(0, Math.min(ww - W, p.x * ww - W / 2)), camy = Math.max(0, Math.min(hh - H, p.y * hh - H / 2));
+        ctx.drawImage(im, -camx, -camy, ww, hh);
+        const lx = p.x * ww - camx, ly = p.y * hh - camy;
+        let nearest = '', nd = 1;                                                           // which world is close
+        for (const g of GARDEN) { const d = Math.hypot((g.x - p.x) * ww, (g.y - p.y) * hh) / H; if (d < nd) { nd = d; nearest = g.slug; } }
+        const md = Math.hypot((MOON.x - p.x) * ww, (MOON.y - p.y) * hh) / H; if (md < nd) { nd = md; nearest = 'moon'; }
+        const nn = nd < .22 ? nearest : ''; if (nn !== nearRef.current) setNear(nn);
+        for (const g of GARDEN) { const gx = g.x * ww - camx, gy = g.y * hh - camy, w = WORLDS.find(x => x.slug === g.slug)!, on = nn === g.slug, a = found.includes(g.slug) ? .9 : .5;
+          const rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, on ? 46 : 26); rg.addColorStop(0, w.color + (on ? 'aa' : '55')); rg.addColorStop(1, w.color + '00'); ctx.fillStyle = rg; ctx.fillRect(gx - 50, gy - 50, 100, 100);
+          ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.font = (on ? '22px' : '16px') + ' Georgia, serif'; ctx.textAlign = 'center'; ctx.fillText('✦', gx, gy + 5); }
+        const dark = ctx.createRadialGradient(lx, ly, H * .12, lx, ly, H * .9); dark.addColorStop(0, 'rgba(3,5,9,0)'); dark.addColorStop(1, 'rgba(3,5,9,.78)'); ctx.fillStyle = dark; ctx.fillRect(0, 0, W, H);   // the hall is lit only around the guest's light
+        trail.current = trail.current.filter(q => now - q.t < 900);
+        for (const q of trail.current) { const a = 1 - (now - q.t) / 900; ctx.fillStyle = 'rgba(214,186,128,' + .35 * a + ')'; ctx.beginPath(); ctx.arc(q.x * ww - camx, q.y * hh - camy, 2 + 3 * a, 0, 7); ctx.fill(); }
+        const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, 70); lg.addColorStop(0, 'rgba(255,241,210,.95)'); lg.addColorStop(.12, 'rgba(236,210,150,.6)'); lg.addColorStop(1, 'rgba(236,210,150,0)'); ctx.fillStyle = lg; ctx.fillRect(lx - 70, ly - 70, 140, 140);
+        ctx.fillStyle = '#fff6e3'; ctx.beginPath(); ctx.arc(lx, ly, 3.5 + Math.sin(now / 300) * .6, 0, 7); ctx.fill();
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step); return () => cancelAnimationFrame(raf);
+  }, [found]);
+  useEffect(() => {                                                                         // keys, only while the guest is in the garden
+    if (!active) return;
+    const map: Record<string, string> = {arrowup: 'up', w: 'up', arrowdown: 'down', s: 'down', arrowleft: 'left', a: 'left', arrowright: 'right', d: 'right'};
+    const kd = (e: KeyboardEvent) => { const k = map[e.key.toLowerCase()]; if (k) { keys.current[k] = true; target.current = null; e.preventDefault(); } if ((e.key === 'Enter' || e.key === ' ') && nearRef.current) { e.preventDefault(); look(); } if (e.key === 'Escape') setActive(false); };
+    const ku = (e: KeyboardEvent) => { const k = map[e.key.toLowerCase()]; if (k) keys.current[k] = false; };
+    window.addEventListener('keydown', kd); window.addEventListener('keyup', ku); return () => { window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); keys.current = {}; };
+  }, [active]);
+  const look = () => { const n = nearRef.current; if (!n) return; setPanel(n); if (n !== 'moon' && !found.includes(n)) { const f = [...found, n]; setFound(f); try { localStorage.setItem('belior-garden', JSON.stringify(f)); } catch {} } };
+  const walkTo = (e: RPointerEvent<HTMLCanvasElement>) => {
+    setActive(true); const c = canvas.current!, r = c.getBoundingClientRect(), im = img.current; if (!im) return;
+    const W = c.clientWidth, H = c.clientHeight, sc = Math.max(W / im.width, H / im.height) * (W < 700 ? 1.7 : 1.45), ww = im.width * sc, hh = im.height * sc, p = pos.current;
+    const camx = Math.max(0, Math.min(ww - W, p.x * ww - W / 2)), camy = Math.max(0, Math.min(hh - H, p.y * hh - H / 2));
+    target.current = {x: (e.clientX - r.left + camx) / ww, y: (e.clientY - r.top + camy) / hh};
+  };
+  const pw = panel && panel !== 'moon' ? WORLDS.find(w => w.slug === panel) : null;
+  const hold = (k: string) => ({onPointerDown: (e: RPointerEvent<HTMLButtonElement>) => { e.preventDefault(); keys.current[k] = true; target.current = null; setActive(true); }, onPointerUp: () => { keys.current[k] = false; }, onPointerCancel: () => { keys.current[k] = false; }, onPointerLeave: () => { keys.current[k] = false; }});
+  return <section className="lw-garden"><div className="lw-games-head"><span className="label">Game III · The Secret Garden</span><h2>{lines(t('비밀 정원', 'The secret garden'))}</h2>
+      <p className="muted">{t('달빛 아래 여섯 세계의 홀. 작은 빛을 데리고 거닐며 다섯 동물을 찾아보세요. 찾은 세계마다 별빛 하나가 남습니다.', 'The hall of the six worlds under the moon. Walk a small light through it and find the five animals; each world found leaves a starlight.')}</p></div>
+    <div className={'lw-hall' + (active ? ' on' : '')}>
+      <canvas ref={canvas} onPointerDown={walkTo} aria-label={t('비밀 정원', 'The secret garden')}/>
+      {!ready && <p className="lw-loading label">Loading…</p>}
+      <div className="lw-hud"><span className="label">✦ {found.length} / {GARDEN.length}</span>{!active && <span className="label lw-hint">{t('눌러서 정원에 들어가기', 'Tap to enter the garden')}</span>}</div>
+      <div className="lw-pad" aria-hidden="true"><span/><button type="button" {...hold('up')}>▲</button><span/><button type="button" {...hold('left')}>◀</button><button type="button" {...hold('down')}>▼</button><button type="button" {...hold('right')}>▶</button></div>
+      {near && !panel && <button type="button" className="lw-look" onClick={look}>{near === 'moon' ? t('달 아래 머물기', 'Stay under the moon') : t('가까이 보기', 'Look closer')} <span aria-hidden="true">✧</span></button>}
+      {panel && <div className="lw-panel" role="dialog">{pw ? <>
+          <span className="label" style={{color: pw.color}}>The Animal Collection · {found.length} / {GARDEN.length}</span><h3 style={{color: pw.color}}>{pw.name}</h3><p className="lw-kw">{pw.kw}</p><p className="muted">{t(pw.world[0], pw.world[1])}</p>
+          <div className="lw-panel-row"><a className="text-link" href={'/collection/' + pw.slug}>{t('이 세계로', 'Enter this world')} <span aria-hidden="true">→</span></a><button type="button" className="text-link" onClick={() => setPanel('')}>{t('정원으로 돌아가기', 'Back to the garden')}</button></div></>
+        : <><span className="label">Under the moon</span><h3>{lines(t('달 아래', 'Under the moon'))}</h3><p className="muted">{t('여기서는 아무것도 하지 않아도 됩니다. 소리를 켜고 잠시 머무세요.', 'Nothing is asked of you here. Turn the sound on and stay a while.')}</p>
+          <div className="lw-panel-row"><SoundButton label={t('백조의 호수', 'Swan Lake')}/><button type="button" className="text-link" onClick={() => setPanel('')}>{t('정원으로 돌아가기', 'Back to the garden')}</button></div></>}</div>}
+      {found.length === GARDEN.length && !panel && <p className="lw-done label">{t('다섯 세계를 모두 찾으셨습니다 · 별빛은 이 기기에 남습니다', 'All five worlds found · your starlights stay on this device')}</p>}
+    </div>
+    <p className="lw-keys muted">{t('PC: 방향키 또는 WASD, Enter로 살펴보기 · 모바일: 화면의 방향 버튼, 또는 가고 싶은 곳을 두드리세요.', 'PC: arrow keys or WASD, Enter to look · Mobile: the arrow buttons, or tap where you want to go.')}</p></section>;
+}
+
 function LoungeGames() {
   const {t} = useT();
   return <section className="lw-games"><div className="lw-games-head"><span className="label">The Playroom</span><h2>{lines(t('놀이방', 'The playroom'))}</h2>
@@ -718,7 +797,7 @@ function Lounge() {
       <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
-    <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><LoungeGames/>{tier === 'circle' && <CarDiffuser/>}
+    <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><SecretGarden/><LoungeGames/>{tier === 'circle' && <CarDiffuser/>}
     {tier === 'circle' && <><section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>
         <figcaption><span className="label">{t(...cat)}</span><h3>{lines(t(...name))}</h3><p>{line}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')}</a></figcaption></figure>)}</div></section></>}
@@ -1241,6 +1320,8 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <figure className="c-6" style={{gridColumn: '7 / span 6'}}><img src={V('bu-violinist.jpg')} alt={t('잔디 위의 바이올리니스트', 'Violinist on the lawn')} loading="lazy"/><figcaption>II. Venue</figcaption></figure></div>
       <div className="spread"><figure className="c-5"><img src={V('bu-violin.jpg')} alt={t('바이올린 클로즈업', 'Violin close-up')} loading="lazy"/><figcaption>III. Detail</figcaption></figure>
         <figure className="c-7"><img src={V('bu-backstage.jpg')} alt={t('공연을 마친 연주진', 'The musicians after the show')} loading="lazy"/><figcaption>IV. Backstage</figcaption></figure></div>
+      <div className="spread"><figure className="c-6"><img src={V('gala-arrival.jpg')} alt={t('행사장 입구에서, 악기를 멘 두 연주자', 'Two musicians with their instruments at the entrance')} loading="lazy"/><figcaption>V. Arrival</figcaption></figure>
+        <figure className="c-6"><img src={V('gala-talk.jpg')} alt={t('행사장 안의 토크 세션', 'The talk inside the hall')} loading="lazy"/><figcaption>VI. The Talk</figcaption></figure></div>
     </section>
     <section className="section night"><div className="statement"><span className="label">BELiOR Music</span><h2>Where Music Becomes Memory.</h2><p>{t('음악이 기억이 되는 순간.', 'Where music becomes memory.')}</p><Cta href="/music/inquiry">{t('공연 문의', 'Inquire')}</Cta></div></section>
   </>;

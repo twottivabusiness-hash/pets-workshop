@@ -227,10 +227,9 @@ function MuseFilm() {
 }
 
 /* ---------- Inquiry, as on the September site ----------
-   Enquiries are delivered by Web3Forms. Paste the house's Web3Forms access key below
-   (web3forms.com → your form → Access Key). While it is empty, the form opens the visitor's
-   mail app with the enquiry already written, addressed to the house. */
-const W3F_KEY = '';
+   Enquiries are delivered by Web3Forms with the house's public form key (the same key the
+   September site used). If sending fails, the form opens the visitor's mail app instead. */
+const W3F_KEY = '4dfff3da-feed-4b5a-ad01-cbf8c38da971';
 const KAKAO = 'https://pf.kakao.com/_UAxfxiX';
 type Field = {name: string; label: [string, string]; type: 'select' | 'text' | 'date' | 'tel' | 'email' | 'textarea'; options?: [string, string][]; ph?: [string, string]; req?: boolean; full?: boolean};
 const CONTACT_FIELDS: Field[] = [

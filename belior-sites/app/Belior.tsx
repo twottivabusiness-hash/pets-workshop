@@ -240,6 +240,16 @@ function LoungeOpening({tier, name}: {tier: Tier | ''; name?: string}) {
       <SoundButton label={t('백조의 호수 듣기', 'Listen · Swan Lake')}/></div></section>;
 }
 
+/* Private invitations — the house's evenings are announced here first; attendance is asked through the enquiry form */
+function LoungeInvitations() {
+  const {t} = useT();
+  return <section className="lw-invite"><figure><img src={V('gala-invitation.jpg')} alt="BELiOR Gala Dinner — A Night of Music and Art" loading="lazy"/></figure>
+    <div className="lw-invite-copy"><span className="label">Private Invitations</span><h2>{lines(t('초대장', 'Invitations'))}</h2>
+      <p className="muted">{t('하우스의 저녁은 이곳에 먼저 걸립니다. 참석을 원하시면 신청을 남겨 주세요. 하우스가 직접 회신드립니다.', 'The house’s evenings are announced here first. Leave a request to attend, and the house will reply in person.')}</p>
+      <p className="lw-invite-title">BELiOR Gala Dinner<br/><span>A Night of Music and Art</span></p>
+      <a className="text-link" href="/private#enquiry">{t('참석 신청', 'Request to attend')} <span aria-hidden="true">↗</span></a></div></section>;
+}
+
 function LoungeWorlds() {
   const {t} = useT();
   const [cur, setCur] = useState<string>('');
@@ -839,7 +849,7 @@ function Lounge() {
       <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
-    <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><LoungeScents/><SecretGarden/><LoungeGames/><VillageGame/>{tier === 'circle' && <CarDiffuser/>}
+    <LoungeOpening tier={tier} name={name}/><LoungeInvitations/><LoungeWorlds/><LoungeScents/><SecretGarden/><LoungeGames/><VillageGame/>{tier === 'circle' && <CarDiffuser/>}
     {tier === 'circle' && <><section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>
         <figcaption><span className="label">{t(...cat)}</span><h3>{lines(t(...name))}</h3><p>{line}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')}</a></figcaption></figure>)}</div></section></>}
@@ -1476,6 +1486,8 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <Scene img="o-m-bag.jpg" eyebrow="Objects" title="Live with Art" lede={t('오래도록 곁에 남는 오브제, 일상의 순간을 특별하게.', 'Objects that stay with you, making the everyday special.')}/>
     <ObjectsRow/>
     <HousePins/>
+    <section className="section"><figure className="wide-fig"><img src={V('macbook-case.jpg')} alt={t('BELiOR 프리미엄 맥북 케이스 — 블랙·토프·아이보리·브라운', 'BELiOR premium MacBook case — black, taupe, ivory, brown')} loading="lazy"/><figcaption>Premium MacBook Case · MacBook Air 13″ · MacBook Pro 14″</figcaption></figure>
+      <p className="muted small" style={{textAlign: 'center', marginTop: 18}}><a className="text-link" href="/private">{t('문의하기', 'Enquire')} <span aria-hidden="true">↗</span></a></p></section>
     <section className="section night"><div className="spread">
       <figure className="c-6"><img src={V('o-m-br-hero.jpg')} alt={t('B 모노그램 가죽 브레이슬릿', 'Leather bracelet with B monogram')} loading="lazy"/><figcaption>Leather · Monogram</figcaption></figure>
       <div className="copy c-5" style={{gridColumn: '8 / span 5'}}><span className="label">Leather Goods</span><h3>{lines(t('모노그램을 새긴 가죽 소품', 'Leather goods with the monogram'))}</h3><p className="muted">{t('하우스의 이니셜을 작은 사물에 옮깁니다.', 'The house initial, carried onto small objects.')}</p></div></div></section>

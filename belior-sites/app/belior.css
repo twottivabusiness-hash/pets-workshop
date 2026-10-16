@@ -1189,4 +1189,5 @@
 .belior .scene.hall{min-height:clamp(420px,33.4vw,calc(100svh - 72px))}
 .belior .scene.hall::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,7,10,.1),transparent 40%,rgba(5,7,10,.72) 100%)}
 .belior .scene.hall .inner{padding-top:clamp(80px,12vw,160px)}
-@media (max-aspect-ratio:1/1){.belior .scene.hall{min-height:min(62svh,560px)}.belior .scene.hall > .bg{object-position:38% center}.belior .scene.hall .inner{padding-top:60px}}
+.belior .scene.hall > .bg-tall{display:none}
+@media (max-aspect-ratio:1/1){.belior .scene.hall{min-height:calc(100svh - 100px)}.belior .scene.hall > .bg-wide{display:none}.belior .scene.hall > .bg-tall{display:block;object-position:50% 40%}.belior .scene.hall .inner{padding-top:60px}}

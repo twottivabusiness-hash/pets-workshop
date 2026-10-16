@@ -1102,3 +1102,4 @@
 .belior .ct2 .pf-status{color:var(--ivory)}
 @media (max-width:900px){.belior .ct2{grid-template-columns:1fr}.belior .ct2-side{position:static}}
 .belior .ct2 .pf-consent dd,.belior .ct2 .pf-note{font-size:12px}
+.belior .official.first{min-height:calc(100svh - 64px)}

@@ -648,6 +648,15 @@ function ArtistsStrip() {
       <span className="label">{a.inst}</span><h3>{lines(t(a.ko, a.en))}</h3><p>{t(...a.edu[0])}</p></a>)}</div></section>;
 }
 
+function OfficialStage({first = false}: {first?: boolean}) {
+  const {t} = useT();
+  return <section className={'official' + (first ? ' first' : '')}><img className="bg" src={V('stage-official.jpg')} alt={t('공식행사 무대의 현악 4중주', 'String quartet on an official stage')} loading="lazy"/>
+    <div className="of-copy"><span className="label">Official Event · Live Performance</span><h2>{lines('Proven on an\nOfficial Stage.')}</h2>
+      <p>{t('한국여성공인회계사회 제31회 정기총회 및 회장 이·취임식, 엘리에나호텔. 여혜린 대표가 기획과 현장을 총괄하고 TWOTTIVA 현악 4중주가 연주했습니다.', 'Korea Women CPA Association, 31st General Meeting & Inauguration at L’Eliena Hotel. Directed by Hyerin Yeo, performed by the TWOTTIVA string quartet.')}</p>
+      <div className="of-num"><b>18</b><span>Hours of Rehearsal<br/>{t('무대에서 처음 맞추는 일은 없습니다.', 'Nothing is played together for the first time on stage.')}</span></div></div>
+  </section>;
+}
+
 function GuestJourney() {
   const {t} = useT();
   const steps: [string, string, string, string][] = [
@@ -870,9 +879,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   /* ---------- pages ---------- */
   const home = <>
-    <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
+    <OfficialStage first/>
     <div className="pf-page" id="enquiry"><InviteContact/></div>
     <B12Hero/><Manifesto/>
+    <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
     <MuseFilm src="belior-film-v9.mp4" poster="film-poster.jpg" label="BELiOR brand film" audio={false}/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
     <ZoomStage img="lion-portrait.jpg" fx={50} fy={40} eyebrow="Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계', 'One symbol, endless worlds')} pos="center 30%" href="/collection"/>
@@ -928,13 +938,13 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <Door href="/music/gala" img="bu-violinist.jpg" eyebrow="Editorial" title="Brand Gala Dinner Show" text={t('현장 · 리셉션 · 백스테이지의 기록.', 'On site · Reception · Backstage.')} pos="center 20%"/>
         <Door href="/music/inquiry" img="bu-violin.jpg" eyebrow="Inquiry" title={t('공연 문의', 'Inquiry')} text={t('행사 정보를 남기면 프로그램을 제안드립니다.', 'Share your event and we will propose a programme.')}/>
       </div></section>
-    <SeoulGala/><TwoHouses/><GuestJourney/><SymphonicAtelier/><BeyondLogo/><Operation/><TheEvening/>
+    <SeoulGala/><TwoHouses/><GuestJourney/><SymphonicAtelier/><OfficialStage/><BeyondLogo/><Operation/><TheEvening/>
     <section className="section"><div className="statement"><span className="label">An Evening</span><h2>An Evening, Beautifully Composed.</h2><p>{t('아름답게 구성된 하나의 저녁.', 'One evening, beautifully composed.')}</p><Cta href="/music/inquiry">{t('공연 문의', 'Inquire')}</Cta></div></section>
   </>;
 
   const artists = <>
     <Scene img="bu-backstage.jpg" eyebrow="Music · Artists" title={t('BELiOR 연주진', 'BELiOR Artists')} lede="Beyond Performance. An Experience." pos="center 35%"/>
-    <Founder/><Artists/>
+    <Founder/><Artists/><OfficialStage/>
     <TheHouse/>
     <Band img="bu-violinist.jpg" eyebrow="En Plein Air" title={t('바람이 지나간 자리에\n선율이 남습니다', 'Where the wind passes,\na melody remains')} text={t('잔디 위의 바람, 테이블 위의 촛불. 그 저녁의 빛과 공기가 그대로 악보가 됩니다.', 'Wind over the lawn, a candle on the table. The light and air of the evening become the score.')} href="/music/performances" cta={t('공연 보기', 'Performances')} pos="center 68%"/>
   </>;
@@ -1152,7 +1162,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <main>{content}</main>
     <footer className="site-footer">
       <div className="foot-top"><div className="foot-brand"><img src={V('mono-ivory.png')} alt="BELiOR" width={33} height={64}/><span className="wordmark">BELiOR</span><span className="label">Music · Art · People · Places</span></div>
-        <nav className="foot-nav" aria-label="Footer">{MENU.map(m => <a href={m.href} key={m.href}>{m.name}</a>)}<a href="/office">OFFICE</a></nav></div>
+        <nav className="foot-nav" aria-label="Footer">{MENU.map(m => <a href={m.href} key={m.href}>{m.name}</a>)}</nav></div>
       <p className="foot-mail"><a href={'mailto:' + MAIL}>{MAIL}</a><a href={'mailto:' + MAIL2}>{MAIL2}</a></p>
       <p className="foot-biz">{t('상호', 'Company')} 벨리오르(BELIOR) · {t('대표', 'CEO')} {t('여혜린', 'Hyerin Yeo')} · {t('사업자등록번호', 'Business No.')} 450-54-01129</p>
     </footer>

@@ -1185,3 +1185,8 @@
 .belior .lw-done{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);margin:0;color:var(--champagne);background:rgba(5,7,10,.6);padding:8px 14px;white-space:nowrap}
 .belior .lw-keys{text-align:center;font-size:11px;letter-spacing:.04em;padding:14px var(--gutter) 0;margin:0}
 @media (max-width:860px){.belior .lw-hall{height:min(70svh,640px)}.belior .lw-done{white-space:normal;width:80%;text-align:center}}
+/* Home opening: the moonlit hall, a 3:1 panorama — shown whole on wide screens, centred on the swan and orca on phones */
+.belior .scene.hall{min-height:clamp(420px,33.4vw,calc(100svh - 72px))}
+.belior .scene.hall::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,7,10,.1),transparent 40%,rgba(5,7,10,.72) 100%)}
+.belior .scene.hall .inner{padding-top:clamp(80px,12vw,160px)}
+@media (max-aspect-ratio:1/1){.belior .scene.hall{min-height:min(62svh,560px)}.belior .scene.hall > .bg{object-position:38% center}.belior .scene.hall .inner{padding-top:60px}}

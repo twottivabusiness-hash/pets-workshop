@@ -91,9 +91,9 @@ function Cta({href, children}: {href: string; children?: ReactNode}) {
   return <a className="cta" href={href}><span>{children ?? t('알아보기', 'Discover')}</span><span className="ring" aria-hidden="true">›</span></a>;
 }
 
-function Scene({img, eyebrow, title, lede, href, cta, pos = 'center'}: {img: string; eyebrow: string; title: string; lede?: string; href?: string; cta?: string; pos?: string}) {
+function Scene({img, eyebrow, title, lede, href, cta, pos = 'center', cls = ''}: {img: string; eyebrow: string; title: string; lede?: string; href?: string; cta?: string; pos?: string; cls?: string}) {
   const {t, en} = useT(); void t; void en;
-  return <section className="scene"><img className="bg" src={V(img)} alt="" style={{objectPosition: pos}}/>
+  return <section className={'scene' + (cls ? ' ' + cls : '')}><img className="bg" src={V(img)} alt="" style={{objectPosition: pos}}/>
       <div className="inner"><span className="label">{eyebrow}</span><h1>{lines(title)}</h1>{lede && <p className="lede">{lede}</p>}{href && <Cta href={href}>{cta}</Cta>}</div></section>;
 }
 
@@ -1225,7 +1225,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   /* ---------- pages ---------- */
   const home = <>
-    <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
+    <Scene img="hero-hall.jpg" cls="hall" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="center 45%" href="/music"/>
     <div className="pf-page" id="enquiry"><InviteContact/></div>
     <B12Hero/><Manifesto/>
     <MuseFilm src="belior-film-v9.mp4" poster="film-poster.jpg" label="BELiOR brand film" audio={false}/>

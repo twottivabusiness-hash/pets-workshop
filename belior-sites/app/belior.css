@@ -978,3 +978,5 @@
 .belior .pf-chip input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
 .belior .pf-grid .pf-chip.on{background:#1d1b18;color:#f5f2ec;border-color:#1d1b18}
 .belior .pf-grid fieldset{display:block;min-width:0}
+.belior .film .hero-sound{position:static}
+@media (max-aspect-ratio:1/1){.belior .film > .bg{object-position:72% center}}

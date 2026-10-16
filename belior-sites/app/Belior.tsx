@@ -217,13 +217,13 @@ function Experience() {
 
 
 /* The Muse of BELiOR — performance film (guests blurred), plays muted until asked */
-function MuseFilm() {
+function MuseFilm({src = 'muse-film.mp4', poster = 'muse-film-poster.jpg', label = 'The Muse of BELiOR', audio = true}: {src?: string; poster?: string; label?: string; audio?: boolean}) {
   const {t} = useT();
   const ref = useRef<HTMLVideoElement>(null), [sound, setSound] = useState(false);
-  return <section className="muse-film" aria-label="The Muse of BELiOR">
-    <video ref={ref} src={V('muse-film.mp4')} poster={V('muse-film-poster.jpg')} autoPlay muted loop playsInline preload="metadata"/>
-    <button type="button" className="mf-sound" aria-pressed={sound} onClick={() => { const v = ref.current; if (!v) return; v.muted = sound; setSound(!sound); if (!sound) { v.currentTime = 0; void v.play().catch(() => {}); } }}>
-      <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button></section>;
+  return <section className="muse-film" aria-label={label}>
+    <video ref={ref} src={V(src)} poster={V(poster)} autoPlay muted loop playsInline preload="metadata"/>
+    {audio && <button type="button" className="mf-sound" aria-pressed={sound} onClick={() => { const v = ref.current; if (!v) return; v.muted = sound; setSound(!sound); if (!sound) { v.currentTime = 0; void v.play().catch(() => {}); } }}>
+      <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button>}</section>;
 }
 
 /* ---------- Inquiry, as on the September site ----------
@@ -323,8 +323,8 @@ function PerformanceInquiry() {
       <ol>{[['INQUIRY', '공연 문의', 'Inquiry', '행사 개요를 전달해 주세요.', 'Send us the outline of the occasion.'], ['CONSULTATION', '상담 및 기획', 'Consultation', '담당자가 세부 내용을 바탕으로 맞춤 제안을 드립니다.', 'We return with a proposal built on the details.'], ['PROPOSAL', '제안 및 확정', 'Proposal', '공연 구성과 세부 사항을 확정하고, 최상의 무대를 준비합니다.', 'Programme and details are confirmed, and the stage prepared.']].map(([en, k1, e1, k2, e2], i) =>
         <li key={en}><span className="no">0{i + 1}</span><b>{en}</b><span className="ko">{t(k1, e1)}</span><p>{t(k2, e2)}</p></li>)}</ol></section>
     <section className="pi-ours"><div className="lead"><h2>OUR<br/>PERFORMANCE</h2><p>{t('공간과 목적에 맞춘, 다양한 형태의 공연을 제안합니다.', 'Performances shaped to the place and the purpose.')}</p></div>
-      {[['pi-o1.jpg', 'PRIVATE DINNER', '프라이빗 만찬', 'Private dinner'], ['pi-o2.jpg', 'CORPORATE EVENT', '기업 행사', 'Corporate'], ['pi-o3.jpg', 'BRAND EVENT', '브랜드 이벤트', 'Brand'], ['pi-o4.jpg', 'SPECIAL OCCASION', '특별한 순간', 'Special occasions']].map(([im, en, k, e]) =>
-        <figure key={en}><img src={V(im)} alt="" loading="lazy"/><figcaption><b>{en}</b><span>{t(k, e)}</span></figcaption></figure>)}</section>
+      {[['stage-quartet.jpg', 'PRIVATE DINNER', '프라이빗 만찬', 'Private dinner', '62% center'], ['stage-official.jpg', 'CORPORATE EVENT', '기업 행사', 'Corporate', 'center'], ['eve-quartet.jpg', 'BRAND EVENT', '브랜드 이벤트', 'Brand', '88% center'], ['bu-violinist.jpg', 'SPECIAL OCCASION', '특별한 순간', 'Special occasions', 'center 30%']].map(([im, en, k, e, pos]) =>
+        <figure key={en}><img src={V(im)} alt="" loading="lazy" style={{objectPosition: pos}}/><figcaption><b>{en}</b><span>{t(k, e)}</span></figcaption></figure>)}</section>
   </div>;
 }
 
@@ -708,7 +708,7 @@ function Services() {
 
 export default function Belior({page = 'home', detail = ''}: {page?: string; detail?: string}) {
   const [en, setEn] = useState(false), [menu, setMenu] = useState(false);
-  const [filmPaused, setFilmPaused] = useState(false), [slide, setSlide] = useState(0), [carHold, setCarHold] = useState(false);
+  const [filmPaused, setFilmPaused] = useState(false), [heroSound, setHeroSound] = useState(false), [slide, setSlide] = useState(0), [carHold, setCarHold] = useState(false);
   const filmRef = useRef<HTMLVideoElement>(null), curtainRef = useRef<HTMLDivElement>(null), trackRef = useRef<HTMLDivElement>(null);
   const t = (ko: string, eng: string) => en ? eng : ko;
   const path = page === 'home' ? '/' : '/' + page + (detail ? '/' + detail : '');
@@ -774,17 +774,19 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   /* ---------- pages ---------- */
   const home = <>
-    <section className="scene film" aria-label="BELiOR brand film">
-      <video ref={filmRef} className="bg" src={V('belior-film-v9.mp4')} poster={V('film-poster.jpg')} muted loop playsInline autoPlay preload="metadata"/>
+    <section className="scene film" aria-label="The Muse of BELiOR — gala dinner performance">
+      <video ref={filmRef} className="bg" src={V('muse-film.mp4')} poster={V('muse-film-poster.jpg')} muted loop playsInline autoPlay preload="metadata"/>
       <button className="film-toggle" type="button" aria-label={filmPaused ? t('영상 재생', 'Play film') : t('영상 일시정지', 'Pause film')}
         onClick={() => { const f = filmRef.current; if (!f) return; if (f.paused) { void f.play().catch(() => {}); setFilmPaused(false); } else { f.pause(); setFilmPaused(true); } }}>
         <span aria-hidden="true">{filmPaused ? '▶' : 'II'}</span></button>
-      <div className="film-sound"><SoundButton label="Swan Lake · Rehearsal"/></div>
+      <div className="film-sound"><button type="button" className="mf-sound hero-sound" aria-pressed={heroSound} onClick={() => { const f = filmRef.current; if (!f) return; f.muted = heroSound; setHeroSound(!heroSound); if (!heroSound) { f.currentTime = 0; void f.play().catch(() => {}); setFilmPaused(false); } }}>
+        <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{heroSound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button></div>
       <div className="cue" aria-hidden="true"><span>Scroll</span><i/></div>
     </section>
+    <div className="pf-page" id="enquiry"><InviteContact/></div>
     <B12Hero/><Manifesto/>
     <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
-    <MuseFilm/>
+    <MuseFilm src="belior-film-v9.mp4" poster="film-poster.jpg" label="BELiOR brand film" audio={false}/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
     <ZoomStage img="lion-portrait.jpg" fx={50} fy={40} eyebrow="Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계', 'One symbol, endless worlds')} pos="center 30%" href="/collection"/>
     <section className={'carousel' + (carHold ? ' hold' : '')} aria-label={t('여섯 개의 컬렉션', 'Six collections')} onPointerDown={() => setCarHold(true)}>

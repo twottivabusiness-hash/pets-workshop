@@ -215,6 +215,17 @@ function Experience() {
       <div className="ex-cc"><span>{k}</span><h3>{lines(h)}</h3><p>{p}</p></div></a>)}</div></section>;
 }
 
+
+/* The Muse of BELiOR — performance film (guests blurred), plays muted until asked */
+function MuseFilm() {
+  const {t} = useT();
+  const ref = useRef<HTMLVideoElement>(null), [sound, setSound] = useState(false);
+  return <section className="muse-film" aria-label="The Muse of BELiOR">
+    <video ref={ref} src={V('muse-film.mp4')} poster={V('muse-film-poster.jpg')} autoPlay muted loop playsInline preload="metadata"/>
+    <button type="button" className="mf-sound" aria-pressed={sound} onClick={() => { const v = ref.current; if (!v) return; v.muted = sound; setSound(!sound); if (!sound) { v.currentTime = 0; void v.play().catch(() => {}); } }}>
+      <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button></section>;
+}
+
 /* No. 01 — The Tchaikovsky Edition */
 function Tchaikovsky() {
   const {t} = useT();
@@ -237,7 +248,7 @@ function Finale() {
 /* Swan Lake rehearsal, one shared player with a slow fade-in */
 let swanAudio: HTMLAudioElement | null = null;
 function swan() {
-  if (!swanAudio) { swanAudio = new Audio('/belior/v3/swan-lake.m4a'); swanAudio.loop = true; swanAudio.preload = 'none'; }
+  if (!swanAudio) { swanAudio = new Audio('/belior/v3/swan-lake-film.mp4'); swanAudio.loop = true; swanAudio.preload = 'none'; }
   return swanAudio;
 }
 function SoundButton({label}: {label: string}) {
@@ -627,6 +638,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     </section>
     <B12Hero/><Manifesto/>
     <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
+    <MuseFilm/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
     <ZoomStage img="lion-portrait.jpg" fx={50} fy={40} eyebrow="Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계', 'One symbol, endless worlds')} pos="center 30%" href="/collection"/>
     <section className={'carousel' + (carHold ? ' hold' : '')} aria-label={t('여섯 개의 컬렉션', 'Six collections')} onPointerDown={() => setCarHold(true)}>
@@ -702,7 +714,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <div className="row"><h3>{lines(t('호텔 연회 · 기업행사 · VIP 리셉션', 'Hotel banquets · Corporate events · VIP receptions'))}</h3><p>TWOTTIVA</p><span/></div>
       </div>
       <p className="muted small" style={{marginTop: 20}}>{t('공연 이력은 TWOTTIVA와 각 연주자의 이력입니다.', 'Performance history belongs to TWOTTIVA and its musicians.')}</p>
-      <video className="performance-video" controls playsInline preload="metadata" src="/belior/rehearsal.mp4"/></section>
+      <video className="performance-video" controls playsInline preload="metadata" poster={V('muse-film-poster.jpg')} src={V('muse-film.mp4')}/></section>
     <TheEvening/>
     <Band img="eve-quartet.jpg" eyebrow="For Your Evening" title={t('행사의 성격에 맞춘\n프로그램', 'A programme shaped\nto your event')} text={t('행사 일정과 장소, 진행 순서를 바탕으로 편성과 곡목을 제안드립니다.', 'We propose ensemble and repertoire around your schedule, venue and running order.')} href="/music/inquiry" cta={t('공연 문의', 'Inquire')} pos="86% 55%"/>
   </>;

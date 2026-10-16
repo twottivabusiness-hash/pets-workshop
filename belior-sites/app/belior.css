@@ -88,7 +88,7 @@
 .belior .house{position: relative; display: block; text-decoration: none; min-height: 72svh; overflow: hidden; isolation: isolate;}
 .belior .house img{position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.6s ease;}
 .belior .house::after{content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(12,11,10,.9), rgba(12,11,10,.1) 60%);}
-.belior .house:hover img{transform: scale(1.04);}
+.belior .house:hover img{filter:brightness(1.09)}
 .belior .house .txt{position: absolute; left: 0; right: 0; bottom: 0; padding: 32px clamp(20px, 3vw, 44px); display: grid; gap: 10px;}
 .belior .house h2{font-size: clamp(1.8rem, 3.4vw, 2.8rem); letter-spacing: .08em;}
 .belior .more{font: .7rem/1 var(--label); letter-spacing: .3em; text-transform: uppercase; color: var(--champagne);}
@@ -98,7 +98,7 @@
 .belior .door{text-decoration: none; display: grid; gap: 14px; align-content: start;}
 .belior .door .ph{aspect-ratio: 4 / 5; overflow: hidden; background: var(--night);}
 .belior .door .ph img{width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease;}
-.belior .door:hover .ph img{transform: scale(1.04);}
+.belior .door:hover .ph img{filter:brightness(1.09)}
 .belior .door h3{font-size: 1.6rem; letter-spacing: .06em;}
 .belior .door p{color: var(--taupe); font-size: .95rem;}
 .belior .spread{display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); align-items: end;}
@@ -131,7 +131,7 @@
 .belior .world{position: relative; text-decoration: none; aspect-ratio: 3 / 4; overflow: hidden; isolation: isolate; background: var(--night);}
 .belior .world .bg{position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.4s ease;}
 .belior .world::after{content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(12,11,10,.92), rgba(12,11,10,.05) 55%);}
-.belior .world:hover .bg{transform: scale(1.05);}
+.belior .world:hover .bg{filter:brightness(1.09)}
 .belior .world .txt{position: absolute; inset: auto 0 0 0; padding: 26px; display: grid; gap: 8px;}
 .belior .world h3{font-size: 2rem; letter-spacing: .14em;}
 .belior .world .kw{font: .68rem/1.5 var(--label); letter-spacing: .26em; text-transform: uppercase; color: var(--ivory); opacity: .8;}
@@ -223,8 +223,8 @@
 @keyframes curtain-fall{ from { opacity: 0; visibility: visible; } to { opacity: 1; visibility: visible; } }
 .belior .scene-mark{height: 46px; width: auto; opacity: .9;}
 .belior .scene-mark.round{width: 56px; height: 56px; object-fit: cover; border-radius: 50%;}
-.belior .scene > .bg, .belior .house img, .belior .world .bg{transform: scale(1.06); transition: transform 2.2s cubic-bezier(.2, .6, .2, 1);}
-.belior .scene.seen > .bg, .belior .house.seen img, .belior .world.seen .bg{transform: scale(1);}
+.belior .scene > .bg, .belior .house img, .belior .world .bg{clip-path:inset(6% 0 6% 0);opacity:.35;transform:translateY(1.5%);transition:clip-path 1.6s cubic-bezier(.2,.7,.2,1),opacity 1.6s ease,transform 1.8s cubic-bezier(.2,.7,.2,1)}
+.belior .scene.seen > .bg, .belior .house.seen img, .belior .world.seen .bg{clip-path:inset(0 0 0 0);opacity:1;transform:none}
 .belior .scene .inner > *{transform: translateY(14px); transition: transform 1.2s cubic-bezier(.2, .6, .2, 1);}
 .belior .scene.seen .inner > *{transform: none;}
 .belior .scene .inner > *:nth-child(2){transition-delay: .08s;}
@@ -321,7 +321,7 @@
 .belior .chapter .num{font: .8rem/1 var(--label); letter-spacing: .2em; color: var(--champagne);}
 .belior .ch-img{aspect-ratio: 2.2 / 1; overflow: hidden; background: var(--night);}
 .belior .ch-img img{width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s ease;}
-.belior .chapter:hover .ch-img img{transform: scale(1.05);}
+.belior .chapter:hover .ch-img img{filter:brightness(1.09)}
 .belior .ch-txt{display: grid; gap: 12px; min-width: 0;}
 .belior .ch-txt h3{font-size: clamp(1.4rem, 2.6vw, 2.1rem); letter-spacing: .08em;}
 .belior .ch-txt p{color: var(--taupe);}
@@ -426,7 +426,7 @@
 .belior .gallery-chapter{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center;text-decoration:none;border-block:1px solid var(--line);padding-block:clamp(24px,4vw,48px)}
 .belior .gc-img{aspect-ratio:16/10;overflow:hidden;background:var(--night)}
 .belior .gc-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s ease}
-.belior .gallery-chapter:hover .gc-img img{transform:scale(1.04)}
+.belior .gallery-chapter:hover .gc-img img{filter:brightness(1.09)}
 .belior .gc-txt{display:grid;gap:14px;min-width:0}
 .belior .gc-txt h3{font-size:clamp(2.2rem,4.6vw,3.8rem);letter-spacing:.14em}
 .belior .gc-work{font:italic 400 1.15rem/1.4 var(--display);color:var(--champagne)}
@@ -573,7 +573,7 @@
 .belior .ar{margin:0;display:grid;gap:16px;align-content:start}
 .belior .ar .ph{aspect-ratio:4/5;overflow:hidden;background:var(--night)}
 .belior .ar .ph img{width:100%;height:100%;object-fit:cover;object-position:center 20%;transition:transform 1.4s ease}
-.belior .ar:hover .ph img{transform:scale(1.04)}
+.belior .ar:hover .ph img{filter:brightness(1.09)}
 .belior .ar h3{font-size:1.6rem}
 .belior .ar ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;color:var(--taupe)}
 .belior .ar li{font-size:.84rem}
@@ -613,8 +613,8 @@
 
 /* ---------- v9 motion ---------- */
 /* text rises into place as it enters (class added by script only) */
-.belior .rv{opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.6,.2,1),transform 1.1s cubic-bezier(.2,.6,.2,1)}
-.belior .rv.seen{opacity:1;transform:none}
+.belior .rv{opacity:0;transform:translateY(18px);clip-path:inset(0 0 14% 0);transition:opacity 1.2s cubic-bezier(.2,.6,.2,1),transform 1.2s cubic-bezier(.2,.6,.2,1),clip-path 1.2s cubic-bezier(.2,.7,.2,1)}
+.belior .rv.seen{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
 .belior .doors > .rv:nth-child(2),.belior .ar-grid > .rv:nth-child(2),.belior .gj li.rv:nth-child(2),.belior .th-grid > .rv:nth-child(2){transition-delay:.12s}
 .belior .doors > .rv:nth-child(3),.belior .ar-grid > .rv:nth-child(3),.belior .gj li.rv:nth-child(3){transition-delay:.24s}
 .belior .doors > .rv:nth-child(4),.belior .ar-grid > .rv:nth-child(4),.belior .gj li.rv:nth-child(4){transition-delay:.36s}
@@ -635,7 +635,7 @@
 .belior .zoom-stage{position:relative;height:100svh;background:#0a0907}
 .belior .zoom-stage.live{height:260svh}
 .belior .zs-frame{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;align-items:end}
-.belior .zs-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:var(--fx) var(--fy);transform:scale(var(--z,1));filter:brightness(calc(.9 + var(--p,1) * .1));will-change:transform}
+.belior .zs-img{position:absolute;left:0;right:0;top:-8%;width:100%;height:116%;object-fit:cover;transform:translateY(calc((1 - var(--p,1)) * 6%));filter:brightness(calc(.72 + var(--p,1) * .28));will-change:transform}
 .belior .zs-veil{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 48% 56% at var(--fx) var(--fy),rgba(10,9,7,0) 0%,rgba(10,9,7,.1) 50%,rgba(10,9,7,.7) 85%,rgba(10,9,7,.85) 100%);opacity:calc(1 - var(--p,1))}
 .belior .zs-frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(10,9,7,.78),transparent 45%)}
 .belior .zs-frame .inner{position:relative;z-index:2;text-align:center;padding:0 var(--gutter,24px) calc(env(safe-area-inset-bottom,0px) + 12vh);opacity:var(--p,1);transform:translateY(calc((1 - var(--p,1)) * 40px))}
@@ -676,7 +676,7 @@
 .belior .fn-team .cta{margin-top:28px;display:inline-flex}
 
 @media (prefers-reduced-motion:reduce){
-  .belior .rv,.belior .scene .inner > *{opacity:1!important;transform:none!important;transition:none!important}
+  .belior .rv,.belior .scene .inner > *,.belior .scene > .bg,.belior .house img,.belior .world .bg{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
   .belior .film .cue i,.belior .zs-hint i,.belior .dot i{animation:none}
 }
 
@@ -685,8 +685,8 @@
 .belior .text-link:hover{color:#d1b87e;border-color:#b69a63;gap:22px}
 .belior .ko-line{color:#b69a63;letter-spacing:.08em;font-size:13px}
 .belior .b12-hero{position:relative;min-height:min(920px,100svh);display:flex;align-items:center;overflow:hidden;isolation:isolate}
-.belior .bh-img{position:absolute;inset:0;z-index:-2;background:url(/belior/v3/b12-panther.jpg) center 45%/cover;transform:scale(1.06);animation:bl-kb 18s ease-out forwards}
-@keyframes bl-kb{to{transform:scale(1)}}
+.belior .bh-img{position:absolute;inset:0;z-index:-2;background:url(/belior/v3/b12-panther.jpg) center 40%/cover;animation:bl-pan 36s ease-in-out infinite alternate}
+@keyframes bl-pan{to{background-position:center 56%}}
 .belior .bh-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#070706cc,#07070638 75%),linear-gradient(0deg,rgba(7,7,6,.62),transparent 38%)}
 .belior .bh-copy{margin:80px 0 0 12.5%;max-width:600px;padding-right:var(--gutter)}
 .belior .b12-hero h2{font-family:var(--display);font-weight:400;font-size:clamp(56px,8vw,116px);line-height:.88;margin:28px 0}
@@ -706,7 +706,7 @@
 .belior .b12-card:nth-child(4),.belior .b12-card:nth-child(5){grid-column:span 3;height:510px}
 .belior .b12-card:nth-child(6){grid-column:span 6;height:520px}
 .belior .b12-card img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.belior .b12-card:hover img{transform:scale(1.045)}
+.belior .b12-card:hover img{filter:brightness(1.09)}
 .belior .b12-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.82),transparent 65%)}
 .belior .b12-cc{position:absolute;bottom:28px;left:27px;right:20px}
 .belior .b12-cc > span:first-child{color:#d4be8a;font-size:11px;letter-spacing:.16em}
@@ -730,7 +730,7 @@
 .belior .b12-next{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #1d1a15}
 .belior .b12-next a{position:relative;height:300px;overflow:hidden;display:flex;align-items:flex-end;padding:30px var(--gutter);color:inherit;text-decoration:none}
 .belior .b12-next img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:opacity .6s,transform 1.1s}
-.belior .b12-next a:hover img{opacity:.8;transform:scale(1.03)}
+.belior .b12-next a:hover img{opacity:.85}
 .belior .b12-next a::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent 70%);z-index:1}
 .belior .b12-next div{position:relative;z-index:2}
 .belior .b12-next span{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#d4be8a}
@@ -784,7 +784,7 @@
 
 /* No. 16 poster */
 .belior .n16-poster{position:relative;min-height:100svh;display:grid;grid-template-rows:auto 1fr auto;justify-items:center;text-align:center;isolation:isolate;overflow:hidden;color:#f6f1e6;padding:clamp(56px,9vh,110px) var(--gutter) clamp(40px,7vh,80px)}
-.belior .n16-poster .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;z-index:-2;transform:scale(1.04);transition:transform 6s ease}
+.belior .n16-poster .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;z-index:-2;transition:filter 6s ease}
 .belior .n16-poster::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,16,10,.35),transparent 28%,transparent 62%,rgba(6,12,12,.5))}
 .belior .np-brand{display:block;font-family:var(--display);font-weight:400;font-size:clamp(46px,8vw,104px);letter-spacing:.18em;line-height:1;text-shadow:0 2px 24px rgba(0,0,0,.35)}
 .belior .np-no{display:block;font-family:var(--display);font-size:clamp(18px,2vw,26px);margin-top:12px;letter-spacing:.06em}
@@ -803,7 +803,7 @@
 .belior .ex-grid{max-width:1440px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
 .belior .ex-card{position:relative;aspect-ratio:3/4.4;overflow:hidden;color:inherit;text-decoration:none;background:#111}
 .belior .ex-card img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.belior .ex-card:hover img{transform:scale(1.05)}
+.belior .ex-card:hover img{filter:brightness(1.09)}
 .belior .ex-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent 60%)}
 .belior .ex-cc{position:absolute;left:22px;right:18px;bottom:24px}
 .belior .ex-cc span{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#d4be8a}
@@ -895,7 +895,7 @@
 .belior .pi-ours .lead p{font-size:12px;line-height:1.8;color:#cfc8bb;margin:0}
 .belior .pi-ours figure{position:relative;margin:0;aspect-ratio:3/4;overflow:hidden}
 .belior .pi-ours figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
-.belior .pi-ours figure:hover img{transform:scale(1.05)}
+.belior .pi-ours figure:hover img{filter:brightness(1.09)}
 .belior .pi-ours figcaption{position:absolute;left:14px;bottom:14px;color:#f5f2ec;display:grid;gap:4px;font-size:12px}
 .belior .pi-ours figcaption b{font-weight:400;letter-spacing:.2em;font-size:11px}
 .belior .ct-hero{text-align:center;padding:60px var(--gutter) 80px;border-bottom:1px solid #e4ddd0}
@@ -948,7 +948,7 @@
 .belior .as-grid a{color:inherit;text-decoration:none}
 .belior .as-grid .ph{aspect-ratio:4/5;overflow:hidden}
 .belior .as-grid img{width:100%;height:100%;object-fit:cover;object-position:center 12%;transition:transform 1.2s}
-.belior .as-grid a:hover img{transform:scale(1.04)}
+.belior .as-grid a:hover img{filter:brightness(1.09)}
 .belior .as-grid .label{display:block;margin-top:14px}
 .belior .as-grid h3{font-weight:400;font-size:19px;margin:6px 0}
 .belior .as-grid p{font-size:12px;color:rgba(236,228,214,.65);margin:0}
@@ -1028,7 +1028,7 @@
 .belior .gs{color:inherit;text-decoration:none;border-top:1px solid var(--world);padding-top:14px}
 .belior .gs .ph{aspect-ratio:1;overflow:hidden;background:#111;margin-bottom:12px}
 .belior .gs img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
-.belior .gs:hover img{transform:scale(1.05)}
+.belior .gs:hover img{filter:brightness(1.09)}
 .belior .gs .label{color:var(--world)}
 .belior .gs h3{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.08em;margin:6px 0}
 .belior .gs p{font-size:12px;color:rgba(236,228,214,.65);margin:0}
@@ -1104,8 +1104,8 @@
 .belior .ct2 .pf-consent dd,.belior .ct2 .pf-note{font-size:12px}
 /* ---------- Lounge world ---------- */
 .belior .lw-open{position:relative;min-height:calc(100svh - 64px);display:grid;align-items:end;isolation:isolate;overflow:hidden;background:#0b0f0c}
-.belior .lw-open .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;z-index:-2;transform:scale(1.04);animation:lw-drift 18s ease-in-out infinite alternate}
-@keyframes lw-drift{from{transform:scale(1.04) translateY(0)}to{transform:scale(1.08) translateY(-1.5%)}}
+.belior .lw-open .bg{position:absolute;inset:-3% -3%;width:106%;height:106%;object-fit:cover;object-position:center 40%;z-index:-2;animation:lw-drift 40s ease-in-out infinite alternate}
+@keyframes lw-drift{from{transform:translate(0,0)}to{transform:translate(-1.6%,-1.2%)}}
 .belior .lw-open::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(8,10,8,.25),transparent 35%,rgba(8,10,8,.82) 100%)}
 .belior .lw-open-copy{padding:clamp(48px,8vw,120px) var(--gutter) clamp(40px,6vw,80px);display:grid;gap:16px;max-width:36rem}
 .belior .lw-open-copy h1{font-family:var(--ko);font-weight:400;font-size:clamp(26px,3vw,40px);letter-spacing:.04em}
@@ -1199,7 +1199,7 @@
 .belior .ls-world.flip .ls-hero{order:2}
 .belior .ls-hero{position:relative;margin:0;aspect-ratio:4/5;overflow:hidden;background:#000}
 .belior .ls-hero img:first-child{width:100%;height:100%;object-fit:cover;transition:transform 6s ease}
-.belior .ls-world:hover .ls-hero img:first-child{transform:scale(1.04)}
+.belior .ls-world:hover .ls-hero img:first-child{filter:brightness(1.09)}
 .belior .ls-hero figcaption{position:absolute;right:18px;bottom:18px;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid rgba(236,228,214,.5);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .belior .ls-hero figcaption img{width:100%;height:100%;object-fit:cover}
 .belior .ls-copy{display:grid;gap:14px}
@@ -1247,3 +1247,8 @@
 .belior .lw-invite-title span{display:block;font:400 .72rem/2 var(--label);letter-spacing:.26em;text-transform:uppercase;color:var(--champagne)}
 .belior .lw-invite .text-link{justify-self:start}
 @media (max-width:860px){.belior .lw-invite{grid-template-columns:1fr}.belior .lw-invite figure{justify-self:center;max-width:360px}}
+
+/* world objects: these pictures are small originals — shown at a size that keeps them crisp */
+.belior .objects-fig{max-width:840px}
+.belior .objects-fig img{width:100%;height:auto}
+.belior .house img,.belior .door .ph img,.belior .world .bg,.belior .ch-img img,.belior .gc-img img,.belior .ar .ph img,.belior .b12-card img,.belior .ex-card img,.belior .pi-ours figure img,.belior .as-grid img,.belior .gs img,.belior .ls-hero img:first-child{transition:filter 1.4s ease,opacity 1.6s ease,clip-path 1.6s cubic-bezier(.2,.7,.2,1),transform 1.8s cubic-bezier(.2,.7,.2,1)}

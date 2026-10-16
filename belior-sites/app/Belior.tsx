@@ -1422,7 +1422,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
           <div className="fact"><span className="label">Pattern & Motif</span><img className="pat" src={V(w.slug + '-pattern.jpg')} alt={w.name + ' pattern'}/></div>
         </div></section>
       <section className="section night"><Head eyebrow={w.name + ' Objects'} title={t(w.name + '의 사물들', 'Objects of ' + w.name)} text={t('향수와 가방, 의류와 캔들. 하나의 엠블럼이 여러 사물로 이어집니다.', 'Parfum, bags, apparel and candles. One emblem carried into many objects.')}/>
-        {mock ? <figure className="wide-fig"><img src={V(w.slug + '-objects.jpg')} alt={w.name + ' objects'} loading="lazy"/><figcaption>Parfum · Bags · Apparel · Objects</figcaption></figure>
+        {mock ? <figure className="wide-fig objects-fig"><img src={V(w.slug + '-objects.jpg')} alt={w.name + ' objects'} loading="lazy"/><figcaption>Parfum · Bags · Apparel · Objects</figcaption></figure>
           : <p className="muted">{t('PHOENIX의 사물은 공개 준비 중입니다.', 'Phoenix objects are in development.')}</p>}</section>
       {w.notes && w.scent && <section className="section"><div className="spread">
         <figure className="c-5"><img src={V(w.slug + '-scent.jpg')} alt={w.name + ' fragrance'} loading="lazy"/><figcaption>Fragrance</figcaption></figure>

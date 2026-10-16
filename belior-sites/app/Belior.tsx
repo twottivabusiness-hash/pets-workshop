@@ -227,10 +227,12 @@ function MuseFilm({src = 'belior-film-v9.mp4', poster = 'film-poster.jpg', label
 /* ---------- The Lounge world: a private place to rest and play, opened by the house's invitation code ---------- */
 const WORLD_SPOTS: [string, number, number][] = [['lion', 17, 19], ['swan', 46, 14], ['orca', 75, 17], ['leopard', 14, 41], ['panther', 85, 36], ['phoenix', 81, 52]];
 
+function lockLounge() { try { ['belior-salon', 'belior-salon-until', 'belior-guest'].forEach(x => localStorage.removeItem(x)); } catch {} location.reload(); }
 function LoungeOpening({tier, name}: {tier: Tier | ''; name?: string}) {
   const {t} = useT();
   const circle = tier === 'circle';
   return <section className="lw-open" aria-label="BELiOR Lounge">
+    <button type="button" className="lw-lock label" onClick={lockLounge}>{t('라운지 잠그기', 'Lock the lounge')}</button>
     <img className="bg" src={V('lounge-forest.jpg')} alt={t('숲속 물가, 말에 오른 아이와 아버지', 'A forest pool, a child on a horse and her father')}/>
     <div className="lw-open-copy"><p className="label">{circle ? 'BELiOR Lounge · The Circle' : 'BELiOR Lounge · Guest of the House'}</p>
       <h1>{name ? lines(t(`${name} 님,\n잠시, 어린 날로`, `${name},\nfor a while, a child again`)) : lines(t('잠시, 어린 날로', 'For a while, a child again'))}</h1>
@@ -755,13 +757,15 @@ function Lounge() {
   const [tier, setTier] = useState<Tier | ''>(''), [name, setName] = useState(''), [opening, setOpening] = useState(false), [err, setErr] = useState(false), [checked, setChecked] = useState(false);
   const open = tier !== '';
   const admit = (tr: Tier, slow: boolean, guest?: Guest) => {
-    try { localStorage.setItem('belior-salon', tr); if (guest) localStorage.setItem('belior-guest', JSON.stringify(guest)); } catch {}
+    try { localStorage.setItem('belior-salon', tr); localStorage.setItem('belior-salon-until', String(Date.now() + 30 * 864e5)); if (guest) localStorage.setItem('belior-guest', JSON.stringify(guest)); } catch {}
     setErr(false); if (guest) setName(guest.name);
     if (!slow) { setTier(tr); return; } setOpening(true); setTimeout(() => { setTier(tr); window.scrollTo(0, 0); }, 1400);
   };
   useEffect(() => {
     (async () => {
       try {
+        const until = Number(localStorage.getItem('belior-salon-until') || 0);            // an entry is remembered for 30 days, then the door closes again
+        if (localStorage.getItem('belior-salon') && Date.now() > until) ['belior-salon', 'belior-salon-until', 'belior-guest'].forEach(x => localStorage.removeItem(x));
         const k = new URLSearchParams(location.search).get('k');
         if (k) {
           history.replaceState(null, '', location.pathname);

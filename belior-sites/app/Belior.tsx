@@ -381,6 +381,17 @@ function InviteContact() {
   </div>;
 }
 
+
+/* BELiOR performance on YouTube (privacy-enhanced embed, loads when scrolled near) */
+const YT_ID = 'FU6bRZKOc18';
+function YouTubeFilm({eyebrow = 'BELiOR · Live Performance'}: {eyebrow?: string}) {
+  const {t} = useT();
+  return <section className="yt-film"><span className="label">{eyebrow}</span>
+    <div className="yt-frame"><iframe src={'https://www.youtube-nocookie.com/embed/' + YT_ID + '?rel=0&modestbranding=1&playsinline=1'} title={t('BELiOR 공연 영상', 'BELiOR performance film')} loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/></div>
+    <a className="text-link" href={'https://youtu.be/' + YT_ID} target="_blank" rel="noopener noreferrer">{t('YouTube에서 보기', 'Watch on YouTube')} <span aria-hidden="true">↗</span></a></section>;
+}
+
 /* No. 01 — The Tchaikovsky Edition */
 function Tchaikovsky() {
   const {t} = useT();
@@ -810,7 +821,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const maison = <>
-    <Scene img="o-hero-salon.jpg" eyebrow="Maison de l’Art de Vivre" title={'A Heritage for a\nBrighter Tomorrow'} lede={t('음악에서 시작된 하나의 하우스. Art · People · Places and beauty.', 'A house that began in music. Art · People · Places and beauty.')}/>
+    <YouTubeFilm eyebrow="BELiOR · Maison"/>
     <MaisonIntro/><TheHouse/>
     <section className="section" id="symbol"><Head eyebrow="Symbol System" title={t('하나의 하우스, 하나의 심볼, 여섯 개의 세계', 'One house, one symbol, six worlds')}
       text={t('메종 심볼은 하우스 전체를, 사자-B 모노그램은 동물 세계관의 시작을, 여섯 엠블럼은 각 컬렉션을 대표합니다.', 'The maison symbol stands for the whole house, the lion-B monogram opens the animal worlds, and six emblems stand for each collection.')}/>
@@ -834,6 +845,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const music = <>
     <Scene img="eve-quartet.jpg" eyebrow="BELiOR Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술. 실제 무대와 현장에서 연주하는 BELiOR의 음악입니다.', 'Music performed live, on real stages and at real events.')} pos="86% 55%"/>
+    <YouTubeFilm/>
     <section className="section"><Head eyebrow="Music" title={t('음악은 저녁을 작곡합니다', 'Music composes the evening')} text="Where Music Becomes Memory."/>
       <div className="doors">
         <Door href="/music/artists" img="bu-backstage.jpg" eyebrow="Artists" title={t('연주진', 'Artists')} text={t('현장에서 함께 호흡하는 연주진.', 'The musicians on stage.')}/>
@@ -847,6 +859,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const artists = <>
     <Scene img="bu-backstage.jpg" eyebrow="Music · Artists" title={t('BELiOR 연주진', 'BELiOR Artists')} lede="Beyond Performance. An Experience." pos="center 35%"/>
+    <YouTubeFilm/>
     <Founder/><Artists/><OfficialStage/>
     <TheHouse/>
     <Band img="bu-violinist.jpg" eyebrow="En Plein Air" title={t('바람이 지나간 자리에\n선율이 남습니다', 'Where the wind passes,\na melody remains')} text={t('잔디 위의 바람, 테이블 위의 촛불. 그 저녁의 빛과 공기가 그대로 악보가 됩니다.', 'Wind over the lawn, a candle on the table. The light and air of the evening become the score.')} href="/music/performances" cta={t('공연 보기', 'Performances')} pos="center 68%"/>
@@ -854,6 +867,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const performances = <>
     <Scene img="o-gala-ensemble.jpg" eyebrow="Music · Performances" title={t('공연 포트폴리오', 'Performances')} lede="The Sound of an Extraordinary Evening."/>
+    <YouTubeFilm/>
     <section className="section"><Head eyebrow="Portfolio" title={t('함께한 저녁', 'Evenings we shared')}/>
       <div className="rows">
         <a className="row" href="/music/gala"><h3>Brand Gala Dinner Show</h3><p>{t('서울 · 한강을 내려다보는 야외 디너 · 현악 4중주 라이브 연주', 'Seoul · Outdoor dinner above the Han River · Live string quartet')}</p><span className="more">Editorial</span></a>
@@ -869,6 +883,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const gala = <>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial · Brand Gala Dinner Show, Seoul" title={t('강 위로 저무는 저녁', 'An evening over the river')} lede={t('브랜드 갈라 디너 쇼에서 BELiOR는 현장의 라이브 연주를 맡았고, 연주에 대해 좋은 평가를 받았습니다.', 'At a brand gala dinner show, BELiOR performed live and was well received.')} pos="center 55%"/>
+    <YouTubeFilm/>
     <section className="section">
       <div className="spread"><figure className="c-8"><img src={V('eve-quartet.jpg')} alt={t('행사장 앞 야외 4중주', 'Outdoor quartet at the venue')} loading="lazy"/><figcaption>I. Reception</figcaption></figure>
         <div className="copy c-4"><span className="label">Reception</span><h3>{lines(t('손님이 도착하는 시간', 'As the guests arrive'))}</h3><p className="muted">{t('조명이 켜지기 시작할 무렵, 리셉션의 공기를 현악 4중주로 채웠습니다.', 'As the lights came on, a string quartet filled the reception.')}</p></div></div>
@@ -992,6 +1007,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const atelier = <>
     <Scene img="o-mk-home-atelier.jpg" eyebrow="Atelier" title="Craft Your Moment" lede={t('시간이 만들어내는 아름다움, 섬세한 손끝에서 시작됩니다.', 'Beauty made by time begins at the fingertips.')}/>
+    <YouTubeFilm/>
     <AtelierContent/>
     <VisualTeam/>
     <section className="section" id="process"><Head eyebrow="Process" title={t('제작의 순서', 'How we make')} text={t('세부 일정과 방식은 프로젝트마다 함께 정합니다.', 'Schedules and methods are agreed project by project.')}/>
@@ -1003,6 +1019,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const journal = <>
     <Scene img="o-mk-home-journal.jpg" eyebrow="Journal" title={'Stories behind\nthe Maison'} lede={t('예술, 사람, 공간의 이야기를 기록합니다.', 'Stories of art, people and places.')}/>
+    <YouTubeFilm/>
     <section className="b12-jhero"><span className="label">Notes from the maison · Volume 01</span><h2>A slower kind<br/><em>of looking.</em></h2><p className="muted">{t('관찰하고, 머물고, 기억하는 것들.', 'What we observe, stay with and remember.')}</p></section>
     <section className="b12-journal">
       <article className="feature"><img src={V('b12-atelier.jpg')} alt={t('가죽을 다루는 손', 'A maker’s hands shaping leather')} loading="lazy"/><span className="label">Atelier notes · 04 min read</span><h3>The beauty of what takes time</h3>

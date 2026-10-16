@@ -587,7 +587,7 @@ function Founder() {
   const {t} = useT();
   const rows: [string, string, string][] = [
     ['기획 · 현장 총괄', 'Planning & direction', t('한국여성공인회계사회 제31회 정기총회 · 회장 이·취임식 — 엘리에나호텔, 2026', 'Korea Women CPA Association, 31st General Meeting & Inauguration — L’Eliena Hotel, 2026')],
-    ['직접 총괄', 'Directed', t('국회의원 내빈행사 — 아르테움 컬쳐', 'National Assembly guest event — Arteum Culture')],
+    ['행사', 'Event', t('국회의원 내빈행사 · 사단법인', 'National Assembly guest event · Incorporated association')],
     ['연주', 'Performance', t('KBS Hall 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th Anniversary Concert')],
     ['현장 진행', 'On site', t('식순이 앞당겨졌을 때 곡 해설 멘트로 행사 흐름을 직접 이음', 'Kept the evening flowing with spoken programme notes when the running order moved')],
     ['운영', 'Operation', t('사전 합주 · 앙상블 디렉팅 · 담당자 창구 단일화', 'Rehearsal, ensemble direction and a single point of contact')],
@@ -603,7 +603,7 @@ function Founder() {
 const PRINCIPALS: {im: string; ko: string; en: string; inst: string; role: [string, string]; edu: [string, string][]; stage: [string, string][]}[] = [
   {im: 'sa-hyerin.jpg', ko: '여혜린', en: 'Hyerin Yeo', inst: 'Violin I', role: ['바이올리니스트 · 예술감독 · 편곡', 'Violinist · Artistic Director · Arranger'],
     edu: [['성신여자대학교 기악과 바이올린 전공', 'Violin, Sungshin Women’s University'], ['TWOTTIVA 프로그램 기획 및 공연 총괄', 'Programme and performance director, TWOTTIVA']],
-    stage: [['한국여성공인회계사회 이·취임식 총괄', 'Directed the Korea Women CPA Association inauguration'], ['국회의원 내빈행사 — 아르테움 컵처', 'Parliamentary guest event — Arteum'], ['KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th anniversary concert']]},
+    stage: [['한국여성공인회계사회 이·취임식 총괄', 'Directed the Korea Women CPA Association inauguration'], ['국회의원 내빈행사 · 사단법인', 'National Assembly guest event · Incorporated association'], ['KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th anniversary concert']]},
   {im: 'sa-samuel.jpg', ko: '김사무엘', en: 'Samuel Kim', inst: 'Violin II', role: ['바이올리니스트', 'Violinist'],
     edu: [['한국예술종합학교 출신', 'Korea National University of Arts']],
     stage: [['청와대 영빈관 대통령 초청 만찬', 'Presidential state dinner, Cheong Wa Dae guest house'], ['2022 대통령 취임식 만찬 · 서울신라호텔', '2022 presidential inauguration dinner, The Shilla Seoul'], ['하나은행', 'Hana Bank']]},

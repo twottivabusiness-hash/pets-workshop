@@ -1192,3 +1192,46 @@
 .belior .scene.hall > .bg-tall{display:none}
 @media (max-aspect-ratio:1/1){.belior .scene.hall{min-height:calc(100svh - 100px)}.belior .scene.hall > .bg-wide{display:none}.belior .scene.hall > .bg-tall{display:block;object-position:50% 40%}.belior .scene.hall .inner{padding-top:60px}}
 .belior .lw-lock{position:absolute;top:18px;right:var(--gutter);z-index:2;background:rgba(5,7,10,.45);border:1px solid rgba(236,228,214,.3);color:var(--ivory);padding:8px 12px;cursor:pointer;backdrop-filter:blur(4px)}
+/* VIP scent atelier */
+.belior .lw-scents{padding:clamp(56px,8vw,110px) var(--gutter);background:#080706;border-top:1px solid rgba(201,170,108,.18)}
+.belior .lw-scents .lw-games-head .muted{max-width:36rem;margin:0 auto;font-size:13px;line-height:1.95}
+.belior .ls-world{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center;max-width:1240px;margin:0 auto;padding:clamp(40px,6vw,80px) 0;border-top:1px solid rgba(201,170,108,.14)}
+.belior .ls-world.flip .ls-hero{order:2}
+.belior .ls-hero{position:relative;margin:0;aspect-ratio:4/5;overflow:hidden;background:#000}
+.belior .ls-hero img:first-child{width:100%;height:100%;object-fit:cover;transition:transform 6s ease}
+.belior .ls-world:hover .ls-hero img:first-child{transform:scale(1.04)}
+.belior .ls-hero figcaption{position:absolute;right:18px;bottom:18px;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid rgba(236,228,214,.5);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.belior .ls-hero figcaption img{width:100%;height:100%;object-fit:cover}
+.belior .ls-copy{display:grid;gap:14px}
+.belior .ls-copy h3{font-size:clamp(2.4rem,5vw,4rem);letter-spacing:.14em;line-height:1}
+.belior .ls-kw{font:400 .72rem/1.6 var(--label);letter-spacing:.22em;text-transform:uppercase;color:var(--champagne);margin:0}
+.belior .ls-world p.ls-world{font-size:14px;line-height:1.95;margin:0;max-width:32rem;text-wrap:pretty}
+.belior .ls-notes{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.belior .ls-notes span{border:1px solid color-mix(in srgb,var(--world) 55%,transparent);padding:10px 16px;font:400 .72rem/1.4 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--ivory)}
+.belior .ls-notes b{font-weight:400}
+.belior .ls-scent{font-family:var(--display);font-size:clamp(1.1rem,1.6vw,1.35rem);line-height:1.6;margin:0;color:var(--ivory);max-width:30rem}
+.belior .ls-atelier{font-size:13px;line-height:1.9;color:rgba(236,228,214,.7);margin:0;display:grid;gap:4px;max-width:30rem}
+.belior .ls-row{display:flex;gap:22px;flex-wrap:wrap;margin-top:6px}
+.belior .ls-making{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(20px,3vw,40px);align-items:center;max-width:1240px;margin:0 auto;padding:clamp(48px,7vw,96px) 0 0;border-top:1px solid rgba(201,170,108,.14)}
+.belior .ls-making-copy{display:grid;gap:12px}
+.belior .ls-making-copy h3{font-family:var(--ko);font-weight:400;font-size:clamp(20px,2vw,26px)}
+.belior .ls-making-copy .muted{font-size:13px;line-height:1.95;margin:0}
+.belior .ls-making figure{margin:0}
+.belior .ls-making figure img{width:100%;aspect-ratio:1;object-fit:cover}
+.belior .ls-making figcaption{font:400 .72rem/1.4 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--champagne);margin-top:10px}
+.belior .ls-sillage{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,4vw,64px);align-items:center;max-width:1240px;margin:clamp(48px,7vw,96px) auto 0;padding-top:clamp(40px,6vw,72px);border-top:1px solid rgba(201,170,108,.14)}
+.belior .ls-sillage img{width:100%;height:auto}
+.belior .ls-sillage > div{display:grid;gap:12px}
+.belior .ls-sillage h3{font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:.1em}
+.belior .ls-sillage .muted{font-size:13px;line-height:1.95;margin:0}
+.belior .ls-sillage .text-link{justify-self:start}
+@media (max-width:860px){.belior .ls-world,.belior .ls-making,.belior .ls-sillage{grid-template-columns:1fr}.belior .ls-world.flip .ls-hero{order:0}.belior .ls-making{grid-template-columns:1fr 1fr}.belior .ls-making-copy{grid-column:1/-1}}
+/* The little village */
+.belior .lw-village{padding:clamp(56px,8vw,110px) var(--gutter) clamp(40px,6vw,80px);background:#0b0a09;border-top:1px solid rgba(201,170,108,.18)}
+.belior .lw-village .lw-games-head .muted{max-width:34rem;margin:0 auto;font-size:13px;line-height:1.95}
+.belior .lw-village-frame{position:relative;max-width:1180px;margin:0 auto;aspect-ratio:16/10;min-height:420px;background:#0f0e0c;border:1px solid rgba(201,170,108,.3)}
+.belior .lw-village-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#e2efe6}
+.belior .lw-village-enter{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;background:radial-gradient(60% 60% at 50% 50%,#1a1712,#0b0a09);border:0;color:var(--ivory);cursor:pointer}
+.belior .lw-village-enter .label{border:1px solid var(--champagne);padding:14px 26px;color:var(--ivory)}
+.belior .lw-village .lw-keys a{color:var(--champagne)}
+@media (max-width:860px){.belior .lw-village-frame{aspect-ratio:auto;height:min(78svh,640px)}}

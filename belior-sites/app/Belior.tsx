@@ -523,6 +523,44 @@ function SecretGarden() {
     <p className="lw-keys muted">{t('PC: 방향키 또는 WASD, Enter로 살펴보기 · 모바일: 화면의 방향 버튼, 또는 가고 싶은 곳을 두드리세요.', 'PC: arrow keys or WASD, Enter to look · Mobile: the arrow buttons, or tap where you want to go.')}</p></section>;
 }
 
+/* ---------- VIP · The Scent Atelier: the six worlds as fragrance, told the way the house tells them ---------- */
+const SCENT_IMG: Record<string, string> = {panther: 'panther-moon.jpg'};
+function LoungeScents() {
+  const {t} = useT();
+  return <section className="lw-scents">
+    <div className="lw-games-head"><span className="label">Private · The Scent Atelier</span><h2>{lines(t('여섯 세계의 향', 'The six worlds, as scent'))}</h2>
+      <p className="muted">{t('동물 컬렉션의 세계마다 하나의 향을 짓습니다. 라운지에 오신 분께만 보여드리는 페이지입니다.', 'One scent is composed for each world of the animal collection. This page is shown only to guests of the lounge.')}</p></div>
+    {WORLDS.map((w, i) => <article className={'ls-world' + (i % 2 ? ' flip' : '')} key={w.slug} style={{['--world' as string]: w.color}}>
+      <figure className="ls-hero"><img src={V(SCENT_IMG[w.slug] || w.alt || w.img || 'phoenix.jpg')} alt={w.name} loading="lazy" style={{objectPosition: posOf(w, 'center')}}/><figcaption><img src={V('emblem-' + w.slug + '.jpg')} alt=""/></figcaption></figure>
+      <div className="ls-copy"><span className="label">The Animal Collection · N° 0{i + 1}</span><h3 style={{color: w.color}}>{w.name}</h3>
+        <p className="ls-kw">{w.kw}</p>
+        <p className="ls-world">{t(w.world[0], w.world[1])}</p>
+        {w.notes && <div className="ls-notes">{w.notes.split(' · ').map(n => <span key={n}><b>{n}</b></span>)}</div>}
+        {w.scent ? <p className="ls-scent">{t(w.scent[0], w.scent[1])}</p> : <p className="ls-scent muted">{t('이 세계의 향은 준비 중입니다.', 'The scent of this world is still being composed.')}</p>}
+        {w.atelier && <p className="ls-atelier"><span className="label">Atelier</span>{t(w.atelier[0], w.atelier[1])}</p>}
+        <div className="ls-row"><a className="text-link" href={'/collection/' + w.slug}>{t('이 세계로', 'Enter this world')} <span aria-hidden="true">→</span></a><a className="text-link" href="/private">{t('샘플 요청', 'Request a sample')} <span aria-hidden="true">↗</span></a></div></div>
+    </article>)}
+    <div className="ls-making"><div className="ls-making-copy"><span className="label">The Atelier · How a scent is made</span><h3>{lines(t('소재에서 시작합니다', 'We begin with material'))}</h3>
+        <p className="muted">{t('우리는 계절이 아니라 소재에서 시작합니다. 서두를 수 없는 디테일 — 솔기의 가장자리, 캡의 균형, 표면이 빛을 모으는 방식 — 로 몇 번이고 돌아갑니다.', 'We begin with material, not a season. Our makers work with patience, returning to the details that cannot be hurried: the edge of a seam, the balance of a cap, the way a surface gathers light.')}</p></div>
+      <figure><img src={V('atelier-drop.jpg')} alt={t('향료 한 방울', 'A single drop of essence')} loading="lazy"/><figcaption>I. The drop</figcaption></figure>
+      <figure><img src={V('atelier-glass.jpg')} alt={t('불 속에서 빚는 유리병', 'A bottle shaped in fire')} loading="lazy"/><figcaption>II. The glass</figcaption></figure></div>
+    <div className="ls-sillage"><img src={V('sillage-patches.jpg')} alt="BELiOR Sillage car fragrance patches" loading="lazy"/>
+      <div><span className="label">Sillage · Car Fragrance</span><h3>BELiOR Sillage</h3><p className="muted">{t('차 안을 위한 BELiOR의 향. 라운지의 손님께 먼저 보여드립니다.', 'BELiOR’s scent for the car, shown first to guests of the lounge.')}</p>
+        <a className="text-link" href="/private">{t('기프트 문의', 'Gift enquiries')} <span aria-hidden="true">↗</span></a></div></div>
+  </section>;
+}
+
+/* Game IV — a small village to wander in. Kept as its own page and opened inside the lounge. */
+function VillageGame() {
+  const {t} = useT();
+  const [open, setOpen] = useState(false);
+  return <section className="lw-village"><div className="lw-games-head"><span className="label">Game IV · The Little Village</span><h2>{lines(t('토끼네 작은 마을', 'The rabbits’ little village'))}</h2>
+      <p className="muted">{t('열매를 모으고, 이웃과 이야기하고, 하루가 저무는 작은 마을. 아이처럼 한가로이 돌아다니셔도 됩니다.', 'Gather berries, talk to the neighbours, watch the day go down. Wander as idly as a child.')}</p></div>
+    <div className="lw-village-frame">{open ? <iframe src="/belior/games/village.html" title={t('토끼네 작은 마을', 'The little village')} loading="lazy" allow="autoplay"/>
+      : <button type="button" className="lw-village-enter" onClick={() => setOpen(true)}><span className="label">{t('마을에 들어가기', 'Enter the village')}</span></button>}</div>
+    <p className="lw-keys muted"><a href="/belior/games/village.html" target="_blank" rel="noopener noreferrer">{t('새 창에서 크게 열기', 'Open full-size in a new window')} ↗</a></p></section>;
+}
+
 function LoungeGames() {
   const {t} = useT();
   return <section className="lw-games"><div className="lw-games-head"><span className="label">The Playroom</span><h2>{lines(t('놀이방', 'The playroom'))}</h2>
@@ -801,7 +839,7 @@ function Lounge() {
       <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
-    <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><SecretGarden/><LoungeGames/>{tier === 'circle' && <CarDiffuser/>}
+    <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><LoungeScents/><SecretGarden/><LoungeGames/><VillageGame/>{tier === 'circle' && <CarDiffuser/>}
     {tier === 'circle' && <><section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>
         <figcaption><span className="label">{t(...cat)}</span><h3>{lines(t(...name))}</h3><p>{line}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')}</a></figcaption></figure>)}</div></section></>}

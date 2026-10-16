@@ -215,10 +215,10 @@ function Experience() {
 
 
 /* The Muse of BELiOR — performance film (guests blurred), plays muted until asked */
-function MuseFilm({src = 'belior-film-v9.mp4', poster = 'film-poster.jpg', label = 'The Muse of BELiOR', audio = true}: {src?: string; poster?: string; label?: string; audio?: boolean}) {
+function MuseFilm({src = 'belior-film-v9.mp4', poster = 'film-poster.jpg', label = 'The Muse of BELiOR', audio = true, vertical = false}: {src?: string; poster?: string; label?: string; audio?: boolean; vertical?: boolean}) {
   const {t} = useT();
   const ref = useRef<HTMLVideoElement>(null), [sound, setSound] = useState(false);
-  return <section className="muse-film" aria-label={label}>
+  return <section className={'muse-film' + (vertical ? ' vertical' : '')} aria-label={label}>
     <video ref={ref} src={V(src)} poster={V(poster)} autoPlay muted loop playsInline preload="metadata"/>
     {audio && <button type="button" className="mf-sound" aria-pressed={sound} onClick={() => { const v = ref.current; if (!v) return; v.muted = sound; setSound(!sound); if (!sound) { v.currentTime = 0; void v.play().catch(() => {}); } }}>
       <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button>}</section>;
@@ -351,16 +351,20 @@ function InviteContact() {
     ['evening', ['음악이 있는 저녁', 'The evening'], ['자리의 흐름을 먼저 읽고, 그 위에 음악과 공간을 함께 구성합니다.', 'We read the flow of the room first, then compose music and place upon it.'], ['pi-hero.jpg', 'ct-eve2.jpg'], '/music'],
     ['content', ['콘텐츠 제작', 'Content production'], ['무대 배경 영상과 영상 편집, 프로그램 그래픽까지 그 저녁의 세계관에 맞춰 기획하고 제작합니다.', 'Stage visuals, film editing and programme graphics, made for the world of each evening.'], ['op-onsite.jpg', 'visual-piano.jpg'], '/atelier'],
   ];
-  return <div className="pf">
-    <section className="ct-hero"><div className="envelope" aria-hidden="true"><div className="card"><em>You are invited to write to the house.</em></div></div>
+  return <div className="pf ct2">
+    <div className="ct2-side">
       <p className="eyebrow">BY INVITATION</p><h1>{lines(t('초대를 청하다', 'Request an invitation'))}</h1>
-      <p className="lead">{t('BELiOR의 저녁은 초대로 열립니다. 함께하고 싶은 저녁의 이야기를 남겨 주시면, 하우스가 직접 회신드립니다.', 'Evenings at BELiOR open by invitation. Tell us about the evening you have in mind, and the house will reply in person.')}</p></section>
-    <section className="ct-services"><p className="eyebrow">{t('BELiOR 서비스 경험', 'The BELiOR services')}</p>
-      {services.map(([id, title, text, imgs, link]) => <div className={'acc' + (open === id ? ' on' : '')} key={id}>
-        <button type="button" onClick={() => setOpen(open === id ? '' : id)} aria-expanded={open === id}>{lines(t(...title))}<span aria-hidden="true">{open === id ? '−' : '+'}</span></button>
-        {open === id && <div className="acc-body"><div className="acc-imgs">{imgs.map(im => <img key={im} src={V(im)} alt="" loading="lazy"/>)}</div>
-          <div className="acc-foot"><p>{t(...text)}</p>{link ? <a className="text-link" href={link}>{t('자세히 보기', 'Learn more')}</a> : <a className="text-link" href={KAKAO} target="_blank" rel="noopener noreferrer">{t('카카오톡으로 상담하기', 'Speak with us on KakaoTalk')}</a>}</div></div>}</div>)}</section>
-    <form className="pf-card ct-form" onSubmit={submit} noValidate><p className="eyebrow">ENQUIRY</p><h2>{lines(t('문의 남기기', 'Leave an enquiry'))}</h2>
+      <p className="lead">{t('BELiOR의 저녁은 초대로 열립니다. 함께하고 싶은 저녁의 이야기를 남겨 주시면, 하우스가 직접 회신드립니다.', 'Evenings at BELiOR open by invitation. Tell us about the evening you have in mind, and the house will reply in person.')}</p>
+      <div className="ct-services"><p className="eyebrow">{t('BELiOR 서비스 경험', 'The BELiOR services')}</p>
+        {services.map(([id, title, text, imgs, link]) => <div className={'acc' + (open === id ? ' on' : '')} key={id}>
+          <button type="button" onClick={() => setOpen(open === id ? '' : id)} aria-expanded={open === id}>{lines(t(...title))}<span aria-hidden="true">{open === id ? '−' : '+'}</span></button>
+          {open === id && <div className="acc-body"><div className="acc-imgs">{imgs.map(im => <img key={im} src={V(im)} alt="" loading="lazy"/>)}</div>
+            <div className="acc-foot"><p>{t(...text)}</p>{link ? <a className="text-link" href={link}>{t('자세히 보기', 'Learn more')}</a> : <a className="text-link" href={KAKAO} target="_blank" rel="noopener noreferrer">{t('카카오톡으로 상담하기', 'Speak with us on KakaoTalk')}</a>}</div></div>}</div>)}</div>
+      <div className="ct2-direct"><p className="eyebrow">KAKAOTALK CHANNEL</p>
+        <a className="ct2-kakao" href={KAKAO + '/chat'} target="_blank" rel="noopener noreferrer">{t('카카오톡으로 상담하기', 'Chat on KakaoTalk')} <span aria-hidden="true">↗</span></a>
+        <a href={'mailto:' + MAIL}>{MAIL}</a><a href={'mailto:' + MAIL2}>{MAIL2}</a></div>
+    </div>
+    <form className="ct2-form" onSubmit={submit} noValidate><p className="eyebrow">ENQUIRY</p><h2>{lines(t('문의 남기기', 'Leave an enquiry'))}</h2>
       <p className="pf-intro">{t('행사의 목적과 원하시는 저녁을 들려주세요. 정해지지 않은 항목은 비워 두셔도 됩니다.', 'Tell us the purpose and the evening you imagine. Leave blank anything not yet decided.')}</p>
       <div className="pf-grid">
         <FieldInput f={{name: 'topic', label: ['문의 주제', 'Subject'], type: 'select', options: TOPICS, full: true}} value={d.topic || ''} set={set('topic')}/>
@@ -376,17 +380,12 @@ function InviteContact() {
       <Consent on={ok} set={setOk} items={['담당자 성함, 연락처, 이메일, 문의 내용', 'Name, phone, email and enquiry']}/>
       <button className="pf-submit" type="submit" disabled={state === 'sending'}>{state === 'sending' ? t('보내는 중…', 'Sending…') : t('초대 요청 보내기', 'Send the request')}</button>
       {msg && <p className="pf-status" role="status">{msg}</p>}</form>
-    <section className="ct-kakao"><p className="eyebrow">KAKAOTALK CHANNEL</p><h2>{lines(t('카카오톡으로도 이야기 나눌 수 있습니다', 'We are also on KakaoTalk'))}</h2>
-      <p>{t('저녁과 오브제, 선물에 관한 이야기를 편하게 남겨 주세요. 하우스가 이어서 안내해 드립니다.', 'Leave a note about an evening, a piece or a gift, and the house will take it from there.')}</p>
-      <a className="pf-submit inline" href={KAKAO + '/chat'} target="_blank" rel="noopener noreferrer">{t('카카오톡으로 상담하기', 'Chat on KakaoTalk')}</a>
-      <a className="text-link" href={KAKAO} target="_blank" rel="noopener noreferrer">{t('채널 추가하기', 'Add the channel')}</a></section>
   </div>;
 }
 
 
 /* BELiOR performance on YouTube (privacy-enhanced embed, loads when scrolled near) */
 const YT_ID = 'FU6bRZKOc18';
-const HERO_YT = 'sNblKuo6k6Y';
 function YouTubeFilm({eyebrow = 'BELiOR · Live Performance'}: {eyebrow?: string}) {
   return <section className="yt-film"><span className="label">{eyebrow}</span><YTBackground id={YT_ID} poster="eve-quartet.jpg" className="framed"/></section>;
 }
@@ -649,15 +648,6 @@ function ArtistsStrip() {
       <span className="label">{a.inst}</span><h3>{lines(t(a.ko, a.en))}</h3><p>{t(...a.edu[0])}</p></a>)}</div></section>;
 }
 
-function OfficialStage() {
-  const {t} = useT();
-  return <section className="official"><img className="bg" src={V('stage-official.jpg')} alt={t('공식행사 무대의 현악 4중주', 'String quartet on an official stage')} loading="lazy"/>
-    <div className="of-copy"><span className="label">Official Event · Live Performance</span><h2>{lines('Proven on an\nOfficial Stage.')}</h2>
-      <p>{t('한국여성공인회계사회 제31회 정기총회 및 회장 이·취임식, 엘리에나호텔. 여혜린 대표가 기획과 현장을 총괄하고 TWOTTIVA 현악 4중주가 연주했습니다.', 'Korea Women CPA Association, 31st General Meeting & Inauguration at L’Eliena Hotel. Directed by Hyerin Yeo, performed by the TWOTTIVA string quartet.')}</p>
-      <div className="of-num"><b>18</b><span>Hours of Rehearsal<br/>{t('무대에서 처음 맞추는 일은 없습니다.', 'Nothing is played together for the first time on stage.')}</span></div></div>
-  </section>;
-}
-
 function GuestJourney() {
   const {t} = useT();
   const steps: [string, string, string, string][] = [
@@ -880,13 +870,9 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   /* ---------- pages ---------- */
   const home = <>
-    <section className="scene film" aria-label="BELiOR film">
-      <YTBackground id={HERO_YT} poster="muse-film-poster.jpg" className="hero"/>
-      <div className="cue" aria-hidden="true"><span>Scroll</span><i/></div>
-    </section>
+    <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
     <div className="pf-page" id="enquiry"><InviteContact/></div>
     <B12Hero/><Manifesto/>
-    <Scene img="eve-quartet.jpg" eyebrow="Music & Experience" title={'The Art of a\nLiving Moment'} lede={t('살아 있는 순간의 예술', 'The art of a living moment')} pos="86% 55%" href="/music"/>
     <MuseFilm src="belior-film-v9.mp4" poster="film-poster.jpg" label="BELiOR brand film" audio={false}/>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial" title={'Brand Gala\nDinner Show'} lede={t('강 위로 저무는 저녁', 'An evening setting over the river')} pos="center 60%" href="/music/gala"/>
     <ZoomStage img="lion-portrait.jpg" fx={50} fy={40} eyebrow="Collection" title={'One Symbol.\nEndless Worlds.'} lede={t('하나의 상징, 끝없는 세계', 'One symbol, endless worlds')} pos="center 30%" href="/collection"/>
@@ -911,7 +897,6 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   </>;
 
   const maison = <>
-    <YouTubeFilm eyebrow="BELiOR · Maison"/>
     <MaisonIntro/><TheHouse/>
     <section className="section" id="symbol"><Head eyebrow="Symbol System" title={t('하나의 하우스, 하나의 심볼, 여섯 개의 세계', 'One house, one symbol, six worlds')}
       text={t('메종 심볼은 하우스 전체를, 사자-B 모노그램은 동물 세계관의 시작을, 여섯 엠블럼은 각 컬렉션을 대표합니다.', 'The maison symbol stands for the whole house, the lion-B monogram opens the animal worlds, and six emblems stand for each collection.')}/>
@@ -943,21 +928,20 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <Door href="/music/gala" img="bu-violinist.jpg" eyebrow="Editorial" title="Brand Gala Dinner Show" text={t('현장 · 리셉션 · 백스테이지의 기록.', 'On site · Reception · Backstage.')} pos="center 20%"/>
         <Door href="/music/inquiry" img="bu-violin.jpg" eyebrow="Inquiry" title={t('공연 문의', 'Inquiry')} text={t('행사 정보를 남기면 프로그램을 제안드립니다.', 'Share your event and we will propose a programme.')}/>
       </div></section>
-    <SeoulGala/><TwoHouses/><GuestJourney/><SymphonicAtelier/><OfficialStage/><BeyondLogo/><Operation/><TheEvening/>
+    <SeoulGala/><TwoHouses/><GuestJourney/><SymphonicAtelier/><BeyondLogo/><Operation/><TheEvening/>
     <section className="section"><div className="statement"><span className="label">An Evening</span><h2>An Evening, Beautifully Composed.</h2><p>{t('아름답게 구성된 하나의 저녁.', 'One evening, beautifully composed.')}</p><Cta href="/music/inquiry">{t('공연 문의', 'Inquire')}</Cta></div></section>
   </>;
 
   const artists = <>
     <Scene img="bu-backstage.jpg" eyebrow="Music · Artists" title={t('BELiOR 연주진', 'BELiOR Artists')} lede="Beyond Performance. An Experience." pos="center 35%"/>
-    <YouTubeFilm/>
-    <Founder/><Artists/><OfficialStage/>
+    <Founder/><Artists/>
     <TheHouse/>
     <Band img="bu-violinist.jpg" eyebrow="En Plein Air" title={t('바람이 지나간 자리에\n선율이 남습니다', 'Where the wind passes,\na melody remains')} text={t('잔디 위의 바람, 테이블 위의 촛불. 그 저녁의 빛과 공기가 그대로 악보가 됩니다.', 'Wind over the lawn, a candle on the table. The light and air of the evening become the score.')} href="/music/performances" cta={t('공연 보기', 'Performances')} pos="center 68%"/>
   </>;
 
   const performances = <>
     <Scene img="o-gala-ensemble.jpg" eyebrow="Music · Performances" title={t('공연 포트폴리오', 'Performances')} lede="The Sound of an Extraordinary Evening."/>
-    <YouTubeFilm/>
+    <MuseFilm src="muse-v2.mp4" poster="muse-v2-poster.jpg" label="The Muse of BELiOR"/>
     <section className="section"><Head eyebrow="Portfolio" title={t('함께한 저녁', 'Evenings we shared')}/>
       <div className="rows">
         <a className="row" href="/music/gala"><h3>Brand Gala Dinner Show</h3><p>{t('서울 · 한강을 내려다보는 야외 디너 · 현악 4중주 라이브 연주', 'Seoul · Outdoor dinner above the Han River · Live string quartet')}</p><span className="more">Editorial</span></a>
@@ -973,7 +957,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const gala = <>
     <Scene img="bu-aerial.jpg" eyebrow="Editorial · Brand Gala Dinner Show, Seoul" title={t('강 위로 저무는 저녁', 'An evening over the river')} lede={t('브랜드 갈라 디너 쇼에서 BELiOR는 현장의 라이브 연주를 맡았고, 연주에 대해 좋은 평가를 받았습니다.', 'At a brand gala dinner show, BELiOR performed live and was well received.')} pos="center 55%"/>
-    <YouTubeFilm/>
+    <MuseFilm src="reel-scent.mp4" poster="reel-scent-poster.jpg" label="Scent of a Woman · performance" vertical/>
     <section className="section">
       <div className="spread"><figure className="c-8"><img src={V('eve-quartet.jpg')} alt={t('행사장 앞 야외 4중주', 'Outdoor quartet at the venue')} loading="lazy"/><figcaption>I. Reception</figcaption></figure>
         <div className="copy c-4"><span className="label">Reception</span><h3>{lines(t('손님이 도착하는 시간', 'As the guests arrive'))}</h3><p className="muted">{t('조명이 켜지기 시작할 무렵, 리셉션의 공기를 현악 4중주로 채웠습니다.', 'As the lights came on, a string quartet filled the reception.')}</p></div></div>
@@ -1096,7 +1080,6 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const atelier = <>
     <Scene img="o-mk-home-atelier.jpg" eyebrow="Atelier" title="Craft Your Moment" lede={t('시간이 만들어내는 아름다움, 섬세한 손끝에서 시작됩니다.', 'Beauty made by time begins at the fingertips.')}/>
-    <YouTubeFilm/>
     <AtelierContent/>
     <VisualTeam/>
     <section className="section" id="process"><Head eyebrow="Process" title={t('제작의 순서', 'How we make')} text={t('세부 일정과 방식은 프로젝트마다 함께 정합니다.', 'Schedules and methods are agreed project by project.')}/>
@@ -1108,7 +1091,6 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const journal = <>
     <Scene img="o-mk-home-journal.jpg" eyebrow="Journal" title={'Stories behind\nthe Maison'} lede={t('예술, 사람, 공간의 이야기를 기록합니다.', 'Stories of art, people and places.')}/>
-    <YouTubeFilm/>
     <section className="b12-jhero"><span className="label">Notes from the maison · Volume 01</span><h2>A slower kind<br/><em>of looking.</em></h2><p className="muted">{t('관찰하고, 머물고, 기억하는 것들.', 'What we observe, stay with and remember.')}</p></section>
     <section className="b12-journal">
       <article className="feature"><img src={V('b12-atelier.jpg')} alt={t('가죽을 다루는 손', 'A maker’s hands shaping leather')} loading="lazy"/><span className="label">Atelier notes · 04 min read</span><h3>The beauty of what takes time</h3>

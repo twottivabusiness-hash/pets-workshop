@@ -1061,3 +1061,44 @@
 .belior .lg-grid p{font-size:12px;color:rgba(236,228,214,.6);margin:0 0 12px}
 @media (max-width:900px){.belior .gs-grid{grid-template-columns:repeat(2,1fr)}.belior .lg-grid{grid-template-columns:1fr 1fr}}
 .belior .ytbg.hero .ytbg-ctrl{right:auto;left:var(--gutter)}
+/* Vertical performance reel (gala page) */
+.belior .muse-film.vertical{aspect-ratio:auto;max-height:none;padding:clamp(48px,8vw,110px) 16px;display:flex;justify-content:center;background:#000}
+.belior .muse-film.vertical video{width:auto;height:min(88svh,1100px);max-width:100%;aspect-ratio:9/16;object-fit:cover}
+.belior .muse-film.vertical .mf-sound{left:50%;transform:translateX(-50%);bottom:clamp(16px,3vw,40px)}
+/* Enquiry — dark house layout: invitation and services on the left, the form on the right */
+.belior .pf-page:has(> .ct2){background:#0c0b0a;color:var(--ivory)}
+.belior .ct2{--pf-line:rgba(201,169,110,.28);--pf-mute:rgba(239,233,221,.62);--gold:#c9a96e;max-width:1320px;margin:0 auto;padding:clamp(72px,9vw,130px) var(--gutter);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(40px,7vw,110px);align-items:start}
+.belior .ct2 .eyebrow{text-align:left;color:var(--gold)}
+.belior .ct2-side{position:sticky;top:110px}
+.belior .ct2-side h1{font-family:var(--ko);font-weight:400;font-size:clamp(24px,2.4vw,32px);letter-spacing:.06em;margin:16px 0 18px;color:var(--ivory)}
+.belior .ct2-side .lead{font-size:13px;line-height:1.95;color:var(--pf-mute);max-width:420px;margin:0}
+.belior .ct2 .ct-services{max-width:none;margin:0;padding:44px 0 0}
+.belior .ct2 .acc > button{color:var(--ivory);font-size:15px;padding:18px 0;letter-spacing:.04em}
+.belior .ct2 .acc > button span{color:var(--gold)}
+.belior .ct2 .acc-imgs{grid-template-columns:1fr 1fr;gap:10px}
+.belior .ct2 .acc-imgs img,.belior .ct2 .acc-imgs img:nth-child(2){aspect-ratio:4/3;height:auto}
+.belior .ct2 .acc-foot{padding:14px 0 22px;font-size:12px}
+.belior .ct2 .text-link{color:var(--gold);border-color:var(--gold)}
+.belior .ct2-direct{margin-top:40px;display:grid;gap:10px;justify-items:start;font-size:12px;letter-spacing:.06em}
+.belior .ct2-direct a{color:var(--pf-mute);text-decoration:none}
+.belior .ct2-direct a:hover{color:var(--ivory)}
+.belior .ct2-direct .ct2-kakao{color:var(--ivory);border:1px solid var(--gold);padding:13px 22px;font-size:11px;letter-spacing:.2em;margin:4px 0 8px}
+.belior .ct2-form{border:1px solid var(--pf-line);padding:clamp(28px,4vw,56px);background:rgba(255,255,255,.02)}
+.belior .ct2-form h2{font-family:var(--ko);font-weight:400;font-size:clamp(20px,1.9vw,26px);margin:12px 0 10px;color:var(--ivory)}
+.belior .ct2 .pf-intro{text-align:left;margin:0 0 34px;font-size:13px;max-width:none}
+.belior .ct2 .pf-grid label,.belior .ct2 .pf-grid legend{color:var(--pf-mute)}
+.belior .ct2 .pf-grid input,.belior .ct2 .pf-grid select,.belior .ct2 .pf-grid textarea{color:var(--ivory);border-color:rgba(239,233,221,.25);background-color:transparent;color-scheme:dark}
+.belior .ct2 .pf-grid select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a96e'/%3E%3C/svg%3E")}
+.belior .ct2 .pf-grid select option{color:#1d1b18}
+.belior .ct2 .pf-grid input:focus,.belior .ct2 .pf-grid select:focus,.belior .ct2 .pf-grid textarea:focus{border-color:var(--gold)}
+.belior .ct2 .pf-grid input::placeholder,.belior .ct2 .pf-grid textarea::placeholder{color:rgba(239,233,221,.32)}
+.belior .ct2 .pf-grid .pf-chip{color:var(--ivory);border-color:rgba(239,233,221,.25)}
+.belior .ct2 .pf-grid .pf-chip.on{background:var(--gold);color:#0c0b0a;border-color:var(--gold)}
+.belior .ct2 .pf-consent{color:var(--pf-mute);border-color:var(--pf-line)}
+.belior .ct2 .pf-consent dl{background:rgba(255,255,255,.04)}
+.belior .ct2 .pf-consent dt,.belior .ct2 .pf-note{color:rgba(239,233,221,.45)}
+.belior .ct2 .pf-check input{accent-color:var(--gold)}
+.belior .ct2 .pf-submit{background:var(--gold);color:#0c0b0a}
+.belior .ct2 .pf-status{color:var(--ivory)}
+@media (max-width:900px){.belior .ct2{grid-template-columns:1fr}.belior .ct2-side{position:static}}
+.belior .ct2 .pf-consent dd,.belior .ct2 .pf-note{font-size:12px}

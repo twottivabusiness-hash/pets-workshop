@@ -602,7 +602,7 @@ function Founder() {
 
 const PRINCIPALS: {im: string; ko: string; en: string; inst: string; role: [string, string]; edu: [string, string][]; stage: [string, string][]}[] = [
   {im: 'sa-hyerin.jpg', ko: '여혜린', en: 'Hyerin Yeo', inst: 'Violin I', role: ['바이올리니스트 · 예술감독 · 편곡', 'Violinist · Artistic Director · Arranger'],
-    edu: [['성신여자대학교 기악과 바이올린 전공', 'Violin, Sungshin Women’s University'], ['TWOTTIVA 프로그램 기획 및 공연 총괄', 'Programme and performance director, TWOTTIVA']],
+    edu: [['TWOTTIVA 프로그램 기획 및 공연 총괄', 'Programme and performance director, TWOTTIVA']],
     stage: [['한국여성공인회계사회 이·취임식 총괄', 'Directed the Korea Women CPA Association inauguration'], ['국회의원 내빈행사 · 사단법인', 'National Assembly guest event · Incorporated association'], ['KBS홀 한·체코 수교 35주년 기념음악회', 'KBS Hall, Korea–Czech 35th anniversary concert']]},
   {im: 'sa-samuel.jpg', ko: '김사무엘', en: 'Samuel Kim', inst: 'Violin II', role: ['바이올리니스트', 'Violinist'],
     edu: [['한국예술종합학교 출신', 'Korea National University of Arts']],
@@ -618,7 +618,7 @@ const COLLECTIVE: [string, string, string, string, [string, string][]][] = [
   ['ac-hsb.jpg', '한솔빈', 'Solbin Han', 'Violin', [['이화여자대학교 출신', 'Ewha Womans University'], ['기업·호텔행사 현악앙상블 다수 활동', 'Corporate and hotel ensembles']]],
   ['ac-lsi.jpg', '이수인', 'Suin Lee', 'Viola', [['이화여자대학교 출신', 'Ewha Womans University'], ['실내악·행사 연주 다수 활동', 'Chamber music and events']]],
   ['ac-wks.jpg', '우경식', 'Kyungsik Woo', 'Viola', [['경희대학교 대학원 출신', 'Kyung Hee University, graduate school'], ['국립심포니콘서트오케스트라 단원', 'Member, National Symphony Concert Orchestra']]],
-  ['ac-kse.jpg', '김송은', 'Songeun Kim', 'Cello', [['성신여자대학교 출신', 'Sungshin Women’s University'], ['독일 국립 Augsburg, LMC 석사과정 재학', 'Master’s study, Leopold Mozart College, Augsburg']]],
+  ['ac-kse.jpg', '김송은', 'Songeun Kim', 'Cello', [['독일 국립 Augsburg, LMC 석사과정 재학', 'Master’s study, Leopold Mozart College, Augsburg']]],
   ['ac-jjh.jpg', '정자현', 'Jahyun Jung', 'Harp', [['한국예술종합학교 출신', 'Korea National University of Arts'], ['국내 주요 행사 하프 협연 활동', 'Harp at major events in Korea']]],
   ['ac-psj.jpg', '박승준', 'Seungjun Park', 'Timpani', [['서울대학교 출신', 'Seoul National University'], ['국내 오케스트라 및 행사 타악기 연주', 'Percussion with orchestras and events']]],
 ];

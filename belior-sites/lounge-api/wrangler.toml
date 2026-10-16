@@ -1,0 +1,7 @@
+name = "belior-lounge"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[[kv_namespaces]]
+binding = "GUESTS"
+id = "PUT_YOUR_KV_NAMESPACE_ID_HERE"

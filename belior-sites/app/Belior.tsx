@@ -227,13 +227,13 @@ function MuseFilm({src = 'belior-film-v9.mp4', poster = 'film-poster.jpg', label
 /* ---------- The Lounge world: a private place to rest and play, opened by the house's invitation code ---------- */
 const WORLD_SPOTS: [string, number, number][] = [['lion', 17, 19], ['swan', 46, 14], ['orca', 75, 17], ['leopard', 14, 41], ['panther', 85, 36], ['phoenix', 81, 52]];
 
-function LoungeOpening({tier}: {tier: Tier | ''}) {
+function LoungeOpening({tier, name}: {tier: Tier | ''; name?: string}) {
   const {t} = useT();
   const circle = tier === 'circle';
   return <section className="lw-open" aria-label="BELiOR Lounge">
     <img className="bg" src={V('lounge-forest.jpg')} alt={t('숲속 물가, 말에 오른 아이와 아버지', 'A forest pool, a child on a horse and her father')}/>
     <div className="lw-open-copy"><p className="label">{circle ? 'BELiOR Lounge · The Circle' : 'BELiOR Lounge · Guest of the House'}</p>
-      <h1>{lines(t('잠시, 어린 날로', 'For a while, a child again'))}</h1>
+      <h1>{name ? lines(t(`${name} 님,\n잠시, 어린 날로`, `${name},\nfor a while, a child again`)) : lines(t('잠시, 어린 날로', 'For a while, a child again'))}</h1>
       <p className="muted">{t('이곳에서는 직함도 나이도 내려놓으셔도 됩니다. 쉬고, 놀고, 다시 돌아오세요.', 'Here, titles and years can be set down. Rest, play, and come back whenever you need to.')}</p>
       <SoundButton label={t('백조의 호수 듣기', 'Listen · Swan Lake')}/></div></section>;
 }
@@ -517,6 +517,13 @@ const LOUNGE_HASH = 'b8578b21fb9edf916958e86478078a36395a8cb4fc35eda5848356adc88
    from the link, remembered on their device, and the lounge opens without anything to type.
    guest  — clients of a performance or contract.   circle — the house's own circle (the invitation code also opens this). */
 type Tier = 'guest' | 'circle';
+/* Guest desk (Cloudflare Worker, belior-sites/lounge-api). Empty until the house deploys it; the lounge then falls back to the tier links. */
+const LOUNGE_API = '';
+type Guest = {k: string; name: string; tier: Tier};
+async function verifyGuest(k: string): Promise<Guest | null> {
+  if (!LOUNGE_API) return null;
+  try { const r = await fetch(LOUNGE_API + '/verify', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({k})}); if (!r.ok) return null; const d = await r.json(); return d.ok ? {k, name: d.name, tier: d.tier} : null; } catch { return null; }
+}
 const TIER_HASH: Record<string, Tier> = {
   '519ff6faf7fc99c02d1dbd5a5cd568f45d3618210c35b11c22ca9599918d9328': 'guest',
   '97c06dde72525f2a3cc438dc78ef83e70246688b638823d93a47c059c0e8dd72': 'circle',
@@ -532,14 +539,30 @@ const LOUNGE_ITEMS: [string, [string, string], string, [string, string]][] = [
 ];
 function Lounge() {
   const {t} = useT();
-  const [tier, setTier] = useState<Tier | ''>(''), [opening, setOpening] = useState(false), [err, setErr] = useState(false), [checked, setChecked] = useState(false);
+  const [tier, setTier] = useState<Tier | ''>(''), [name, setName] = useState(''), [opening, setOpening] = useState(false), [err, setErr] = useState(false), [checked, setChecked] = useState(false);
   const open = tier !== '';
-  const admit = (tr: Tier, slow: boolean) => { try { localStorage.setItem('belior-salon', tr); } catch {} setErr(false); if (!slow) { setTier(tr); return; } setOpening(true); setTimeout(() => { setTier(tr); window.scrollTo(0, 0); }, 1400); };
+  const admit = (tr: Tier, slow: boolean, guest?: Guest) => {
+    try { localStorage.setItem('belior-salon', tr); if (guest) localStorage.setItem('belior-guest', JSON.stringify(guest)); } catch {}
+    setErr(false); if (guest) setName(guest.name);
+    if (!slow) { setTier(tr); return; } setOpening(true); setTimeout(() => { setTier(tr); window.scrollTo(0, 0); }, 1400);
+  };
   useEffect(() => {
     (async () => {
       try {
         const k = new URLSearchParams(location.search).get('k');
-        if (k) { const tr = TIER_HASH[await sha(k.trim())]; history.replaceState(null, '', location.pathname); if (tr) { admit(tr, true); setChecked(true); return; } }
+        if (k) {
+          history.replaceState(null, '', location.pathname);
+          const g = await verifyGuest(k.trim());                       // a personal link from the guest desk
+          if (g) { admit(g.tier, true, g); setChecked(true); return; }
+          const tr = TIER_HASH[await sha(k.trim())];                   // or one of the house's tier links
+          if (tr) { admit(tr, true); setChecked(true); return; }
+        }
+        const remembered = localStorage.getItem('belior-guest');
+        if (remembered) {                                               // a known guest: ask the desk again, so a removed link closes
+          const prev = JSON.parse(remembered) as Guest, g = LOUNGE_API ? await verifyGuest(prev.k) : prev;
+          if (g) { setName(g.name); setTier(g.tier); setChecked(true); return; }
+          localStorage.removeItem('belior-guest'); localStorage.removeItem('belior-salon');
+        }
         const saved = localStorage.getItem('belior-salon');
         if (saved === '1' || saved === 'circle') setTier('circle'); else if (saved === 'guest') setTier('guest');
       } catch {}
@@ -549,8 +572,8 @@ function Lounge() {
   async function enter(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const raw = String(new FormData(e.currentTarget).get('code') || '').trim(), v = raw.toUpperCase().replace(/\s/g, '');
-    const h = await sha(v), tr = h === LOUNGE_HASH ? 'circle' : TIER_HASH[await sha(raw)];
-    if (tr) admit(tr, true); else { setErr(false); requestAnimationFrame(() => setErr(true)); }
+    const g = await verifyGuest(raw), h = await sha(v), tr = g ? g.tier : h === LOUNGE_HASH ? 'circle' : TIER_HASH[await sha(raw)];
+    if (tr) admit(tr, true, g || undefined); else { setErr(false); requestAnimationFrame(() => setErr(true)); }
   }
   if (!checked) return <section className="lounge-gate" aria-busy="true"/>;
   if (!open) return <section className={'lounge-gate' + (opening ? ' opening' : '')}>
@@ -561,7 +584,7 @@ function Lounge() {
       <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
     <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
   return <>
-    <LoungeOpening tier={tier}/><LoungeWorlds/><LoungeGames/>{tier === 'circle' && <CarDiffuser/>}
+    <LoungeOpening tier={tier} name={name}/><LoungeWorlds/><LoungeGames/>{tier === 'circle' && <CarDiffuser/>}
     <GiftScents/>
     {tier === 'circle' && <><section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
       <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>

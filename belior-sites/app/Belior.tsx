@@ -60,14 +60,14 @@ const MENU: {href: string; name: string; ko: string; subs: [string, string, stri
   {href: '/products', name: 'PARFUM & OBJECTS', ko: '향과 오브제', subs: [['/products/no-16', 'No. 16 — 숲과 말', 'No. 16 — Forest & Horse'], ['/products/parfum', 'Parfum', 'Parfum'], ['/objects', 'Selected Objects', 'Selected Objects']]},
   {href: '/atelier', name: 'ATELIER', ko: '아틀리에', subs: [['/atelier', '콘텐츠 제작', 'Content direction'], ['/atelier#visual', '비주얼 팀', 'Visual team'], ['/atelier#process', '제작의 순서', 'Process']]},
   {href: '/journal', name: 'JOURNAL', ko: '저널', subs: [['/journal', '모든 이야기', 'All stories']]},
-  {href: '/private', name: 'PRIVATE ENQUIRIES', ko: '프라이빗 문의', subs: [['/private', '문의하기', 'Enquire']]},
+  {href: '/private', name: 'PRIVATE ENQUIRIES', ko: '프라이빗 문의', subs: [['/private', '문의하기', 'Enquire'], ['/lounge', 'BELiOR 라운지', 'BELiOR Lounge']]},
 ];
 
 // page-turn: the destination label, and the animal shown on each turn (Lion first, then the house in order)
 const LABELS: Record<string, string> = {
   '/': 'BELiOR', '/maison': 'MAISON', '/music': 'MUSIC & EXPERIENCE', '/music/artists': 'ARTISTS', '/music/performances': 'PERFORMANCES',
   '/music/gala': 'BRAND GALA DINNER SHOW', '/music/inquiry': 'PERFORMANCE INQUIRY', '/collection': 'THE COLLECTION', '/products': 'PARFUM & OBJECTS',
-  '/products/no-16': 'No. 16', '/objects': 'OBJECTS', '/atelier': 'ATELIER', '/journal': 'JOURNAL', '/private': 'PRIVATE ENQUIRIES',
+  '/products/no-16': 'No. 16', '/objects': 'OBJECTS', '/atelier': 'ATELIER', '/journal': 'JOURNAL', '/private': 'PRIVATE ENQUIRIES', '/lounge': 'LOUNGE',
 };
 WORLDS.forEach(w => { LABELS['/collection/' + w.slug] = w.name + ' COLLECTION'; });
 type Turn = {world: string; mark: string; round: boolean; color: string};
@@ -184,9 +184,7 @@ function LogoFilm() {
 /* No. 16 poster, typeset over the picture */
 function N16Poster() {
   const {t} = useT();
-  return <section className="n16-poster"><img className="bg" src={V('no16-pool.jpg')} alt={t('햇살이 드는 숲속 물가, 말에 오른 아이와 곁을 지키는 아버지', 'A sunlit forest pool, a child on a white horse and her father beside her')} loading="lazy"/>
-    <div className="np-top"><span className="np-brand">BELiOR</span><span className="np-no">No. 16</span></div>
-    <div className="np-bottom"><p className="np-line">Some memories hold us.</p><p className="np-ko">나를 지탱해주던, 그날의 기억.</p><span className="np-foot">A Memory in Scent</span></div></section>;
+  return <section className="n16-poster-img"><img src={V('no16-poster.jpg')} alt={t('BELiOR — 햇살이 드는 숲속 물가, 말에 오른 아이와 곁을 지키는 아버지. A More Beautiful Tomorrow.', 'BELiOR — a sunlit forest pool, a child on a white horse and her father beside her. A More Beautiful Tomorrow.')} loading="lazy"/></section>;
 }
 
 /* Seoul Gala — VIP Presents */
@@ -203,7 +201,7 @@ function SeoulGala() {
 function Experience() {
   const {t} = useT();
   const items: [string, string, string, string, string, string][] = [
-    ['no16-pool.jpg', 'I · Childhood', t('숲속 물가의 기억', 'A forest pool, remembered'), t('나를 지탱해주던 그날의 숲과 말.', 'The forest, and the horse that held me.'), '/products/no-16', 'center 40%'],
+    ['no16-pool.jpg', 'I · Childhood', t('숲속 물가의 기억', 'A forest pool, remembered'), t('어린 시절, 숲속 물가의 한 장면.', 'A childhood scene by a forest pool.'), '/products/no-16', 'center 40%'],
     ['swan-ballet.jpg', 'II · Paris', t('막이 오르기 직전', 'Before the curtain rises'), t('오페라 극장의 정적, 그리고 백조의 호수.', 'The hush of the opera house, and Swan Lake.'), '/collection/swan', 'center'],
     ['visual-arrival.jpg', 'III · Monte-Carlo', t('불빛 아래 도착하는 밤', 'Arriving under the lights'), t('차 문이 열리고, 저녁이 시작됩니다.', 'A car door opens, and the evening begins.'), '/private', 'center'],
     ['seoul-gala-hall.jpg', 'IV · Seoul', t('초대받은 이들의 갈라', 'A gala, by invitation'), t('대리석 기둥 사이로 켜지는 보면대의 불빛.', 'Music stands glowing between marble columns.'), '/music', 'center'],
@@ -217,7 +215,7 @@ function Experience() {
 
 
 /* The Muse of BELiOR — performance film (guests blurred), plays muted until asked */
-function MuseFilm({src = 'muse-film.mp4', poster = 'muse-film-poster.jpg', label = 'The Muse of BELiOR', audio = true}: {src?: string; poster?: string; label?: string; audio?: boolean}) {
+function MuseFilm({src = 'belior-film-v9.mp4', poster = 'film-poster.jpg', label = 'The Muse of BELiOR', audio = true}: {src?: string; poster?: string; label?: string; audio?: boolean}) {
   const {t} = useT();
   const ref = useRef<HTMLVideoElement>(null), [sound, setSound] = useState(false);
   return <section className="muse-film" aria-label={label}>
@@ -231,6 +229,8 @@ function MuseFilm({src = 'muse-film.mp4', poster = 'muse-film-poster.jpg', label
    September site used). If sending fails, the form opens the visitor's mail app instead. */
 const W3F_KEY = '4dfff3da-feed-4b5a-ad01-cbf8c38da971';
 const KAKAO = 'https://pf.kakao.com/_UAxfxiX';
+/* Phone alert topic the house set up on the September site (ntfy) — every enquiry also rings the phone. */
+const PHONE_TOPIC = 'twottiva-2518344b98686d6f';
 type Field = {name: string; label: [string, string]; type: 'select' | 'text' | 'date' | 'tel' | 'email' | 'textarea'; options?: [string, string][]; ph?: [string, string]; req?: boolean; full?: boolean};
 const CONTACT_FIELDS: Field[] = [
   {name: 'contact_name', label: ['담당자 성함', 'Your name'], type: 'text'},
@@ -253,6 +253,8 @@ const TOPICS: [string, string][] = [['프라이빗 이벤트', 'Private event'],
 const EXPERIENCES: [string, string][] = [['음악', 'Music'], ['공간 연출', 'Spatial direction'], ['기프트 · 오브제', 'Gifts & objects'], ['영상', 'Film']];
 
 async function sendInquiry(subject: string, title: string, body: string[], d: Record<string, string>) {
+  const src = ' · 유입 : ' + (new URLSearchParams(window.location.search).get('utm_source') || 'direct') + ' / ' + (document.referrer || '-');
+  fetch('https://ntfy.sh', {method: 'POST', body: JSON.stringify({topic: PHONE_TOPIC, title: 'BELiOR ' + subject + ' / ' + (title || '신규') + ' / ' + (d.date || '일정 미정'), message: body.join('\n') + '\n\n' + src, priority: 5, tags: ['sparkles']})}).catch(() => {});
   if (!W3F_KEY) throw Error('no key');
   const r = await fetch('https://api.web3forms.com/submit', {method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'},
     body: JSON.stringify({access_key: W3F_KEY, subject: '[BELiOR ' + subject + '] ' + title + ' / ' + (d.date || '일정 미정'), from_name: 'BELiOR 홈페이지 ' + subject,
@@ -384,12 +386,105 @@ function InviteContact() {
 
 /* BELiOR performance on YouTube (privacy-enhanced embed, loads when scrolled near) */
 const YT_ID = 'FU6bRZKOc18';
+const HERO_YT = 'sNblKuo6k6Y';
 function YouTubeFilm({eyebrow = 'BELiOR · Live Performance'}: {eyebrow?: string}) {
+  return <section className="yt-film"><span className="label">{eyebrow}</span><YTBackground id={YT_ID} poster="eve-quartet.jpg" className="framed"/></section>;
+}
+
+
+function HousePins() {
   const {t} = useT();
-  return <section className="yt-film"><span className="label">{eyebrow}</span>
-    <div className="yt-frame"><iframe src={'https://www.youtube-nocookie.com/embed/' + YT_ID + '?rel=0&modestbranding=1&playsinline=1'} title={t('BELiOR 공연 영상', 'BELiOR performance film')} loading="lazy"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/></div>
-    <a className="text-link" href={'https://youtu.be/' + YT_ID} target="_blank" rel="noopener noreferrer">{t('YouTube에서 보기', 'Watch on YouTube')} <span aria-hidden="true">↗</span></a></section>;
+  return <section className="b12-split pins"><img src={V('house-pins.jpg')} alt={t('BELiOR 하우스 핀 — 바이올린, 백조, 백합, 샴페인, 린, 백조의 호수, 하트, 이름 핀, 고양이', 'BELiOR house pins — violin, swan, lily, champagne, Rin, Swan Lake, heart, name plate, cat')} loading="lazy"/>
+    <div><span className="label">Entry 02 · Objects of the House</span><h2>{lines(t('현과 사람,\n장소와 이야기.', 'Strings, people,\nplaces, stories.'))}</h2>
+      <p className="muted">{t('핀과 참으로 옮긴 하우스의 조각들. 무대 위의 것만이 아니라, 그 사이의 일상까지 하나의 세계로 둡니다.', 'Pieces of the house, carried onto pins and charms — not only what is on stage, but the everyday between.')}</p>
+      <a className="text-link" href="/private">{t('핀 제작 문의', 'Enquire about pins')} <span aria-hidden="true">↗</span></a></div></section>;
+}
+
+
+/* Parfum: one scent for each animal world, given to guests as a gift */
+function GiftScents() {
+  const {t} = useT();
+  return <section className="section night gift-scents"><Head eyebrow="Parfum · The Animal Collection" title={t('동물 컬렉션의 향, 선물로 전합니다', 'A scent for each world, given as a gift')}
+      text={t('BELiOR는 여섯 동물의 세계마다 하나의 향을 짓고, 함께한 분께 선물로 전합니다. 일부 향은 라운지에서만 만나실 수 있습니다.', 'BELiOR composes one scent for each of the six animal worlds and gives it to guests of the house. Some are shown only in the Lounge.')}/>
+    <div className="gs-grid">{WORLDS.map(w => <a className="gs" href={'/collection/' + w.slug} key={w.slug} style={{['--world' as string]: w.color}}>
+      <div className="ph"><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'} loading="lazy"/></div>
+      <span className="label">{w.mat}</span><h3>{w.name}</h3><p>{w.notes || w.kw}</p></a>)}</div>
+    <div className="gs-cta"><a className="text-link" href="/lounge">{t('라운지 입장', 'Enter the Lounge')} <span aria-hidden="true">↗</span></a><a className="text-link" href="/private">{t('기프트 문의', 'Gift enquiries')} <span aria-hidden="true">↗</span></a></div></section>;
+}
+
+/* BELiOR Lounge — opened with the invitation code given at BELiOR evenings (same code as the September site) */
+const LOUNGE_HASH = 'b8578b21fb9edf916958e86478078a36395a8cb4fc35eda5848356adc88f3a70';
+const LOUNGE_ITEMS: [string, [string, string], string, [string, string]][] = [
+  ['lg-card.jpg', ['레더 카드 홀더', 'Leather Card Holder'], 'Noir · Champagne trim', ['가죽', 'Leather']],
+  ['lg-wallet.jpg', ['레더 플랩 월렛', 'Leather Flap Wallet'], 'Noir · Gold clasp', ['가죽', 'Leather']],
+  ['lg-sleeve.jpg', ['레더 랩톱 슬리브', 'Leather Laptop Sleeve'], 'Noir · Gold edge', ['가죽', 'Leather']],
+  ['prod-bag-hd.jpg', ['B 모노그램 백', 'B Monogram Bag'], 'Ivory · Noir', ['가죽', 'Leather']],
+  ['ct-gift1.jpg', ['메종 기프트 세트', 'Maison Gift Set'], 'Card holder · Parfum', ['기프트', 'Gifts']],
+  ['lg-parfum.jpg', ['BELiOR 퍼퓸', 'BELiOR Parfum'], 'Holiday 2026', ['기프트', 'Gifts']],
+];
+function Lounge() {
+  const {t} = useT();
+  const [open, setOpen] = useState(false), [opening, setOpening] = useState(false), [err, setErr] = useState(false);
+  useEffect(() => { try { if (localStorage.getItem('belior-salon') === '1') setOpen(true); } catch {} }, []);
+  async function enter(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const v = String(new FormData(e.currentTarget).get('code') || '').toUpperCase().replace(/\s/g, '');
+    const h = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)))).map(b => b.toString(16).padStart(2, '0')).join('');
+    if (h === LOUNGE_HASH) { try { localStorage.setItem('belior-salon', '1'); } catch {} setErr(false); setOpening(true); setTimeout(() => { setOpen(true); window.scrollTo(0, 0); }, 1400); }
+    else { setErr(false); requestAnimationFrame(() => setErr(true)); }
+  }
+  if (!open) return <section className={'lounge-gate' + (opening ? ' opening' : '')}>
+    <div className="lg-seal" aria-hidden="true"><span className="l">B</span><span className="r">B</span></div>
+    <p className="label">BELiOR Lounge · By Invitation</p><h1>{lines(t('초대받은 분만 들어오실 수 있습니다.', 'By invitation only.'))}</h1>
+    <p className="muted">{t('라운지는 BELiOR의 저녁을 함께한 분들을 위한 공간입니다. 전해 받으신 초대 코드를 입력해 주세요.', 'The Lounge is kept for guests of BELiOR evenings. Please enter the invitation code you were given.')}</p>
+    <form className={'lg-form' + (err ? ' err' : '')} onSubmit={enter}><input name="code" type="password" autoComplete="off" placeholder={t('초대 코드', 'Invitation code')} aria-label={t('초대 코드', 'Invitation code')}/><button type="submit">ENTER</button>
+      <p className="lg-err" role="alert">{err ? t('코드가 맞지 않습니다.', 'That code is not recognised.') : ''}</p></form>
+    <a className="text-link" href="/private">{t('초대를 청하기', 'Request an invitation')} <span aria-hidden="true">→</span></a></section>;
+  return <>
+    <section className="lounge-head"><p className="label">BELiOR Lounge · Welcome</p><h1>{lines(t('라운지에 오신 것을 환영합니다', 'Welcome to the Lounge'))}</h1>
+      <p className="muted">{t('BELiOR의 저녁을 함께한 분들께만 보여드리는 향과 오브제입니다.', 'Scents and pieces shown only to guests of BELiOR evenings.')}</p></section>
+    <GiftScents/>
+    <section className="section"><Head eyebrow="Lounge Objects" title={t('라운지 오브제', 'Lounge objects')}/>
+      <div className="lg-grid">{LOUNGE_ITEMS.map(([im, name, line, cat]) => <figure key={im}><div className="ph"><img src={V(im)} alt={t(...name)} loading="lazy"/></div>
+        <figcaption><span className="label">{t(...cat)}</span><h3>{lines(t(...name))}</h3><p>{line}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')}</a></figcaption></figure>)}</div></section>
+  </>;
+}
+
+/* Enquiry, always one tap away (bottom right, like the Porsche chat button) */
+function EnquiryDock() {
+  const {t} = useT();
+  const [open, setOpen] = useState(false);
+  return <div className={'dock' + (open ? ' open' : '')}>
+    {open && <div className="dock-panel" role="dialog" aria-label={t('문의', 'Enquiries')}>
+      <a href="/music/inquiry">{t('공연 문의', 'Performance enquiry')}</a><a href="/private#enquiry">{t('초대 · 기프트 문의', 'Invitation & gifts')}</a>
+      <a href="https://pf.kakao.com/_UAxfxiX/chat" target="_blank" rel="noopener noreferrer">{t('카카오톡 상담', 'KakaoTalk')}</a><a href={'mailto:' + MAIL}>{MAIL}</a></div>}
+    <button type="button" className="dock-btn" aria-expanded={open} aria-label={t('문의하기', 'Enquire')} onClick={() => setOpen(o => !o)}>
+      {open ? <span aria-hidden="true">×</span> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>}</button></div>;
+}
+
+/* Background film from YouTube, dressed as the house's own: no player chrome, still image until it plays */
+function YTBackground({id, poster, className = ''}: {id: string; poster: string; className?: string}) {
+  const {t} = useT();
+  const ref = useRef<HTMLIFrameElement>(null), [on, setOn] = useState(false), [sound, setSound] = useState(false), [paused, setPaused] = useState(false);
+  const cmd = (func: string, args: unknown[] = []) => ref.current?.contentWindow?.postMessage(JSON.stringify({event: 'command', func, args}), '*');
+  useEffect(() => {
+    let timer = 0;
+    const msg = (e: MessageEvent) => {
+      if (typeof e.data !== 'string' || !/youtube/.test(e.origin) || e.source !== ref.current?.contentWindow) return;
+      try { const d = JSON.parse(e.data); if (d.info && d.info.playerState === 1 && !timer) timer = window.setTimeout(() => setOn(true), 2600); } catch {}
+    };
+    window.addEventListener('message', msg);
+    return () => { window.removeEventListener('message', msg); clearTimeout(timer); };
+  }, []);
+  return <div className={'ytbg ' + className + (on ? ' on' : '')}>
+    <img className="ytbg-still" src={V(poster)} alt=""/>
+    <div className="ytbg-frame" aria-hidden="true"><iframe ref={ref} title="BELiOR film" tabIndex={-1} allow="autoplay; encrypted-media" loading="lazy"
+      onLoad={() => ref.current?.contentWindow?.postMessage(JSON.stringify({event: 'listening', id}), '*')}
+      src={'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&mute=1&loop=1&playlist=' + id + '&controls=0&showinfo=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1'}/></div>
+    <div className="ytbg-ctrl">
+      <button type="button" className="mf-sound" aria-pressed={sound} onClick={() => { if (sound) cmd('mute'); else { cmd('unMute'); cmd('seekTo', [0, true]); cmd('playVideo'); setPaused(false); } setSound(!sound); }}>
+        <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{sound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button>
+      <button type="button" className="ytbg-pause" aria-label={paused ? t('영상 재생', 'Play film') : t('영상 일시정지', 'Pause film')} onClick={() => { cmd(paused ? 'playVideo' : 'pauseVideo'); setPaused(!paused); }}><span aria-hidden="true">{paused ? '▶' : 'II'}</span></button></div></div>;
 }
 
 /* No. 01 — The Tchaikovsky Edition */
@@ -719,7 +814,7 @@ function Services() {
 
 export default function Belior({page = 'home', detail = ''}: {page?: string; detail?: string}) {
   const [en, setEn] = useState(false), [menu, setMenu] = useState(false);
-  const [filmPaused, setFilmPaused] = useState(false), [heroSound, setHeroSound] = useState(false), [slide, setSlide] = useState(0), [carHold, setCarHold] = useState(false);
+  const [filmPaused, setFilmPaused] = useState(false), [slide, setSlide] = useState(0), [carHold, setCarHold] = useState(false);
   const filmRef = useRef<HTMLVideoElement>(null), curtainRef = useRef<HTMLDivElement>(null), trackRef = useRef<HTMLDivElement>(null);
   const t = (ko: string, eng: string) => en ? eng : ko;
   const path = page === 'home' ? '/' : '/' + page + (detail ? '/' + detail : '');
@@ -785,13 +880,8 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   /* ---------- pages ---------- */
   const home = <>
-    <section className="scene film" aria-label="The Muse of BELiOR — gala dinner performance">
-      <video ref={filmRef} className="bg" src={V('muse-film.mp4')} poster={V('muse-film-poster.jpg')} muted loop playsInline autoPlay preload="metadata"/>
-      <button className="film-toggle" type="button" aria-label={filmPaused ? t('영상 재생', 'Play film') : t('영상 일시정지', 'Pause film')}
-        onClick={() => { const f = filmRef.current; if (!f) return; if (f.paused) { void f.play().catch(() => {}); setFilmPaused(false); } else { f.pause(); setFilmPaused(true); } }}>
-        <span aria-hidden="true">{filmPaused ? '▶' : 'II'}</span></button>
-      <div className="film-sound"><button type="button" className="mf-sound hero-sound" aria-pressed={heroSound} onClick={() => { const f = filmRef.current; if (!f) return; f.muted = heroSound; setHeroSound(!heroSound); if (!heroSound) { f.currentTime = 0; void f.play().catch(() => {}); setFilmPaused(false); } }}>
-        <span aria-hidden="true" className="mf-bars"><i/><i/><i/></span>{heroSound ? t('소리 끄기', 'Sound off') : t('소리 켜기', 'Sound on')}</button></div>
+    <section className="scene film" aria-label="BELiOR film">
+      <YTBackground id={HERO_YT} poster="muse-film-poster.jpg" className="hero"/>
       <div className="cue" aria-hidden="true"><span>Scroll</span><i/></div>
     </section>
     <div className="pf-page" id="enquiry"><InviteContact/></div>
@@ -814,7 +904,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="section night"><div className="spread">
       <figure className="c-5"><img src={V('no16-pool.jpg')} alt={t('숲속 물가에서 말에 오른 아이와 아버지', 'A child on a horse by a forest pool, her father beside her')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
       <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>A memory, held.</h3>
-        <p className="muted">{t('어린 시절, 아버지가 지켜보는 가운데 처음 말에 올랐던 순간. 무서웠지만 나를 지탱해 주던 말과 푸릇한 숲의 기억을 하나의 향에 담습니다.', 'As a child, I rode a horse for the first time while my father watched. I was afraid, yet the horse held me steady. That green, fairy-tale forest becomes a scent.')}</p>
+        <p className="muted">{t('어린 시절, 아버지와 함께했던 푸른 숲과 맑은 물가. 그 장면을 하나의 향에 담습니다.', 'A green forest and a clear pool, shared with my father as a child — that scene, kept in a scent.')}</p>
         <a className="more" href="/products/no-16">{t('No. 16 이야기', 'The story of No. 16')}</a></div></div></section>
     <Tchaikovsky/><Listening/><Experience/><ObjectsRow/><Services/><Finale/>
     <Scene img="visual-arrival.jpg" eyebrow="Private Enquiries · By Invitation" title="By Appointment" lede={t('공연과 컬렉션, 프라이빗 이벤트에 관한 문의', 'Enquiries for performances, collections and private events')} href="/private" cta={t('문의하기', 'Enquire')}/>
@@ -876,7 +966,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <div className="row"><h3>{lines(t('호텔 연회 · 기업행사 · VIP 리셉션', 'Hotel banquets · Corporate events · VIP receptions'))}</h3><p>TWOTTIVA</p><span/></div>
       </div>
       <p className="muted small" style={{marginTop: 20}}>{t('공연 이력은 TWOTTIVA와 각 연주자의 이력입니다.', 'Performance history belongs to TWOTTIVA and its musicians.')}</p>
-      <video className="performance-video" controls playsInline preload="metadata" poster={V('muse-film-poster.jpg')} src={V('muse-film.mp4')}/></section>
+</section>
     <TheEvening/>
     <Band img="eve-quartet.jpg" eyebrow="For Your Evening" title={t('행사의 성격에 맞춘\n프로그램', 'A programme shaped\nto your event')} text={t('행사 일정과 장소, 진행 순서를 바탕으로 편성과 곡목을 제안드립니다.', 'We propose ensemble and repertoire around your schedule, venue and running order.')} href="/music/inquiry" cta={t('공연 문의', 'Inquire')} pos="86% 55%"/>
   </>;
@@ -956,7 +1046,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
 
   const no16 = <div className="no16">
     <section className="n16-hero"><img className="bg" src={V('no16-hero.jpg')} alt={t('푸른 숲에서 말에 오른 아이와 지켜보는 아버지', 'A child on a horse in a green forest, her father watching')}/>
-      <div className="inner"><h1 className="keep">No.16<br/>A memory, held.</h1><p className="lede">{t('푸른 숲, 나를 지탱해주던 기억.', 'A green forest, and the memory that held me.')}</p>
+      <div className="inner"><h1 className="keep">No.16<br/>A memory, held.</h1><p className="lede">{t('푸른 숲, 어린 시절의 한 장면.', 'A green forest, a childhood scene.')}</p>
         <a className="line-cta" href="#memory">DISCOVER THE STORY <span aria-hidden="true">→</span></a></div></section>
     <N16Poster/>
     <section className="n16-stay"><div className="txt"><h2>The moments that stay.</h2>
@@ -964,14 +1054,14 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <img src={V('no16-stream.jpg')} alt={t('햇살이 비치는 이끼와 시냇물', 'Moss and a sunlit stream')} loading="lazy"/></section>
     <section className="n16-memory" id="memory">
       <div className="n16-top"><div className="txt"><span className="label">No.16 / The Memory</span><h2>{lines('Before it was a scent,\nit was a memory.')}</h2>
-        <p>{lines(t('어린 시절, 아빠가 권했던 말 위에 올랐습니다.\n무서웠지만, 말은 나를 지탱하고 있었고\n아빠는 그 모습을 지켜보고 있었습니다.', 'As a child, I climbed onto the horse my father offered.\nI was afraid, but the horse held me steady,\nand my father stood watching.'))}</p></div>
+        <p>{lines(t('어린 시절, 아빠와 함께 숲에 갔습니다.\n나뭇잎 사이로 빛이 내리고,\n물가에는 하얀 말이 서 있었습니다.', 'As a child, I went into the forest with my father.\nLight fell through the leaves,\nand a white horse stood by the water.'))}</p></div>
         <img src={V('no16-hand.jpg')} alt={t('말갈기에 얹은 아이의 손', 'A child’s hand on the horse’s mane')} loading="lazy"/></div>
       <div className="n16-three">{[['no16-forest.jpg', '01 — The Forest', t('이끼 낀 숲의 바닥', 'The mossy forest floor')], ['no16-warmth.jpg', '02 — The Warmth', t('햇살을 받은 말의 갈기', 'The horse’s mane in sunlight')], ['no16-presence.jpg', '03 — The Presence', t('말 위의 아이를 지켜보는 아버지', 'A father watching his child on horseback')]].map(([im, cap, alt]) =>
         <figure key={im}><img src={V(im)} alt={alt} loading="lazy"/><figcaption>{cap}</figcaption></figure>)}</div>
       <div className="n16-foot"><p>Some moments never leave us.</p><a className="line-cta" href="/journal">CONTINUE THE STORY <span aria-hidden="true">→</span></a></div>
     </section>
     <section className="n16-childhood"><span className="label">{t('어린 시절', 'Childhood')}</span>
-      <p className="world-line">{t('푸릇푸릇한, 동화 속 같은 숲. 무서웠지만 나를 지탱해 주던 말. 그 순간은 지금도 선명하게 남아 있습니다.', 'A green forest, like a fairy tale. I was afraid, but the horse held me. That moment is still vivid.')}</p>
+      <p className="world-line">{t('푸릇푸릇한, 동화 속 같은 숲. 그 순간은 지금도 선명하게 남아 있습니다.', 'A green forest, like a fairy tale. That moment is still vivid.')}</p>
       <p>{t('BELiOR는 테마마다 하나의 이야기를 담습니다. No. 16은 그 첫 기억입니다.', 'BELiOR gives every theme a story of its own. No. 16 is the first memory.')}</p>
       <a className="line-cta" href="/private">{t('No. 16 프라이빗 문의', 'Enquire about No. 16')} <span aria-hidden="true">→</span></a></section>
   </div>;
@@ -986,9 +1076,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
         <div><span className="label">A considered object</span><h2>Kept close.<br/>Returned to.</h2>
           <p className="muted">{t('건축적인 유리, 무게감 있는 캡, 손안에 자연스럽게 놓이는 형태. 모든 디테일은 의도되었고, 어느 것도 주목을 요구하지 않습니다.', 'Architectural glass, a weighted cap, and a form designed to rest naturally in the hand. Every detail is intentional; nothing asks for attention.')}</p>
           <a className="text-link" href="/atelier">Our way of making <span aria-hidden="true">↗</span></a></div></section></>}
-      {(d === '' || d === 'parfum') && <section className="section night"><div className="spread">
-        <figure className="c-5"><img src={V('no16-horse.jpg')} alt={t('검은 말', 'A black horse')} loading="lazy"/><figcaption>No. 16</figcaption></figure>
-        <div className="copy c-6" style={{gridColumn: '7 / span 6'}}><span className="label">Parfum · No. 16</span><h3>{lines(t('숲, 그리고 나를 지탱해 준 말', 'The forest, and the horse that held me'))}</h3><a className="more" href="/products/no-16">{t('이야기 보기', 'Read the story')}</a></div></div></section>}
+      {(d === '' || d === 'parfum') && <GiftScents/>}
       <section className="section"><Head eyebrow="The Art of Everyday" title={t('일상의 예술', 'The art of everyday')} text={t('출시 소식은 프라이빗 문의로 먼저 안내드립니다.', 'Launch news is shared first through private enquiries.')}/>
         <div className="lines">{items.map(([s, n, ko, im]) => <a className="line-item" href={'/products/' + s} key={s}><div className="ph"><img src={V(im)} alt={n} loading="lazy" style={{objectPosition: im.includes('clothing') ? '66% center' : im.includes('bag') ? '56% center' : undefined}}/></div><span className="label">{n}</span><p className="muted">{t(ko, n)}</p></a>)}</div></section>
       <ObjectsRow/><OneWorld/>
@@ -998,6 +1086,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
   const objects = <>
     <Scene img="o-m-bag.jpg" eyebrow="Objects" title="Live with Art" lede={t('오래도록 곁에 남는 오브제, 일상의 순간을 특별하게.', 'Objects that stay with you, making the everyday special.')}/>
     <ObjectsRow/>
+    <HousePins/>
     <section className="section night"><div className="spread">
       <figure className="c-6"><img src={V('o-m-br-hero.jpg')} alt={t('B 모노그램 가죽 브레이슬릿', 'Leather bracelet with B monogram')} loading="lazy"/><figcaption>Leather · Monogram</figcaption></figure>
       <div className="copy c-5" style={{gridColumn: '8 / span 5'}}><span className="label">Leather Goods</span><h3>{lines(t('모노그램을 새긴 가죽 소품', 'Leather goods with the monogram'))}</h3><p className="muted">{t('하우스의 이니셜을 작은 사물에 옮깁니다.', 'The house initial, carried onto small objects.')}</p></div></div></section>
@@ -1031,7 +1120,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     </section>
     <Listening/>
     <section className="section"><div className="rows">
-      <a className="row" href="/products/no-16"><h3>{lines(t('No. 16 — 숲, 그리고 나를 지탱해 준 말', 'No. 16 — The forest, and the horse that held me'))}</h3><p>Parfum · Story</p><span className="more">Read</span></a>
+      <a className="row" href="/products/no-16"><h3>{lines(t('No. 16 — 숲속 물가의 기억', 'No. 16 — A forest pool, remembered'))}</h3><p>Parfum · Story</p><span className="more">Read</span></a>
       <a className="row" href="/music/gala"><h3>{lines(t('Brand Gala Dinner Show, 그날의 기록', 'Brand Gala Dinner Show, that evening'))}</h3><p>Music · Reception · Backstage</p><span className="more">Read</span></a>
       <a className="row" href="/maison#house"><h3>{lines(t('무대에서 시작된 하우스', 'A house born on stage'))}</h3><p>Maison · BELiOR & TWOTTIVA</p><span className="more">Read</span></a>
       <a className="row" href="/collection"><h3>{lines(t('하나의 상징, 여섯 개의 세계', 'One symbol, six worlds'))}</h3><p>Collection</p><span className="more">Read</span></a>
@@ -1061,7 +1150,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     page === 'products' ? productPage(detail) :
     page === 'objects' ? objects :
     page === 'atelier' ? atelier :
-    page === 'journal' ? journal : privatePage;
+    page === 'journal' ? journal : page === 'lounge' ? <Lounge/> : privatePage;
 
   return <LangCtx.Provider value={en}><div className={'belior' + (page === 'products' && detail === 'no-16' ? ' ivory' : '')}>
     <div className="curtain" ref={curtainRef} aria-hidden="true"><div className="c-inner"><img className="c-mark" src={V('lion-motif.jpg')} alt=""/>
@@ -1070,7 +1159,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <header className="site-header">
       <button className="menu-btn" type="button" aria-expanded={menu} aria-controls="belior-menu" onClick={() => setMenu(!menu)}>{menu ? 'CLOSE' : 'MENU'}</button>
       <a className="brand" href="/" aria-label="BELiOR home"><img src={V(page === 'products' && detail === 'no-16' ? 'mono-black.png' : 'mono-ivory.png')} alt="BELiOR" width={22} height={43}/></a>
-      <div className="head-right"><button className="lang" type="button" onClick={() => setEn(!en)} aria-label="Change language">{en ? 'KR' : 'EN'}</button><a className="head-link" href="/private">PRIVATE ENQUIRIES</a></div>
+      <div className="head-right"><button className="lang" type="button" onClick={() => setEn(!en)} aria-label="Change language">{en ? 'KR' : 'EN'}</button><a className="head-link" href="/lounge">LOUNGE</a><a className="head-link" href="/private">PRIVATE ENQUIRIES</a></div>
     </header>
     <nav className="menu-panel" id="belior-menu" hidden={!menu} aria-label="Menu">
       <div className="m-grid">{MENU.map(m => <div className="m-col" key={m.href}>
@@ -1083,7 +1172,9 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="foot-top"><div className="foot-brand"><img src={V('mono-ivory.png')} alt="BELiOR" width={33} height={64}/><span className="wordmark">BELiOR</span><span className="label">Music · Art · People · Places</span></div>
         <nav className="foot-nav" aria-label="Footer">{MENU.map(m => <a href={m.href} key={m.href}>{m.name}</a>)}<a href="/office">OFFICE</a></nav></div>
       <p className="foot-mail"><a href={'mailto:' + MAIL}>{MAIL}</a><a href={'mailto:' + MAIL2}>{MAIL2}</a></p>
+      <p className="foot-biz">{t('상호', 'Company')} 벨리오르(BELIOR) · {t('대표', 'CEO')} {t('여혜린', 'Hyerin Yeo')} · {t('사업자등록번호', 'Business No.')} 450-54-01129</p>
     </footer>
+    <EnquiryDock/>
   </div></LangCtx.Provider>;
 }
 

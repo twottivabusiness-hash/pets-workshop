@@ -986,3 +986,78 @@
 .belior .yt-frame{position:relative;aspect-ratio:16/9;margin:18px 0 22px;background:#000;box-shadow:0 30px 80px rgba(0,0,0,.45)}
 .belior .yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .belior .pf-page .yt-film .text-link{color:#1d1b18}
+
+/* hero film from YouTube: same full-screen frame, cropped to cover like the video it replaces */
+.belior .film .yt-bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.belior .film .yt-bg iframe{position:absolute;top:50%;left:50%;width:max(100%,177.78vh);height:max(100%,56.25vw);transform:translate(-50%,-50%);border:0}
+@supports (height:100svh){.belior .film .yt-bg iframe{width:max(100%,177.78svh)}}
+/* childhood poster shown whole */
+.belior .n16-poster-img{background:#0d1410;padding:clamp(24px,6vw,80px) var(--gutter);display:grid;place-items:center}
+.belior .n16-poster-img img{display:block;width:min(100%,640px);height:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.belior .pins img{height:auto;aspect-ratio:1122/1402;object-fit:contain;background:#f3eee6}
+.belior .film .yt-bg{opacity:0;transition:opacity 1.2s ease}
+.belior .film .yt-bg.on{opacity:1}
+
+/* ---------- v19 ---------- */
+/* house film from YouTube, without player chrome */
+.belior .ytbg{position:relative;overflow:hidden;background:#0a0907}
+.belior .ytbg.hero{position:absolute;inset:0;z-index:-2}
+.belior .ytbg.framed{aspect-ratio:16/9;margin:18px 0 0;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.belior .ytbg-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.belior .ytbg-frame{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.belior .ytbg.on .ytbg-frame{opacity:1}
+.belior .ytbg-frame iframe{position:absolute;top:50%;left:50%;border:0;width:118%;height:118%;transform:translate(-50%,-50%)}
+.belior .ytbg.hero .ytbg-frame iframe{width:max(118%,210vh);height:max(118%,66.4vw)}
+.belior .ytbg-ctrl{position:absolute;right:16px;bottom:16px;display:flex;gap:10px;align-items:center;z-index:3}
+.belior .ytbg.hero .ytbg-ctrl{right:var(--gutter);bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+.belior .ytbg-ctrl .mf-sound{position:static}
+.belior .ytbg-pause{width:36px;height:36px;border-radius:50%;border:1px solid rgba(239,233,221,.5);background:rgba(12,11,10,.35);color:var(--ivory);font-size:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.belior .film .film-toggle,.belior .film .film-sound{display:none}
+@media (max-aspect-ratio:1/1){.belior .ytbg.hero .ytbg-still{object-position:72% center}}
+/* footer company line */
+.belior .foot-biz{margin:10px 0 0;font-size:10px;letter-spacing:.06em;color:rgba(236,228,214,.45)}
+/* enquiry dock */
+.belior .dock{position:fixed;right:clamp(14px,2.4vw,28px);bottom:clamp(14px,2.4vw,28px);z-index:60;display:grid;justify-items:end;gap:12px}
+.belior .dock-btn{width:54px;height:54px;border-radius:50%;border:0;background:#f5f2ec;color:#141210;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:22px}
+.belior .dock-btn svg{width:22px;height:22px}
+.belior .dock-panel{background:#f5f2ec;color:#141210;min-width:220px;padding:10px 0;box-shadow:0 20px 50px rgba(0,0,0,.35);display:grid}
+.belior .dock-panel a{padding:12px 20px;color:#141210;text-decoration:none;font-size:13px;letter-spacing:.04em}
+.belior .dock-panel a:hover{background:#ebe6dd}
+/* gift scents */
+.belior .gs-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:30px}
+.belior .gs{color:inherit;text-decoration:none;border-top:1px solid var(--world);padding-top:14px}
+.belior .gs .ph{aspect-ratio:1;overflow:hidden;background:#111;margin-bottom:12px}
+.belior .gs img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
+.belior .gs:hover img{transform:scale(1.05)}
+.belior .gs .label{color:var(--world)}
+.belior .gs h3{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.08em;margin:6px 0}
+.belior .gs p{font-size:12px;color:rgba(236,228,214,.65);margin:0}
+.belior .gs-cta{display:flex;gap:28px;flex-wrap:wrap;margin-top:34px}
+/* lounge */
+.belior .lounge-gate{min-height:calc(100svh - 100px);display:grid;place-content:center;justify-items:center;text-align:center;padding:120px var(--gutter) 80px;background:radial-gradient(ellipse at 50% 30%,#1b1710,#0a0907 65%)}
+.belior .lg-seal{display:flex;font-family:var(--display);font-size:64px;color:#c4a96c;margin-bottom:26px;transition:transform 1.2s cubic-bezier(.7,0,.3,1),opacity 1.2s}
+.belior .lg-seal span{display:block;width:.5em;overflow:hidden;transition:transform 1.2s cubic-bezier(.7,0,.3,1)}
+.belior .lg-seal .r{direction:rtl}
+.belior .lounge-gate.opening .lg-seal .l{transform:translateX(-60px)}.belior .lounge-gate.opening .lg-seal .r{transform:translateX(60px)}
+.belior .lounge-gate.opening{opacity:.0;transition:opacity 1.4s ease .2s}
+.belior .lounge-gate h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,4vw,52px);margin:16px 0}
+.belior .lounge-gate h1 .ko{font-size:.7em}
+.belior .lounge-gate .muted{max-width:420px;line-height:1.9}
+.belior .lg-form{display:flex;gap:0;margin:30px 0 8px;flex-wrap:wrap;justify-content:center}
+.belior .lg-form input{background:transparent;border:1px solid rgba(239,233,221,.4);border-right:0;color:var(--ivory);padding:14px 18px;font:inherit;letter-spacing:.2em;min-width:220px;outline:none}
+.belior .lg-form button{background:#c4a96c;color:#141210;border:0;padding:14px 22px;letter-spacing:.24em;font-size:11px;cursor:pointer}
+.belior .lg-err{flex-basis:100%;margin:10px 0 0;color:#d98b7a;font-size:12px;min-height:1em}
+.belior .lg-form.err input{animation:bl-shake .4s}
+@keyframes bl-shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.belior .lounge-head{text-align:center;padding:140px var(--gutter) 30px}
+.belior .lounge-head h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,4vw,52px);margin:14px 0}
+.belior .lounge-head h1 .ko{font-size:.7em}
+.belior .lg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+.belior .lg-grid figure{margin:0}
+.belior .lg-grid .ph{aspect-ratio:4/5;overflow:hidden;background:#111}
+.belior .lg-grid img{width:100%;height:100%;object-fit:cover}
+.belior .lg-grid h3{font-weight:400;font-size:18px;margin:8px 0 4px}
+.belior .lg-grid h3 .ko{font-size:1em}
+.belior .lg-grid p{font-size:12px;color:rgba(236,228,214,.6);margin:0 0 12px}
+@media (max-width:900px){.belior .gs-grid{grid-template-columns:repeat(2,1fr)}.belior .lg-grid{grid-template-columns:1fr 1fr}}
+.belior .ytbg.hero .ytbg-ctrl{right:auto;left:var(--gutter)}

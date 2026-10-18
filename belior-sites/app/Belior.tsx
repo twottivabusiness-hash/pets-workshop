@@ -71,9 +71,8 @@ const LABELS: Record<string, string> = {
 };
 WORLDS.forEach(w => { LABELS['/collection/' + w.slug] = w.name + ' COLLECTION'; });
 type Turn = {world: string; mark: string; round: boolean; color: string};
-const SEQUENCE: Turn[] = [{world: 'LION', mark: V('lion-motif.jpg'), round: false, color: '#c9a35f'},
-  ...WORLDS.slice(1).map(w => ({world: w.name, mark: V('emblem-' + w.slug + '.jpg'), round: true, color: w.color}))];
-const OWN: Record<string, Turn> = Object.fromEntries(WORLDS.map((w, i) => ['/collection/' + w.slug, i === 0 ? SEQUENCE[0] : {world: w.name, mark: V('emblem-' + w.slug + '.jpg'), round: true, color: w.color}]));
+const SEQUENCE: Turn[] = WORLDS.map(w => ({world: w.name, mark: V('emblem-' + w.slug + '.png'), round: false, color: w.color}));
+const OWN: Record<string, Turn> = Object.fromEntries(WORLDS.map((w, i) => ['/collection/' + w.slug, SEQUENCE[i]]));
 
 const HANGUL = /[\u3131-\uD79D]/;
 // Korean is set small in the Apple system face; Latin keeps the display serif
@@ -288,7 +287,7 @@ function EmblemPairs() {
     <p className="muted">{t('열두 장의 카드 속에 여섯 세계가 두 장씩 숨어 있습니다.', 'Six worlds, two cards each, hidden among twelve.')}</p>
     <div className="lw-cards">{cards.map(c => { const show = up.includes(c.id) || done.includes(c.slug); const w = WORLDS.find(x => x.slug === c.slug)!;
       return <button type="button" key={c.id} className={'lw-card' + (show ? ' show' : '') + (done.includes(c.slug) ? ' done' : '')} style={{['--world' as string]: w.color}} onClick={() => flip(c)} aria-label={show ? w.name : t('카드', 'Card')}>
-        <span className="back"><b>B</b></span><span className="face"><img src={V('emblem-' + c.slug + '.jpg')} alt=""/></span></button>; })}</div>
+        <span className="back"><b>B</b></span><span className="face"><img src={V('emblem-' + c.slug + '.png')} alt=""/></span></button>; })}</div>
     <p className="lw-score">{won ? t(`모두 찾으셨습니다 · ${moves}번`, `All six found · ${moves} turns`) : t(`${done.length} / 6 · ${moves}번`, `${done.length} / 6 · ${moves} turns`)}
       <button type="button" className="text-link" onClick={reset}>{t('다시 섞기', 'Shuffle again')}</button></p></div>;
 }
@@ -541,7 +540,7 @@ function LoungeScents() {
     <div className="lw-games-head"><span className="label">Private · The Scent Atelier</span><h2>{lines(t('여섯 세계의 향', 'The six worlds, as scent'))}</h2>
       <p className="muted">{t('동물 컬렉션의 세계마다 하나의 향을 짓습니다. 라운지에 오신 분께만 보여드리는 페이지입니다.', 'One scent is composed for each world of the animal collection. This page is shown only to guests of the lounge.')}</p></div>
     {WORLDS.map((w, i) => <article className={'ls-world' + (i % 2 ? ' flip' : '')} key={w.slug} style={{['--world' as string]: w.color}}>
-      <figure className="ls-hero"><img src={V(SCENT_IMG[w.slug] || w.alt || w.img || 'phoenix.jpg')} alt={w.name} loading="lazy" style={{objectPosition: posOf(w, 'center')}}/><figcaption><img src={V('emblem-' + w.slug + '.jpg')} alt=""/></figcaption></figure>
+      <figure className="ls-hero"><img src={V(SCENT_IMG[w.slug] || w.alt || w.img || 'phoenix.jpg')} alt={w.name} loading="lazy" style={{objectPosition: posOf(w, 'center')}}/><figcaption><img src={V('emblem-' + w.slug + '.png')} alt=""/></figcaption></figure>
       <div className="ls-copy"><span className="label">The Animal Collection · N° 0{i + 1}</span><h3 style={{color: w.color}}>{w.name}</h3>
         <p className="ls-kw">{w.kw}</p>
         <p className="ls-world">{t(w.world[0], w.world[1])}</p>
@@ -769,7 +768,7 @@ function GiftScents() {
   return <section className="section night gift-scents"><Head eyebrow="Parfum · The Animal Collection" title={t('동물 컬렉션의 향, 선물로 전합니다', 'A scent for each world, given as a gift')}
       text={t('BELiOR는 여섯 동물의 세계마다 하나의 향을 짓고, 함께한 분께 선물로 전합니다. 일부 향은 라운지에서만 만나실 수 있습니다.', 'BELiOR composes one scent for each of the six animal worlds and gives it to guests of the house. Some are shown only in the Lounge.')}/>
     <div className="gs-grid">{WORLDS.map(w => <a className="gs" href={'/collection/' + w.slug} key={w.slug} style={{['--world' as string]: w.color}}>
-      <div className="ph"><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'} loading="lazy"/></div>
+      <div className="ph"><img src={V('emblem-' + w.slug + '.png')} alt={w.name + ' emblem'} loading="lazy"/></div>
       <span className="label">{w.mat}</span><h3>{w.name}</h3><p>{w.notes || w.kw}</p></a>)}</div>
     <div className="gs-cta"><a className="text-link" href="/lounge">{t('라운지 입장', 'Enter the Lounge')} <span aria-hidden="true">↗</span></a><a className="text-link" href="/private">{t('기프트 문의', 'Gift enquiries')} <span aria-hidden="true">↗</span></a></div></section>;
 }
@@ -953,7 +952,7 @@ function Head({eyebrow, title, text}: {eyebrow: string; title: string; text?: st
 
 function Emblems({items, five}: {items: World[]; five?: boolean}) {
   const {t, en} = useT(); void t; void en;
-  return <div className={'emblems' + (five ? ' five' : '')}>{items.map(w => <a className="emblem" href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/><span className="label">{w.name}</span></a>)}</div>;
+  return <div className={'emblems' + (five ? ' five' : '')}>{items.map(w => <a className="emblem" href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.png')} alt={w.name + ' emblem'}/><span className="label">{w.name}</span></a>)}</div>;
 
 }
 
@@ -1313,7 +1312,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       <div className="symbols three">
         <div className="symbol-card"><div className="mark"><img src={V('mono-ivory.png')} alt="BELiOR maison symbol" width={76} height={150}/></div><span className="label">Maison Symbol</span><h3>{lines(t('메종 심볼', 'Maison symbol'))}</h3><p className="muted">{t('하우스의 공식 표기. 사이트 상단과 모든 공식 문서에 사용합니다.', 'The official mark of the house, used at the top of the site and on all official documents.')}</p></div>
         <div className="symbol-card"><div className="mark"><img src={V('monogram-hd.jpg')} alt="Lion-B monogram" style={{maxHeight: 150, borderRadius: 4}}/></div><span className="label">The Monogram</span><h3>{lines(t('사자-B 모노그램', 'Lion-B monogram'))}</h3><p className="muted">{t('현처럼 곧게 선 획 위에 별을 얹은 이니셜. 동물 세계관으로 들어가는 문입니다.', 'An initial straight as a string, crowned with a star. The door to the animal worlds.')}</p></div>
-        <div className="symbol-card"><div className="mini">{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/></a>)}</div><span className="label">Collection Emblems</span><h3>{lines(t('여섯 엠블럼', 'Six emblems'))}</h3><p className="muted">LION · SWAN · ORCA · LEOPARD · PANTHER · PHOENIX.</p></div>
+        <div className="symbol-card"><div className="mini">{WORLDS.map(w => <a href={'/collection/' + w.slug} key={w.slug}><img src={V('emblem-' + w.slug + '.png')} alt={w.name + ' emblem'}/></a>)}</div><span className="label">Collection Emblems</span><h3>{lines(t('여섯 엠블럼', 'Six emblems'))}</h3><p className="muted">LION · SWAN · ORCA · LEOPARD · PANTHER · PHOENIX.</p></div>
       </div></section>
     <section className="b12-manifesto"><span className="label">Our point of view</span><h2>Luxury is not a volume.<br/><span>It is a feeling.</span></h2>
       <p className="muted">{t('BELiOR는 서울에서 태어난 독립 메종입니다. 향과 패션, 오브제를 하나의 추구로 엮습니다. 처음 닿는 순간부터 나의 것으로 느껴지고, 오래도록 의미가 남는 것을 만듭니다.', 'BELiOR is an independent maison born in Seoul. We bring together fragrance, fashion and objects in a single pursuit: to create things that feel personal from the very first touch, and meaningful for a long time after.')}</p></section>
@@ -1413,7 +1412,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
       {w.slug === 'swan' && <section className="section night"><Head eyebrow="Swan Lake · TWOTTIVA × BELiOR" title={t('달빛 아래의 호수', 'A lake under the moon')} text={t('리허설에서 녹음한 Swan Lake 연주입니다. 소리를 켜고 보세요.', 'Swan Lake, recorded in rehearsal. Watch with sound.')}/><video className="performance-video" controls playsInline preload="metadata" poster={V('swan-lake-poster.jpg')} src={V('swan-lake-film.mp4')}/></section>}
       <section className="section"><div className="spread">
         <div className="copy c-7"><span className="label">The World</span><p className="world-line">{w.world[en ? 1 : 0]}</p></div>
-        <div className="c-4 emblem-side"><img src={V('emblem-' + w.slug + '.jpg')} alt={w.name + ' emblem'}/><span className="label">{w.name} Emblem</span></div></div>
+        <div className="c-4 emblem-side"><img src={V('emblem-' + w.slug + '.png')} alt={w.name + ' emblem'}/><span className="label">{w.name} Emblem</span></div></div>
         {w.slug === 'lion' && <blockquote className="note-founder"><span className="label">Founder’s Note</span><p>{t('사자를 좋아하는 이유는 강인하고 멋지기 때문입니다.', 'I love the lion because it is strong and magnificent.')}</p></blockquote>}
         <div className="facts">
           <div className="fact"><span className="label">Keywords</span><span className="val">{w.kw}</span></div>
@@ -1550,7 +1549,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     page === 'journal' ? journal : page === 'lounge' ? <Lounge/> : privatePage;
 
   return <LangCtx.Provider value={en}><div className={'belior' + (page === 'products' && detail === 'no-16' ? ' ivory' : '')}>
-    <div className="curtain" ref={curtainRef} aria-hidden="true"><div className="c-inner"><img className="c-mark" src={V('lion-motif.jpg')} alt=""/>
+    <div className="curtain" ref={curtainRef} aria-hidden="true"><div className="c-inner"><img className="c-mark" src={V('emblem-lion.png')} alt=""/>
       <span className="c-world">LION</span><span className="c-line"/><span className="c-label">{LABELS[path] || 'BELiOR'}</span></div></div>
     <div className="topline"><span>A More Beautiful Tomorrow</span><span>Seoul</span></div>
     <header className="site-header">

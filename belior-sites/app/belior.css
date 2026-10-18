@@ -468,8 +468,7 @@
 .belior.ivory .foot-brand img,.belior.ivory .statement img{filter:invert(1)}
 /* page turn, Ferrari-style: one small mark, nothing else */
 .belior .curtain .c-world,.belior .curtain .c-line,.belior .curtain .c-label{display:none}
-.belior .curtain .c-mark,.belior .curtain:not(.round) .c-mark{height:clamp(44px,6vh,60px);width:clamp(44px,6vh,60px);object-fit:cover}
-.belior .curtain.round .c-mark{width:clamp(44px,6vh,60px);height:clamp(44px,6vh,60px);border-radius:50%}
+.belior .curtain .c-mark,.belior .curtain:not(.round) .c-mark,.belior .curtain.round .c-mark{height:clamp(72px,11vh,110px);width:clamp(72px,11vh,110px);object-fit:contain;border-radius:0;background:none}
 /* ---------- The Evening: the whole photograph, never cropped ---------- */
 .belior .evening.whole{grid-template-columns:1fr;gap:2px}
 .belior .ev-photo{margin:0}
@@ -1262,3 +1261,8 @@
 .belior .foot-info dd a:hover{color:var(--ivory)}
 .belior .foot-info .foot-biz{margin-top:26px;padding-top:18px;border-top:1px solid rgba(236,228,214,.12);font-size:11px;line-height:1.8;letter-spacing:.06em;color:rgba(236,228,214,.5)}
 @media (min-width:860px){.belior .foot-info dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 40px}}
+
+/* Emblems are transparent PNGs now: no crops, no circles */
+.belior .emblem img,.belior .symbol-card .mini img,.belior .gs .ph img,.belior .lw-card .face img,.belior .emblem-side img,.belior .ls-hero figcaption img{object-fit:contain!important;border-radius:0!important;background:transparent!important}
+.belior .ls-hero figcaption{border:0;background:transparent;box-shadow:none;width:84px;height:84px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.6))}
+.belior .lw-card .face{background:#120f0c;padding:10%}

@@ -1443,7 +1443,7 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <section className="n16-hero"><img className="bg" src={V('no16-hero.jpg')} alt={t('푸른 숲에서 말에 오른 아이와 지켜보는 아버지', 'A child on a horse in a green forest, her father watching')}/>
       <div className="inner"><h1 className="keep">No.16<br/>A memory, held.</h1><p className="lede">{t('푸른 숲, 어린 시절의 한 장면.', 'A green forest, a childhood scene.')}</p>
         <a className="line-cta" href="#memory">DISCOVER THE STORY <span aria-hidden="true">→</span></a></div></section>
-    <N16Poster/><CarDiffuser/>
+    <N16Poster/>
     <section className="n16-stay"><div className="txt"><h2>The moments that stay.</h2>
       <p>{lines(t('향은 우리를 어떤 장소로 데려갑니다 —\n우리를 만든 감정과, 여전히 안에 살아 있는\n고요한 힘으로.', 'Scent can return us to a place —\nto the feelings that shaped us, and the quiet strength\nthat still lives within.'))}</p></div>
       <img src={V('no16-stream.jpg')} alt={t('햇살이 비치는 이끼와 시냇물', 'Moss and a sunlit stream')} loading="lazy"/></section>
@@ -1467,11 +1467,10 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     const one = items.find(x => x[0] === d);
     return <>
       <Scene img="o-mk-home-objects.jpg" eyebrow="Parfum · Bag · Clothing · Objects" title={one ? one[1] : 'The Art of Everyday'} lede={t('감각을 담는 소재, 오래 머무는 형태.', 'Materials that hold feeling. Forms that endure.')}/>
-      {(d === '' || d === 'parfum') && <><Tchaikovsky/><CarDiffuser/><section className="b12-split"><img src={V('b12-fragrance.jpg')} alt={t('검은 향수병과 난초', 'A dark glass bottle beside an orchid')} loading="lazy"/>
+      {(d === '' || d === 'parfum') && <><Tchaikovsky/><section className="b12-split"><img src={V('b12-fragrance.jpg')} alt={t('검은 향수병과 난초', 'A dark glass bottle beside an orchid')} loading="lazy"/>
         <div><span className="label">A considered object</span><h2>Kept close.<br/>Returned to.</h2>
           <p className="muted">{t('건축적인 유리, 무게감 있는 캡, 손안에 자연스럽게 놓이는 형태. 모든 디테일은 의도되었고, 어느 것도 주목을 요구하지 않습니다.', 'Architectural glass, a weighted cap, and a form designed to rest naturally in the hand. Every detail is intentional; nothing asks for attention.')}</p>
           <a className="text-link" href="/atelier">Our way of making <span aria-hidden="true">↗</span></a></div></section></>}
-      {(d === '' || d === 'parfum') && <GiftScents/>}
       {d === 'clothing' && <section className="section night"><figure className="wide-fig"><img src={V('clothing-board.jpg')} alt={t('BELiOR 의류 컬렉션 — 코트, 재킷, 드레스, 구두, 가방', 'The BELiOR clothing collection — coats, jackets, dresses, shoes, bag')} loading="lazy"/><figcaption>The Signature · Day to Night · Modern Classic</figcaption></figure>
         <div className="spread" style={{marginTop: 40}}><figure className="c-6"><img src={V('clothing-top.jpg')} alt={t('트위드 재킷과 검은 리본', 'Tweed jacket and a black ribbon')} loading="lazy"/><figcaption>A Life in Harmony</figcaption></figure>
           <div className="copy c-5" style={{gridColumn: '8 / span 5'}}><span className="label">Clothing</span><h3>{lines(t('음악처럼 입는 옷', 'Worn like music'))}</h3><p className="muted">{t('시그니처 코트와 재킷, 낮에서 밤으로 이어지는 드레스. 하우스의 심볼을 작게 새깁니다.', 'Signature coats and jackets, dresses that carry from day to night. The house symbol, set small.')}</p><a className="text-link" href="/private">{t('문의하기', 'Enquire')} <span aria-hidden="true">↗</span></a></div></div></section>}
@@ -1569,8 +1568,15 @@ export default function Belior({page = 'home', detail = ''}: {page?: string; det
     <footer className="site-footer">
       <div className="foot-top"><div className="foot-brand"><img src={V('mono-ivory.png')} alt="BELiOR" width={33} height={64}/><span className="wordmark">BELiOR</span><span className="label">Music · Art · People · Places</span></div>
         <nav className="foot-nav" aria-label="Footer">{MENU.map(m => <a href={m.href} key={m.href}>{m.name}</a>)}</nav></div>
-      <p className="foot-mail"><a href={'mailto:' + MAIL}>{MAIL}</a><a href={'mailto:' + MAIL2}>{MAIL2}</a></p>
-      <p className="foot-biz">{t('상호', 'Company')} 벨리오르(BELIOR) · {t('대표', 'CEO')} {t('여혜린', 'Hyerin Yeo')} · {t('사업자등록번호', 'Business No.')} 450-54-01129</p>
+      <div className="foot-info"><p className="label">Business Information</p>
+        <dl>
+          <div><dt>Brand</dt><dd>BELiOR<br/>벨리오르</dd></div>
+          <div><dt>Event Direction</dt><dd>BELiOR — Private Event Direction<br/>{t('행사 콘셉트 · 캐스팅 · 현장 디렉션', 'Event concept · Casting · On-site direction')}</dd></div>
+          <div><dt>Performance Area</dt><dd>{t('서울·수도권 전역', 'Seoul and the capital region')}</dd></div>
+          <div><dt>Founder &amp; Performance Director</dt><dd>HYERIN YEO</dd></div>
+          <div><dt>Contact</dt><dd>E-mail: <a href={'mailto:' + MAIL}>{MAIL}</a><br/>E-mail: <a href={'mailto:' + MAIL2}>{MAIL2}</a><br/>KakaoTalk Channel: <a href={KAKAO} target="_blank" rel="noopener noreferrer">BELiOR</a><br/>Website: belior.co.kr</dd></div>
+        </dl>
+        <p className="foot-biz">Business Operator: BELiOR · Representative: HYERIN YEO<br/>Business Registration No. 450-54-01129</p></div>
     </footer>
     <EnquiryDock/>
   </div></LangCtx.Provider>;

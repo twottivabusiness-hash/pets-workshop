@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F5F0E6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="BELIOR">
+<meta name="description" content="BELIOR — The Evening, Composed. Maison de l'Art de Vivre, Seoul.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>BELIOR</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+KR:wght@300;400;500&display=swap">
+<style>
+*{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* one ivory world: photo-led screens, small wordmark, square edges, gold only as hairline */
+:root{
+  --ivory:#F5F0E6; --card:#FAF7F0; --ink:#1A1816; --muted:#6E665B; --gold:#B08E58; --black:#0B0A09; --line:#D8CDB8; --on-photo:#F6F1E8;
+  --display:"Cormorant Garamond","Times New Roman",serif; --body:"Noto Serif KR","Apple SD Gothic Neo",serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{background:var(--ivory);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--ivory)}
+a{color:inherit}
+.app{max-width:520px;margin:0 auto;min-height:100%;background:var(--ivory);position:relative}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header (everyday BELiOR) */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;height:56px;background:var(--ivory);border-bottom:1px solid var(--line)}
+.bar.over{position:absolute;left:0;right:0;background:transparent;border-color:transparent}
+.icon-btn{width:44px;height:44px;display:grid;place-items:center;background:none;border:0;cursor:pointer;color:inherit}
+.icon-btn:focus-visible,.link:focus-visible,.row:focus-visible,.cta:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+.burger{width:20px;height:9px;border-top:1px solid currentColor;border-bottom:1px solid currentColor}
+.bar .mark{justify-self:center;height:13px}
+.bar .sym{height:22px}
+.over .burger{color:var(--on-photo)}
+
+/* home hero (main BELIOR, small) */
+.hero{position:relative;aspect-ratio:3/4.3;max-height:760px;overflow:hidden;background:var(--black)}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.74)}
+.hero .main{position:absolute;top:calc(64px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:28%;max-width:150px}
+.hero .copy{position:absolute;left:0;right:0;bottom:44px;text-align:center;color:var(--on-photo)}
+.eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.32em;text-transform:uppercase}
+.link{display:inline-block;margin-top:14px;font-size:13px;letter-spacing:.06em;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:3px}
+
+/* sections */
+.sec{padding-block:40px}
+.sec h2{font-family:var(--display);font-weight:400;font-size:28px;line-height:1.15;margin:8px 0 0;text-wrap:balance}
+.lede{color:var(--muted);font-size:14px;line-height:1.85;margin:12px 0 0}
+.lines{display:grid;gap:28px;margin-top:28px}
+.line{display:grid;gap:10px;text-decoration:none}
+.line .ph{aspect-ratio:4/5;overflow:hidden;background:var(--black)}
+.line .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.line .name{font-family:var(--display);font-size:20px;letter-spacing:.14em}
+.line .desc{font-size:13px;color:var(--muted)}
+.film{margin-top:20px;background:var(--black)}
+.film video{display:block;width:100%;aspect-ratio:9/16;max-height:640px;background:var(--black)}
+.foot{border-top:1px solid var(--line);text-align:center;padding-block:40px 56px;color:var(--muted);font-size:12px;line-height:2}
+.foot .sym{height:30px;margin:0 auto 14px;display:block}
+.foot .desc{font-family:var(--display);letter-spacing:.28em;font-size:11px;color:var(--ink)}
+
+/* line page */
+.page-hero{aspect-ratio:4/5;max-height:620px;overflow:hidden;background:var(--black)}
+.page-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.page-hero.contain img{object-fit:contain}
+.rows{margin:24px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.rows li{padding:16px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;justify-content:space-between;gap:16px}
+.rows li span:last-child{color:var(--muted);font-size:12px;text-align:right}
+.cta{display:block;width:100%;margin-top:28px;padding:16px;background:var(--black);color:var(--on-photo);border:0;font-family:var(--display);font-size:14px;letter-spacing:.28em;text-transform:uppercase;cursor:pointer;text-align:center;text-decoration:none}
+.note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.7}
+
+/* menu overlay */
+.menu{position:fixed;inset:0;z-index:40;background:rgba(11,10,9,.45);display:flex;justify-content:center}
+.menu .sheet{width:100%;max-width:520px;background:var(--card);padding-top:env(safe-area-inset-top,0px);overflow:auto}
+.menu .top{display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid var(--line)}
+.menu .close{display:flex;align-items:center;gap:8px;background:none;border:0;font:inherit;font-size:14px;cursor:pointer;color:var(--ink);padding:8px 0}
+.menu .top img{height:12px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);text-decoration:none;font-size:15px}
+.row small{color:var(--muted);font-size:12px;margin-left:8px}
+.row .chev{font-family:var(--display);font-size:20px;color:var(--muted)}
+.menu .sub{padding-block:24px;font-size:13px;color:var(--muted);display:grid;gap:14px}
+@media (prefers-reduced-motion:no-preference){.view{animation:in .35s ease}@keyframes in{from{opacity:.4}to{opacity:1}}}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <!-- HOME -->
+  <section class="view" id="v-home">
+    <header class="bar over gut" style="padding:0">
+      <button class="icon-btn" data-open-menu aria-label="메뉴 열기"><span class="burger"></span></button>
+      <span></span><span></span>
+    </header>
+    <div class="hero">
+      <img class="bg" src="img/hero-gala.jpg" alt="갈라 이브닝 입구의 손님들">
+      <img class="main" src="img/wordmark-main-ivory.png" alt="BELIOR">
+      <div class="copy">
+        <div class="eyebrow">The Evening, Composed.</div>
+        <a class="link" href="#music">자세히 보기</a>
+      </div>
+    </div>
+    <div class="sec gut">
+      <div class="eyebrow" style="color:var(--gold)">Maison de l'Art de Vivre</div>
+      <h2>음악에서 시작된 하우스</h2>
+      <p class="lede">음악으로 관계를 만들고, 향으로 경험을 기억시키며, 오브제로 하우스를 소유하게 합니다.</p>
+      <div class="lines">
+        <a class="line" href="#music"><div class="ph"><img src="img/music-arrival.jpg" alt="악기를 든 연주자들의 입장"></div><span class="name">BELiOR MUSIC</span><span class="desc">공연 기획 · VIP 음악 연출</span></a>
+        <a class="line" href="#private"><div class="ph"><img src="img/private-hall.jpg" alt="갈라 디너 테이블이 준비된 홀"></div><span class="name">BELiOR PRIVATE</span><span class="desc">프라이빗 고객 · 맞춤 경험</span></a>
+        <a class="line" href="#maison"><div class="ph"><img src="img/maison-box.jpg" alt="버건디 벨벳 기프트 박스 Amour éternel"></div><span class="name">BELiOR MAISON</span><span class="desc">향 · 라이프스타일 제품</span></a>
+        <a class="line" href="#editions"><div class="ph"><img src="img/monogram-full-gold.jpg" alt="골드 B 모노그램"></div><span class="name">BELiOR EDITIONS</span><span class="desc">한정판 · 아트 오브제</span></a>
+      </div>
+    </div>
+    <div class="sec gut" style="padding-top:8px">
+      <div class="eyebrow" style="color:var(--gold)">Film</div>
+      <h2>月亮代表我的心</h2>
+      <p class="lede">The Moon Represents My Heart · BELiOR MUSIC 연주</p>
+      <div class="film"><video controls playsinline preload="metadata" src="img/film.mp4"></video></div>
+    </div>
+    <footer class="foot gut">
+      <img class="sym" src="img/symbol-ink.png" alt="BELIOR 하우스 심볼">
+      <div class="desc">MAISON DE L'ART DE VIVRE</div>
+      <div>SEOUL · belior.co.kr</div>
+    </footer>
+  </section>
+
+  <!-- LINE PAGES -->
+  <template id="t-line">
+    <section class="view">
+      <header class="bar gut" style="padding:0">
+        <button class="icon-btn" data-open-menu aria-label="메뉴 열기"><span class="burger"></span></button>
+        <a href="#home" aria-label="홈으로" style="justify-self:center;display:flex"><img class="mark" src="img/wordmark-everyday-ink.png" alt="BELiOR"></a>
+        <span></span>
+      </header>
+      <div class="page-hero"><img data-img alt=""></div>
+      <div class="sec gut">
+        <div class="eyebrow" style="color:var(--gold)" data-eyebrow></div>
+        <h2 data-title></h2>
+        <p class="lede" data-lede></p>
+        <ul class="rows" data-rows></ul>
+        <a class="cta" href="#contact">문의하기</a>
+      </div>
+      <footer class="foot gut"><img class="sym" src="img/symbol-ink.png" alt=""><div class="desc">MAISON DE L'ART DE VIVRE</div><div>SEOUL · belior.co.kr</div></footer>
+    </section>
+  </template>
+  <div id="v-page" hidden></div>
+
+  <!-- CONTACT -->
+  <section class="view" id="v-contact" hidden>
+    <header class="bar gut" style="padding:0">
+      <button class="icon-btn" data-open-menu aria-label="메뉴 열기"><span class="burger"></span></button>
+      <a href="#home" aria-label="홈으로" style="justify-self:center;display:flex"><img class="mark" src="img/wordmark-everyday-ink.png" alt="BELiOR"></a>
+      <span></span>
+    </header>
+    <div class="sec gut">
+      <div class="eyebrow" style="color:var(--gold)">Private enquiries · By invitation</div>
+      <h2>By Appointment</h2>
+      <p class="lede">공연과 컬렉션, 프라이빗 이벤트에 관한 문의</p>
+      <ul class="rows">
+        <li><span>BELiOR MUSIC</span><span>호텔 · 기업행사 · 갈라디너</span></li>
+        <li><span>BELiOR PRIVATE</span><span>프라이빗 이벤트 · 웨딩</span></li>
+        <li><span>BELiOR MAISON</span><span>향 · 기프트</span></li>
+        <li><span>BELiOR EDITIONS</span><span>한정판 · 오브제</span></li>
+      </ul>
+      <a class="cta" href="https://belior.co.kr" target="_blank" rel="noopener">belior.co.kr 에서 문의</a>
+      <p class="note">문의 접수는 공식 홈페이지에서 받습니다.</p>
+    </div>
+    <footer class="foot gut"><img class="sym" src="img/symbol-ink.png" alt=""><div class="desc">MAISON DE L'ART DE VIVRE</div><div>SEOUL · belior.co.kr</div></footer>
+  </section>
+
+  <!-- MENU -->
+  <div class="menu" id="menu" hidden>
+    <nav class="sheet gut" aria-label="메뉴">
+      <div class="top"><button class="close" data-close-menu>×&nbsp; 닫기</button><img src="img/wordmark-everyday-ink.png" alt="BELiOR"></div>
+      <a class="row" href="#home">홈<span class="chev">›</span></a>
+      <a class="row" href="#music">BELiOR MUSIC<span class="chev">›</span></a>
+      <a class="row" href="#private">BELiOR PRIVATE<span class="chev">›</span></a>
+      <a class="row" href="#maison">BELiOR MAISON<span class="chev">›</span></a>
+      <a class="row" href="#editions">BELiOR EDITIONS<span class="chev">›</span></a>
+      <a class="row" href="#contact">부티크 · 문의<span class="chev">›</span></a>
+      <div class="sub"><span>The Evening, Composed.</span><span>SEOUL · belior.co.kr</span></div>
+    </nav>
+  </div>
+</div>
+
+<script>
+const PAGES = {
+  music:   {img:"img/music-arrival.jpg", eyebrow:"BELiOR MUSIC", title:"공연 기획 · VIP 음악 연출", lede:"특급호텔, 기업 VIP 행사, 프라이빗 갈라디너의 음악을 행사 흐름에 맞춰 연출합니다. 연주는 공연 파트너 TWOTTIVA가 맡습니다.",
+            rows:[["프로그램 기획","행사 성격 · 식순 맞춤"],["편성 · 리허설","현장 운영 포함"],["VIP 동선 · 큐 대응","국문 · 영문 큐시트"]]},
+  private: {img:"img/private-hall.jpg", eyebrow:"BELiOR PRIVATE", title:"프라이빗 고객 · 맞춤 경험", lede:"갈라디너, 프라이빗 이벤트, 웨딩을 BELIOR가 연출한 하나의 저녁으로 구성합니다.",
+            rows:[["갈라디너","음악 · 공간 · 기프트"],["프라이빗 이벤트","맞춤 구성"],["웨딩","하우스가 연출하는 프라이빗 웨딩"]]},
+  maison:  {img:"img/maison-box.jpg", eyebrow:"BELiOR MAISON", title:"향 · 라이프스타일 제품", lede:"공연의 기억을 향과 오브제로 이어갑니다.",
+            rows:[["AMOUR ÉTERNEL","기프트 컬렉션"],["SILLAGE","차량용 향 · 준비 중"]]},
+  editions:{img:"img/monogram-full-gold.jpg", contain:true, eyebrow:"BELiOR EDITIONS", title:"한정판 · 아트 오브제", lede:"BELIOR의 상징을 담은 소장용 한정판을 소개합니다.",
+            rows:[["B 모노그램 에디션","준비 중"]]}
+};
+const $ = s => document.querySelector(s);
+const home = $("#v-home"), page = $("#v-page"), contact = $("#v-contact"), menu = $("#menu"), tpl = $("#t-line");
+function show(){
+  const key = (location.hash || "#home").slice(1);
+  menu.hidden = true; document.body.style.overflow = "";
+  home.hidden = key !== "home" && key !== "";
+  contact.hidden = key !== "contact";
+  const p = PAGES[key];
+  page.hidden = !p; page.innerHTML = "";
+  if (p) {
+    const n = tpl.content.cloneNode(true);
+    const img = n.querySelector("[data-img]"); img.src = p.img; img.alt = p.title;
+    if (p.contain) n.querySelector(".page-hero").classList.add("contain");
+    n.querySelector("[data-eyebrow]").textContent = p.eyebrow;
+    n.querySelector("[data-title]").textContent = p.title;
+    n.querySelector("[data-lede]").textContent = p.lede;
+    const ul = n.querySelector("[data-rows]");
+    p.rows.forEach(([a,b]) => { const li = document.createElement("li"); const s1 = document.createElement("span"); s1.textContent = a; const s2 = document.createElement("span"); s2.textContent = b; li.append(s1, s2); ul.append(li); });
+    page.append(n);
+  }
+  if (!PAGES[key] && key !== "contact" && key !== "home" && key !== "") { home.hidden = false; }
+  window.scrollTo(0, 0);
+}
+document.addEventListener("click", e => {
+  if (e.target.closest("[data-open-menu]")) { menu.hidden = false; document.body.style.overflow = "hidden"; menu.querySelector("[data-close-menu]").focus(); }
+  if (e.target.closest("[data-close-menu]") || e.target === menu) { menu.hidden = true; document.body.style.overflow = ""; }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { menu.hidden = true; document.body.style.overflow = ""; } });
+window.addEventListener("hashchange", show); show();
+</script>
+
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</body>
+</html>
